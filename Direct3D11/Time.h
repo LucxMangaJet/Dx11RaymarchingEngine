@@ -10,8 +10,12 @@ public:
 	float getTotalTime() { return _totalTime; }
 
 private:
-	float _deltaTime = 0.0f;
-	float _lastTimestamp = 0.0f;
+
+	double _secondsPerCount;
+	float _deltaTime;
 	float _totalTime = 0.0f;
+	__int64 _prevCount;
+	__int64 _currCount;
+
 };
 

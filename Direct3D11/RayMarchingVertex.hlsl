@@ -1,5 +1,3 @@
-#include "RayMarchingUtil.hlsl"
-
 struct VertexInput
 {
     float4 position : POSITION;

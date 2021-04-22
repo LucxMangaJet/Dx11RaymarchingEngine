@@ -1,6 +1,8 @@
 #include "PerRenderingDataContainer.h"
 #include "Material.h"
 #include "Utils.h"
+#include <iomanip>
+#include <sstream>
 
 int PerRenderingDataContainer::init(D3D* d3d)
 {
@@ -48,11 +50,12 @@ void PerRenderingDataContainer::SetResolution(float width, float height)
 	_data.Width = width;
 }
 
-void PerRenderingDataContainer::SetCameraData(float fov, XMFLOAT4X4* view)
+void PerRenderingDataContainer::SetCameraData(float fov, XMFLOAT3 position, XMFLOAT4X4* view)
 {
 	CameraData data = {};
 	data.FOV = fov;
 	data.ViewMatrix = *view;
+	data.Position = position;
 
 	_data.CameraData = data;
 }
@@ -60,6 +63,32 @@ void PerRenderingDataContainer::SetCameraData(float fov, XMFLOAT4X4* view)
 void PerRenderingDataContainer::SetLightData(LightData data)
 {
 	_data.LightData = data;
+}
+
+void PerRenderingDataContainer::ResetObjects()
+{
+	_objectIndex = 0;
+}
+
+void PerRenderingDataContainer::AddObject(int type, XMFLOAT3 position, XMFLOAT3 eulerAngles, float scale)
+{
+	RMObject object;
+	object.Type = type;
+	object.Scale = XMFLOAT3(scale, scale, scale);
+
+	XMVECTOR xmvRotation = XMLoadFloat3(&eulerAngles);
+	XMVECTOR xmvTranslation = XMLoadFloat3(&position);
+
+	XMMATRIX rotation = XMMatrixRotationRollPitchYawFromVector(-xmvRotation);
+	XMMATRIX translation = XMMatrixTranslationFromVector(-xmvTranslation);
+
+	XMMATRIX comb = translation * rotation;
+	XMStoreFloat4x4(&object.TranslationRotationMatrix, comb);
+
+	_data.Objects.Objects[_objectIndex] = object;
+
+	_objectIndex++;
+	_data.Objects.Count = _objectIndex;
 }
 
 int PerRenderingDataContainer::createDX11Buffer(ID3D11Device* pD3DDevice)

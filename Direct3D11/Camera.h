@@ -7,15 +7,21 @@ using namespace DirectX;
 class Camera
 {
 public:
-	int init(INT screenWidth, INT screenHeight, float fov);
+	int init(INT screenWidth, INT screenHeight, float fov, XMFLOAT3 position, XMFLOAT3 forward, XMFLOAT3 up);
 	void deInit();
 
+	XMFLOAT3 getWorldPosition() { return _worldPosition; }
 	XMFLOAT4X4* getViewMatrix() { return &_viewMatrix; }
-	XMFLOAT4X4* getProjectionMatrix() { return &_projectionMatrix; }
 	float getFOV() { return fov; }
 
+	void SetPosition(XMFLOAT3 position);
+	void Update();
+
 private:
+	XMFLOAT3 _worldPosition;
+	XMFLOAT3 _forward;
+	XMFLOAT3 _up;
+
 	XMFLOAT4X4 _viewMatrix = {};
-	XMFLOAT4X4 _projectionMatrix = {};
 	float fov;
 };

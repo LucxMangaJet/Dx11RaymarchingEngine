@@ -19,9 +19,9 @@ void GameObject::update(float deltaTime)
 	XMStoreFloat4x4(&_worldMatrix, scale * rotation * translation);
 }
 
-void GameObject::render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* viewMatrix, XMFLOAT4X4* projectionMatrix)
+void GameObject::render(ID3D11DeviceContext* pD3DDeviceContext)
 {
-	_material->render(pD3DDeviceContext, &_worldMatrix, viewMatrix, projectionMatrix);
+	_material->render(pD3DDeviceContext, &_worldMatrix);
 	_mesh->render(pD3DDeviceContext);
 }
 

@@ -1,50 +1,5 @@
 #include "RayMarchingUtil.hlsl"
 
-struct RMObject
-{
-	float3 Position;
-	int Type;
-	float3 Rotation;
-	float Scale;
-};
-
-struct RMObjectCollectionData
-{
-	int Count;
-	float3 __padding;
-
-	RMObject Objects[256];
-};
-
-struct LightData
-{
-	float3 LightDirection;
-	float LightIntensity;
-	float3 AmbientColor;
-	float3 DiffuseColor;
-};
-
-struct CameraData
-{
-	float3 ViewProjectionMatrix;
-	float FOV;
-	float3 __padding;
-};
-
-cbuffer PerRenderingData :register(b0)
-{
-	float Time;
-	float Width;
-	float Height;
-	float _padding;
-
-	CameraData Camera;
-
-	LightData Light;
-
-	RMObjectCollectionData Objects;
-};
-
 struct PixelInput
 {
 	float4 position : SV_POSITION;
@@ -52,17 +7,32 @@ struct PixelInput
 };
 
 
+
 float4 main(PixelInput IN) : SV_TARGET
 {
+	float3 viewDir = RayDirection(Camera.FOV, IN.positionCS.xy, float2(Width,Height));
+	
+	float3 forward = mul(Camera.ViewMatrix, float4(viewDir, 0.0)).xyz;
 
-	float3 forward = float3(0, 0, 1);
-	float m = RayMarch(IN.positionCS, forward, 0 ,100);
+	float depth = RayMarch(Camera.Position, forward, 0, 10000);
 
-	float3 pos = IN.positionCS + m * forward;
-
-	float3 normal = SDF_EstimateNormal(pos);
-	if (m > 0)
+		// Didn't hit anything
+	if (depth > 10000 - EPSILON)
+	{
 		return 0;
+	}
 
-	return float4(Time,0,0,1);
+	float3 contactPoint = Camera.Position + depth * forward;
+	float3 normalizedLight = normalize(Light.LightDirection);
+	float3 normalizedNormal = SDF_EstimateNormal(Camera.Position + depth * forward);
+
+	// diffuse light
+	float diffuse = dot(-normalizedLight, normalizedNormal); // calculate light intensity
+	diffuse = max(diffuse, 0.0f); // dot product can be negative
+	diffuse *= Light.LightIntensity; // adjust light intensity by multiplicator
+
+	float4 color = float4(saturate(Light.AmbientColor + Light.DiffuseColor * diffuse),1);
+	return color;
+
+	return 1;
 }

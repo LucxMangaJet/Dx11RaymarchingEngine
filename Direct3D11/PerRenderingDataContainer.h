@@ -7,15 +7,14 @@ using namespace DirectX;
 
 struct RMObject
 {
-	XMFLOAT3 Position;
-	int Type;
-	XMFLOAT3 Rotation;
-	float Scale;
+	XMFLOAT3 Scale;
+	float Type;
+	XMFLOAT4X4 TranslationRotationMatrix;
 };
 
 struct RMObjectCollectionData
 {
-	int Count;
+	float Count;
 	XMFLOAT3 __padding;
 
 	RMObject Objects[256];
@@ -32,8 +31,8 @@ struct LightData
 struct CameraData
 {
 	XMFLOAT4X4 ViewMatrix;
+	XMFLOAT3 Position;
 	float FOV;
-	XMFLOAT3 __padding;
 };
 
 struct PerRenderingData
@@ -47,7 +46,7 @@ struct PerRenderingData
 
 	LightData LightData;
 
-	RMObjectCollectionData ObjectsData;
+	RMObjectCollectionData Objects;
 };
 
 class PerRenderingDataContainer
@@ -66,11 +65,14 @@ public:
 
 	void SetTime(float time);
 	void SetResolution(float width, float height);
-	void SetCameraData(float fov, XMFLOAT4X4* view);
+	void SetCameraData(float fov,XMFLOAT3 position, XMFLOAT4X4* view);
 	void SetLightData(LightData data);
+	void ResetObjects();
+	void AddObject(int type, XMFLOAT3 position, XMFLOAT3 eulerAngles, float scale);
 
 private:
 
+	int _objectIndex = 0;
 	PerRenderingData _data = {};
 	ID3D11Buffer* _buffer = nullptr;
 };

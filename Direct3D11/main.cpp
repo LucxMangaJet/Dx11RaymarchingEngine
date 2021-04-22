@@ -20,7 +20,6 @@ std::wstring IntToHexString(int nr)
 	return oss.str();
 }
 
-
 int ThrowErrorMSGBox(int code)
 {
 	MessageBox(NULL, (std::to_wstring(code) + L" Hex: " + IntToHexString(code)).c_str(), L"Error", 0);
@@ -52,7 +51,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 
 	// 4. create camera
 	Camera camera;
-	error = camera.init(width, height, XM_PI * 0.3333333f);
+	error = camera.init(width, height, XM_PI * 0.3333333f, DirectX::XMFLOAT3(0, 0, -5), DirectX::XMFLOAT3(0, 0, 1), DirectX::XMFLOAT3(0, 1, 0));
 	if (error != 0) return ThrowErrorMSGBox(error);
 
 	// 5. create time
@@ -72,9 +71,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 
 	// 7. create light
 	LightData light = {};
-	light.LightDirection = { 0.0f, 0.0f, 1.0f };
+	light.LightDirection = { 1.0f, 0.0f, 0.0f };
 	light.AmbientColor = { 0.2f, 0.2f, 0.2f, 1.0f };
-	light.DiffuseColor = { 1.0f, 1.0f, 0.0f, 1.0f };
+	light.DiffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	light.LightIntensity = 1.0f;
 
 	//8. GameObject
@@ -87,6 +86,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	perRenderingData.SetResolution(width, height);
 	perRenderingData.SetLightData(light);
 
+	perRenderingData.AddObject(1, XMFLOAT3(0, 0, 5), XMFLOAT3(), 1);
+	perRenderingData.AddObject(1, XMFLOAT3(1, 0, 5), XMFLOAT3(), 1);
+	perRenderingData.AddObject(1, XMFLOAT3(2, 0, 5), XMFLOAT3(0, 1, 0), 1);
+	perRenderingData.AddObject(1, XMFLOAT3(3, 0, 5), XMFLOAT3(0, 2, 0), 1);
+
 	// 8. run application
 	while (true)
 	{
@@ -98,13 +102,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 		// 8.2. draw objects 
 		d3d.beginScene(0.0f, 0.0f, 0.0f);
 
+		camera.Update();
+
 		//Setup per rendering buffer
 		perRenderingData.SetTime(time.getTotalTime());
-		perRenderingData.SetCameraData(camera.getFOV(), camera.getViewMatrix());
+		perRenderingData.SetCameraData(camera.getFOV(), camera.getWorldPosition(), camera.getViewMatrix());
 		perRenderingData.bind(d3d.getDeviceContext());
 
 		// rendering stuff
-		gameObject.render(d3d.getDeviceContext(), camera.getViewMatrix(), camera.getProjectionMatrix());
+		gameObject.render(d3d.getDeviceContext());
 
 		d3d.endScene();
 	}
@@ -115,6 +121,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	camera.deInit();
 	face.deInit();
 	d3d.deInit();
+	perRenderingData.deinit();
 	window.deInit();
 
 	return 0;

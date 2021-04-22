@@ -18,7 +18,7 @@ int Material::init(D3D* d3d, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCW
 	return 0;
 }
 
-void Material::render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix, XMFLOAT4X4* viewMatrix, XMFLOAT4X4* projectionMatrix)
+void Material::render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix)
 {
 	pD3DDeviceContext->IASetInputLayout(_pInputLayout);
 	pD3DDeviceContext->VSSetShader(_pVertexShader, nullptr, 0);

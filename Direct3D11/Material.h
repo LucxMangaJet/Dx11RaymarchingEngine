@@ -25,10 +25,8 @@ class Material
 {
 public:
 	int init(D3D* d3d, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters);
-	virtual void render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix, XMFLOAT4X4* viewMatrix, XMFLOAT4X4* projectionMatrix);
+	virtual void render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix);
 	void deInit();
-
-	void setLight(ID3D11DeviceContext* pD3DDeviceContext, LightData& lightData);
 
 protected:
 	// helper methods
