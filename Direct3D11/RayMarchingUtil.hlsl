@@ -54,6 +54,25 @@ float SDF_Sphere(float3 p)
 	return length(p) - 1;
 }
 
+float SDF_Sierpinski(float3 z)
+{
+	int Iterations = 3;
+	float Scale = 1.1;
+	float Offset = 0.5;
+
+	float r;
+	int n = 0;
+	while (n < Iterations)
+	{
+		if (z.x + z.y < 0) z.xy = -z.yx; // fold 1
+		if (z.x + z.z < 0) z.xz = -z.zx; // fold 2
+		if (z.y + z.z < 0) z.zy = -z.yz; // fold 3	
+		z = z * Scale - Offset * (Scale - 1.0);
+		n++;
+	}
+	return (length(z)) * pow(Scale, -float(n));
+}
+
 float SDF_Cube(float3 p)
 {
 	// If d.x < 0, then -1 < p.x < 1, and same logic applies to p.y, p.z
@@ -85,6 +104,7 @@ float SDF_Difference(float a, float b)
 {
 	return max(a, -b);
 }
+
 
 // polynomial smooth min (k = 0.1);
 float SDF_SmoothUnion(float a, float b, float k)
@@ -124,13 +144,17 @@ float SDF_Scene(float3 p)
 				val = min(val, SDF_Sphere(tp / scale) * scalingCorrection);
 			else if (object.Type == 2)
 				val = min(val, SDF_Cube(tp / scale) * scalingCorrection);
+			else if (object.Type == 3)
+				val = min(val, SDF_Sierpinski(tp / scale) * scalingCorrection);
+
 		}
 		else
 		{
 			if (object.Type == 1)
-				val = min(val, SDF_Sphere(mod3(tp / scale,object.Modulo)) * scalingCorrection);
+				val = min(val, SDF_Sphere(mod3(tp / scale, object.Modulo)) * scalingCorrection);
 			else if (object.Type == 2)
-				val = min(val, SDF_Cube(mod3(tp / scale,object.Modulo)) * scalingCorrection);
+				val = min(val, SDF_Cube(mod3(tp / scale, object.Modulo)) * scalingCorrection);
+
 		}
 
 

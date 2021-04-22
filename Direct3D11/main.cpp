@@ -91,12 +91,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	perRenderingData.SetResolution(width, height);
 	perRenderingData.SetLightData(light);
 
-	perRenderingData.AddObject(2, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(1, 1, 1), Operation::Union);
-	perRenderingData.AddObject(1, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(1.5, 1.5, 1.5), Operation::Difference);
-	perRenderingData.AddObject(1, XMFLOAT3(2, 0, 5), XMFLOAT3(0, 1, 0), XMFLOAT3(1, 1, 1));
-	perRenderingData.AddObject(2, XMFLOAT3(3, 0, 5), XMFLOAT3(0, 2, 0), XMFLOAT3(1, 1, 1), Operation::Difference);
+	perRenderingData.AddObject(3, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(1, 1, 1), Operation::Union);
+	perRenderingData.AddObject(1, XMFLOAT3(0, -3, 5), XMFLOAT3(), XMFLOAT3(1, 1, 1), Operation::Union);
+	//perRenderingData.AddObject(1, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(1.5, 1.5, 1.5), Operation::Difference);
+	//perRenderingData.AddObject(1, XMFLOAT3(2, 0, 5), XMFLOAT3(0, 1, 0), XMFLOAT3(1, 1, 1));
+	//perRenderingData.AddObject(2, XMFLOAT3(3, 0, 5), XMFLOAT3(0, 2, 0), XMFLOAT3(1, 1, 1), Operation::Difference);
 
 	POINT old_mousePos = {};
+	old_mousePos.x = width * 0.5f;
+	old_mousePos.y = height * 0.5f;
 
 	// 8. run application
 	while (true)
