@@ -12,6 +12,11 @@
 #include <iomanip>
 #include <sstream>
 
+#define KEY_W 0x57
+#define KEY_S 0x53
+#define KEY_D 0x44
+#define KEY_A 0x41
+#define KEY_PRESSED 0x8000
 
 std::wstring IntToHexString(int nr)
 {
@@ -51,7 +56,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 
 	// 4. create camera
 	Camera camera;
-	error = camera.init(width, height, XM_PI * 0.3333333f, DirectX::XMFLOAT3(0, 0, -5), DirectX::XMFLOAT3(0, 0, 1), DirectX::XMFLOAT3(0, 1, 0));
+	error = camera.init(width, height, XM_PI * 0.3333333f, DirectX::XMFLOAT3(0, 0, -5), DirectX::XMFLOAT3(0, 0, 0));
 	if (error != 0) return ThrowErrorMSGBox(error);
 
 	// 5. create time
@@ -86,10 +91,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	perRenderingData.SetResolution(width, height);
 	perRenderingData.SetLightData(light);
 
-	perRenderingData.AddObject(1, XMFLOAT3(0, 0, 5), XMFLOAT3(), 1);
-	perRenderingData.AddObject(1, XMFLOAT3(1, 0, 5), XMFLOAT3(), 1);
-	perRenderingData.AddObject(1, XMFLOAT3(2, 0, 5), XMFLOAT3(0, 1, 0), 1);
-	perRenderingData.AddObject(1, XMFLOAT3(3, 0, 5), XMFLOAT3(0, 2, 0), 1);
+	perRenderingData.AddObject(2, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(1, 1, 1), Operation::Union);
+	perRenderingData.AddObject(1, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(1.5, 1.5, 1.5), Operation::Difference);
+	perRenderingData.AddObject(1, XMFLOAT3(2, 0, 5), XMFLOAT3(0, 1, 0), XMFLOAT3(1, 1, 1));
+	perRenderingData.AddObject(2, XMFLOAT3(3, 0, 5), XMFLOAT3(0, 2, 0), XMFLOAT3(1, 1, 1), Operation::Difference);
+
+	POINT old_mousePos = {};
 
 	// 8. run application
 	while (true)
@@ -101,6 +108,49 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 
 		// 8.2. draw objects 
 		d3d.beginScene(0.0f, 0.0f, 0.0f);
+
+		POINT mousePos;
+		if (GetCursorPos(&mousePos))
+		{
+			POINT diff;
+			diff.x = mousePos.x - old_mousePos.x;
+			diff.y = mousePos.y - old_mousePos.y;
+
+			XMFLOAT3 eular = camera.getWorldRotation();
+			eular.y += (float)diff.x / width;
+			eular.x += (float)diff.y / height;
+			camera.SetEulerAngles(eular);
+			old_mousePos = mousePos;
+
+		}
+
+		XMFLOAT3 f_position = camera.getWorldPosition();
+		XMFLOAT3 f_forward = camera.getForwardVector();
+		XMFLOAT3 f_right = camera.getRightVector();
+
+		XMVECTOR position = XMLoadFloat3(&f_position);
+		XMVECTOR forward = XMLoadFloat3(&f_forward);
+		XMVECTOR right = XMLoadFloat3(&f_right);
+
+		if (GetKeyState(KEY_W) & KEY_PRESSED)
+		{
+			position = XMVectorAdd(position, XMVectorScale(forward, time.getDeltaTime()));
+		}
+		if (GetKeyState(KEY_S) & KEY_PRESSED)
+		{
+			position = XMVectorAdd(position, XMVectorScale(forward, -time.getDeltaTime()));
+		}
+		if (GetKeyState(KEY_A) & KEY_PRESSED)
+		{
+			position = XMVectorAdd(position, XMVectorScale(right, -time.getDeltaTime()));
+		}
+		if (GetKeyState(KEY_D) & KEY_PRESSED)
+		{
+			position = XMVectorAdd(position, XMVectorScale(right, time.getDeltaTime()));
+		}
+
+		XMStoreFloat3(&f_position, position);
+		camera.SetPosition(f_position);
 
 		camera.Update();
 

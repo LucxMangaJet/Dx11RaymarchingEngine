@@ -9,6 +9,8 @@ struct RMObject
 {
 	XMFLOAT3 Scale;
 	float Type;
+	float Operation;
+	XMFLOAT3 Modulo;
 	XMFLOAT4X4 TranslationRotationMatrix;
 };
 
@@ -49,6 +51,13 @@ struct PerRenderingData
 	RMObjectCollectionData Objects;
 };
 
+enum class Operation
+{
+	Union = 0,
+	Intersection = 1,
+	Difference = 2
+};
+
 class PerRenderingDataContainer
 {
 
@@ -68,7 +77,7 @@ public:
 	void SetCameraData(float fov,XMFLOAT3 position, XMFLOAT4X4* view);
 	void SetLightData(LightData data);
 	void ResetObjects();
-	void AddObject(int type, XMFLOAT3 position, XMFLOAT3 eulerAngles, float scale);
+	void AddObject(int type, XMFLOAT3 position, XMFLOAT3 eulerAngles, XMFLOAT3 scale, Operation operation = Operation::Union, XMFLOAT3 modulo = XMFLOAT3() );
 
 private:
 

@@ -13,11 +13,12 @@ float4 main(PixelInput IN) : SV_TARGET
 	float3 viewDir = RayDirection(Camera.FOV, IN.positionCS.xy, float2(Width,Height));
 	
 	float3 forward = mul(Camera.ViewMatrix, float4(viewDir, 0.0)).xyz;
+	float MAX_DIST = 1000;
 
-	float depth = RayMarch(Camera.Position, forward, 0, 10000);
+	float depth = RayMarch(Camera.Position, forward, 0, MAX_DIST);
 
 		// Didn't hit anything
-	if (depth > 10000 - EPSILON)
+	if (depth > MAX_DIST - EPSILON)
 	{
 		return 0;
 	}

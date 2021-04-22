@@ -1,5 +1,5 @@
 
-#define MAX_MARCHING_STEPS 256
+#define MAX_MARCHING_STEPS 128
 #define EPSILON 0.001
 #define MAX_OBJECTS 256
 
@@ -7,6 +7,8 @@ struct RMObject
 {
 	float3 Scale;
 	float Type;
+	float Operation;
+	float3 Modulo;
 	float4x4 ITRMatrix;
 };
 
@@ -91,6 +93,10 @@ float SDF_SmoothUnion(float a, float b, float k)
 	return min(a, b) - h * h * k * (1.0 / 4.0);
 }
 
+float3 mod3(float3 el, float3 mod)
+{
+	return float3(el.x % mod.x, el.y % mod.y, el.z % mod.z);
+}
 
 // polynomial smooth min (k = 0.1);
 float SDF_SmoothCubicUnion(float a, float b, float k)
@@ -112,13 +118,28 @@ float SDF_Scene(float3 p)
 		float scalingCorrection = min(scale.x, min(scale.y, scale.z));
 		float val = 10000;
 
-		if (object.Type == 1)
-			val = min(val, SDF_Sphere(tp / scale) * scalingCorrection);
-		if (object.Type == 2)
-			val = min(val, SDF_Cube(tp / scale) * scalingCorrection);
+		if (length(object.Modulo) == 0)
+		{
+			if (object.Type == 1)
+				val = min(val, SDF_Sphere(tp / scale) * scalingCorrection);
+			else if (object.Type == 2)
+				val = min(val, SDF_Cube(tp / scale) * scalingCorrection);
+		}
+		else
+		{
+			if (object.Type == 1)
+				val = min(val, SDF_Sphere(mod3(tp / scale,object.Modulo)) * scalingCorrection);
+			else if (object.Type == 2)
+				val = min(val, SDF_Cube(mod3(tp / scale,object.Modulo)) * scalingCorrection);
+		}
 
 
-		res = SDF_SmoothCubicUnion(res, val, 0.5);
+		if (object.Operation == 0)
+			res = SDF_Union(res, val);
+		else if (object.Operation == 1)
+			res = SDF_Intersect(res, val);
+		else if (object.Operation == 2)
+			res = SDF_Difference(res, val);
 	}
 
 	return res;

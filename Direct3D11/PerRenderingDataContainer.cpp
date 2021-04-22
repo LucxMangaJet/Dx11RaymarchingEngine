@@ -70,11 +70,13 @@ void PerRenderingDataContainer::ResetObjects()
 	_objectIndex = 0;
 }
 
-void PerRenderingDataContainer::AddObject(int type, XMFLOAT3 position, XMFLOAT3 eulerAngles, float scale)
+void PerRenderingDataContainer::AddObject(int type, XMFLOAT3 position, XMFLOAT3 eulerAngles, XMFLOAT3 scale, Operation operation , XMFLOAT3 modulo )
 {
 	RMObject object;
 	object.Type = type;
-	object.Scale = XMFLOAT3(scale, scale, scale);
+	object.Scale = scale;
+	object.Operation =(float)(int)operation;
+	object.Modulo = modulo;
 
 	XMVECTOR xmvRotation = XMLoadFloat3(&eulerAngles);
 	XMVECTOR xmvTranslation = XMLoadFloat3(&position);
@@ -90,6 +92,8 @@ void PerRenderingDataContainer::AddObject(int type, XMFLOAT3 position, XMFLOAT3 
 	_objectIndex++;
 	_data.Objects.Count = _objectIndex;
 }
+
+
 
 int PerRenderingDataContainer::createDX11Buffer(ID3D11Device* pD3DDevice)
 {
