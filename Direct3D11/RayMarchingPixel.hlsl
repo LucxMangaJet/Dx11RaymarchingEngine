@@ -31,18 +31,18 @@ struct CameraData
 	float3 __padding;
 };
 
-struct PerRenderingData
+cbuffer PerRenderingData :register(b0)
 {
 	float Time;
 	float Width;
 	float Height;
 	float _padding;
 
-	CameraData CameraData;
+	CameraData Camera;
 
-	LightData LightData;
+	LightData Light;
 
-	RMObjectCollectionData ObjectsData;
+	RMObjectCollectionData Objects;
 };
 
 struct PixelInput
@@ -63,5 +63,6 @@ float4 main(PixelInput IN) : SV_TARGET
 	float3 normal = SDF_EstimateNormal(pos);
 	if (m > 0)
 		return 0;
-	return float4(normal,1);
+
+	return float4(Time,0,0,1);
 }

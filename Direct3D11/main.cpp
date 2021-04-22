@@ -9,11 +9,21 @@
 #include <string>
 #include "MeshGenerator.h"
 #include "PerRenderingDataContainer.h"
+#include <iomanip>
+#include <sstream>
+
+
+std::wstring IntToHexString(int nr)
+{
+	std::wostringstream oss;  // note the 'w'
+	oss << std::hex << nr;
+	return oss.str();
+}
 
 
 int ThrowErrorMSGBox(int code)
 {
-	MessageBox(NULL, std::to_wstring(code).c_str(), L"Error", 0);
+	MessageBox(NULL, (std::to_wstring(code) + L" Hex: " + IntToHexString(code)).c_str(), L"Error", 0);
 	return code;
 }
 
@@ -90,7 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 
 		//Setup per rendering buffer
 		perRenderingData.SetTime(time.getTotalTime());
-		perRenderingData.SetCameraData(camera.getFOV(), camera.getViewMatrix(), camera.getProjectionMatrix());
+		perRenderingData.SetCameraData(camera.getFOV(), camera.getViewMatrix());
 		perRenderingData.bind(d3d.getDeviceContext());
 
 		// rendering stuff

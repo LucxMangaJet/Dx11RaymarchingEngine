@@ -48,18 +48,12 @@ void PerRenderingDataContainer::SetResolution(float width, float height)
 	_data.Width = width;
 }
 
-void PerRenderingDataContainer::SetCameraData(float fov, XMFLOAT4X4* view, XMFLOAT4X4* projection)
+void PerRenderingDataContainer::SetCameraData(float fov, XMFLOAT4X4* view)
 {
 	CameraData data = {};
 	data.FOV = fov;
+	data.ViewMatrix = *view;
 
-	XMMATRIX viewMatrix = XMLoadFloat4x4(view);
-	XMMATRIX projectionMatrix = XMLoadFloat4x4(projection);
-
-	XMMATRIX vpMatrix = viewMatrix * projectionMatrix;
-	vpMatrix = XMMatrixTranspose(vpMatrix);
-
-	XMStoreFloat4x4(&data.ViewProjectionMatrix, vpMatrix);
 	_data.CameraData = data;
 }
 

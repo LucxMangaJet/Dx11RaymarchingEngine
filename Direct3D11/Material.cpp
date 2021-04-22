@@ -5,7 +5,7 @@
 #include "PerRenderingDataContainer.h"
 
 
-int Material::init(D3D* d3d, LPCWSTR textureName,LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters)
+int Material::init(D3D* d3d, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters)
 {
 	ID3D11Device* pD3DDevice = d3d->getDevice();
 
@@ -74,6 +74,7 @@ int Material::createVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 int Material::createPixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 {
 	ID3DBlob* pCompiledCode = nullptr;
+	ID3DBlob* pCompiledErrors = nullptr;
 	std::wstring compiledName = std::wstring(name) + L".cso";
 
 	HRESULT hr = D3DReadFileToBlob(compiledName.c_str(), &pCompiledCode);
@@ -88,7 +89,7 @@ int Material::createPixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 			"ps_4_0", // shader type & version
 			0, 0, // optional flags
 			&pCompiledCode, // compiled code target
-			nullptr // optional blob for all compile errors
+			&pCompiledErrors // optional blob for all compile errors
 		);
 
 		if (hr == D3D11_ERROR_FILE_NOT_FOUND)
@@ -96,8 +97,18 @@ int Material::createPixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 			MessageBox(NULL, name, L"File not found", 0);
 		}
 	}
+	if (pCompiledErrors)
+	{
+		char* error = (char*)pCompiledErrors->GetBufferPointer();
+		size_t size = strlen(error) + 1;
+		wchar_t* res = new wchar_t[size];
 
-	if (FAILED(hr)) return 46;
+		size_t outSize;
+		mbstowcs_s(&outSize, res, size, error, size - 1);
+
+		MessageBox(NULL, res, L"Error", 0);
+	}
+	if (FAILED(hr)) return hr;
 
 	hr = pD3DDevice->CreatePixelShader(pCompiledCode->GetBufferPointer(), pCompiledCode->GetBufferSize(), nullptr, &_pPixelShader);
 	if (FAILED(hr)) return 48;

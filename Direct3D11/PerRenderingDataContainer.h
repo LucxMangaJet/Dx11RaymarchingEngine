@@ -31,7 +31,7 @@ struct LightData
 
 struct CameraData
 {
-	XMFLOAT4X4 ViewProjectionMatrix;
+	XMFLOAT4X4 ViewMatrix;
 	float FOV;
 	XMFLOAT3 __padding;
 };
@@ -66,7 +66,7 @@ public:
 
 	void SetTime(float time);
 	void SetResolution(float width, float height);
-	void SetCameraData(float fov, XMFLOAT4X4* view, XMFLOAT4X4* projection);
+	void SetCameraData(float fov, XMFLOAT4X4* view);
 	void SetLightData(LightData data);
 
 private:

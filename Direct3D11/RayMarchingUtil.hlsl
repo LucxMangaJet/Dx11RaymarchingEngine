@@ -44,6 +44,6 @@ float RayMarch(float3 position, float3 forward, float min, float max)
 
 float3 rayDirection(float fieldOfView, float2 clipSpacePosition, float2 size)
 {
-	float z = - size.y / tan(radians(fieldOfView) * 0.5);
+	float z = - size.y / tan(fieldOfView * 0.5);
 	return normalize(float3(clipSpacePosition, z));
 }
