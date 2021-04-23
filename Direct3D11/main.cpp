@@ -11,6 +11,7 @@ static Direct3D* g_direct3D;
 static Window* g_window;
 static Engine* g_engine;
 static ImGUIFacade* g_gui;
+static Time* g_time;
 
 void RunMainLoop();
 void Shutdown();
@@ -44,11 +45,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	g_AppInfo.D3DDeviceContext = d3d.GetDeviceContext();
 	g_direct3D = &d3d;
 
+	//Time Setup
+	Time time;
+	result = time.Initialize();
+	if (FailedInit(result)) return result.ErrorCode;
+	g_time = &time;
+	g_AppInfo.Time = g_time;
+
 	//Engine Setup
 	Engine engine;
 	result = engine.Initialize(g_AppInfo);
 	if (FailedInit(result)) return result.ErrorCode;
-
 	g_engine = &engine;
 
 	//ImGUI Setup
@@ -72,6 +79,7 @@ void RunMainLoop()
 		if (!g_window->Run()) break;
 
 		//update
+		g_time->Update();
 		g_gui->Update(g_AppInfo);
 		g_engine->Update(g_AppInfo);
 

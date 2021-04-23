@@ -1,4 +1,6 @@
 #include "ImGUIWin32.h"
+#include "AppInfo.h"
+#include "Time.h"
 
 static ImGuiMouseCursor     g_LastMouseCursor = ImGuiMouseCursor_COUNT;
 bool UpdateMouseCursor();
@@ -51,7 +53,7 @@ void ImGUIWin32::Update(const AppInfo& appInfo)
 	::GetClientRect(appInfo.MainWindow, &rect);
 	io.DisplaySize = ImVec2((float)(rect.right - rect.left), (float)(rect.bottom - rect.top));
 
-	io.DeltaTime = 0; //SET DELTA TIME from engine timer
+	io.DeltaTime = appInfo.Time->GetDeltaTime();
 
 	// Read keyboard modifiers inputs
 	io.KeyCtrl = (::GetKeyState(VK_CONTROL) & 0x8000) != 0;

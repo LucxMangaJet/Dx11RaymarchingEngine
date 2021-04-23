@@ -12,10 +12,6 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 {
 	InitResult result;
 
-	// create time
-	result = _time.Initialize();
-	if (result.Failed) return result;
-
 	//create render plane
 	MeshData sphereData = MeshGenerator::GenerateFace();
 	result = _renderPlane.Initialize(appInfo.D3DDevice, &sphereData);
@@ -64,8 +60,6 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 
 void Engine::Update(const AppInfo& appInfo)
 {
-	_time.Update();
-
 	POINT mousePos;
 	if (GetCursorPos(&mousePos))
 	{
@@ -89,7 +83,7 @@ void Engine::Update(const AppInfo& appInfo)
 	XMVECTOR forward = XMLoadFloat3(&f_forward);
 	XMVECTOR right = XMLoadFloat3(&f_right);
 
-	float deltaTime = _time.GetDeltaTime();
+	float deltaTime = appInfo.Time->GetDeltaTime();
 
 	if (GetKeyState(KEY_W) & KEY_PRESSED)
 	{
@@ -118,7 +112,7 @@ void Engine::Update(const AppInfo& appInfo)
 void Engine::Render(const AppInfo& appInfo)
 {
 	//Setup per rendering buffer
-	_perRenderData.SetTime(_time.GetTotalTime());
+	_perRenderData.SetTime(appInfo.Time->GetTotalTime());
 	_perRenderData.SetCameraData(_camera.GetFOV(), _camera.GetWorldPosition(), _camera.GetViewMatrix());
 	_perRenderData.Bind(appInfo.D3DDeviceContext);
 
@@ -130,7 +124,6 @@ void Engine::DeInitialize()
 {
 
 	_mainMaterial.DeInitialize();
-	_time.DeInitialize();
 	_camera.DeInitialize();
 	_renderPlane.DeInitialize();
 	_perRenderData.DeInitialize();

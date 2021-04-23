@@ -6,6 +6,9 @@
 #include <iomanip>
 #include <sstream>
 
+
+class Time;
+
 struct AppInfo
 {
 	int Width;
@@ -17,6 +20,7 @@ struct AppInfo
 	HWND MainWindow;
 	ID3D11Device* D3DDevice;
 	ID3D11DeviceContext* D3DDeviceContext;
+	Time* Time;
 };
 
 struct InitResult

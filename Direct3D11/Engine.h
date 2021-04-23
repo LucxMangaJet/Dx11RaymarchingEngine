@@ -22,7 +22,6 @@ public:
 
 protected:
 
-	Time _time;
 	PerRenderingDataContainer _perRenderData;
 	Camera _camera;
 

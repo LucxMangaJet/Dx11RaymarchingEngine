@@ -4,6 +4,7 @@
 //forward declaration for ImGUI to catch Win32 events. Impl in: ImGUIWin32.cpp
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+//Main WndProc for MainWindow
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
