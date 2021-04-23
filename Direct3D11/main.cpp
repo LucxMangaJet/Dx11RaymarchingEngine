@@ -5,6 +5,7 @@
 #include "AppInfo.h"
 #include "Engine.h"
 #include "ImGUIFacade.h"
+#include "Event.h"
 
 static AppInfo g_AppInfo; //Contains global information and pointers to commonly used objects for initialization (Dx11 & WinApi)
 static Direct3D* g_direct3D;
@@ -12,6 +13,7 @@ static Window* g_window;
 static Engine* g_engine;
 static ImGUIFacade* g_gui;
 static Time* g_time;
+static ActionEvent* g_OnGuiEvent;
 
 void RunMainLoop();
 void Shutdown();
@@ -64,6 +66,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	if (FailedInit(result)) return result.ErrorCode;
 	g_gui = &gui;
 
+	//Setup OnGUI event
+	ActionEvent onGUIEvent;
+	g_OnGuiEvent = &onGUIEvent;
+
 
 	RunMainLoop();
 
@@ -80,8 +86,10 @@ void RunMainLoop()
 
 		//update
 		g_time->Update();
-		g_gui->Update(g_AppInfo);
 		g_engine->Update(g_AppInfo);
+
+		g_gui->Update(g_AppInfo);
+		g_OnGuiEvent->Invoke();
 
 		// render
 		g_direct3D->BeginScene(0.0f, 0.0f, 0.0f);
