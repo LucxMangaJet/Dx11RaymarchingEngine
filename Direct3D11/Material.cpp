@@ -45,13 +45,13 @@ InitResult Material::CreateVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 {
 	ID3DBlob* pCompiledCode = nullptr;
 	ID3DBlob* pCompileErrors = nullptr;
-	std::wstring compiledName = std::wstring(name) + L".cso";
+	std::wstring compiledName = std::wstring(name) + TEXT(".cso");
 
 	HRESULT hr = D3DReadFileToBlob(compiledName.c_str(), &pCompiledCode);
 	//MessageBox(NULL, std::to_wstring(hr).c_str(), name , 0);
 	if (FAILED(hr))
 	{
-		std::wstring rawName = std::wstring(name) + L".hlsl";
+		std::wstring rawName = std::wstring(name) + TEXT(".hlsl");
 		hr = D3DCompileFromFile(
 			rawName.c_str(), // shader filename
 			nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, // optional macros & includes
@@ -77,7 +77,7 @@ InitResult Material::CreateVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 		if (pCompileErrors)
 		{
 			stream << TEXT("Compile Errors: ");
-			stream << ToWideSet((char*)pCompileErrors);
+			stream << ToWideSet((char*)pCompileErrors->GetBufferPointer());
 		}
 
 		return InitResult::Failure(hr, stream.str().c_str());
@@ -98,13 +98,13 @@ InitResult Material::CreatePixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 {
 	ID3DBlob* pCompiledCode = nullptr;
 	ID3DBlob* pCompiledErrors = nullptr;
-	std::wstring compiledName = std::wstring(name) + L".cso";
+	std::wstring compiledName = std::wstring(name) + TEXT(".cso");
 
 	HRESULT hr = D3DReadFileToBlob(compiledName.c_str(), &pCompiledCode);
 
 	if (FAILED(hr))
 	{
-		std::wstring rawName = std::wstring(name) + L".hlsl";
+		std::wstring rawName = std::wstring(name) + TEXT(".hlsl");
 		hr = D3DCompileFromFile(
 			rawName.c_str(), // shader filename
 			nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, // optional macros & includes
@@ -130,7 +130,7 @@ InitResult Material::CreatePixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 		if (pCompiledErrors)
 		{
 			stream << TEXT("Compile Errors: ");
-			stream << ToWideSet((char*)pCompiledErrors);
+			stream << ToWideSet((char*)pCompiledErrors->GetBufferPointer());
 		}
 
 		return InitResult::Failure(hr, stream.str().c_str());

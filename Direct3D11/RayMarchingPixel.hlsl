@@ -6,8 +6,6 @@ struct PixelInput
 	float4 positionCS :TEXCOORD1;
 };
 
-
-
 float4 main(PixelInput IN) : SV_TARGET
 {
 	float3 viewDir = RayDirection(Camera.FOV, IN.positionCS.xy, float2(Width,Height));
@@ -26,9 +24,9 @@ float4 main(PixelInput IN) : SV_TARGET
 	float3 contactPoint = Camera.Position + depth * forward;
 	float3 normalizedLight = normalize(Light.LightDirection);
 
-
 	float3 normalizedNormal = SDF_EstimateNormal(Camera.Position + depth * forward);
 
+	// and http://en.wikipedia.org/wiki/Phong_shading
 	// diffuse light
 	float diffuse = dot(-normalizedLight, normalizedNormal); // calculate light intensity
 	diffuse = max(diffuse, 0.0f); // dot product can be negative
@@ -42,11 +40,4 @@ float4 main(PixelInput IN) : SV_TARGET
 	return color;
 
 	return 1;
-
-	// https://stackoverflow.com/questions/34527505/blinn-phong-shading-with-hlsl-and-d3d11-point-light
-	// https://brooknovak.wordpress.com/2008/11/13/hlsl-per-pixel-point-light-using-phong-blinn-lighting-model/
-	// Phong relfection is ambient + light-diffuse + spec highlights.
-	// I = Ia*ka*Oda + fatt*Ip[kd*Od(N.L) + ks(R.V)^n]
-	// Ref: http://www.whisqu.se/per/docs/graphics8.htm
-	// and http://en.wikipedia.org/wiki/Phong_shading
 }

@@ -87,17 +87,14 @@ bool FailedInit(InitResult result)
 	if (result.Failed)
 	{
 		std::wstringstream stream;
-		stream << TEXT("Init fail: I:");
+		stream << TEXT("I:");
 		stream << result.ErrorCode;
 		stream << TEXT(" H: ");
 		stream << std::hex << result.ErrorCode;
 
 		stream << TEXT(" ");
+		stream << result.ErrorMsg;
 
-		if (result.ErrorMsg)
-		{
-			stream << result.ErrorMsg;
-		}
 		stream << std::endl;
 		MessageBox(NULL, stream.str().c_str(), TEXT("Init Error"), 0);
 		

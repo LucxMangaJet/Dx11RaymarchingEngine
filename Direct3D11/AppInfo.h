@@ -23,7 +23,7 @@ struct InitResult
 {
 	bool Failed = false;
 	int ErrorCode = false;
-	const wchar_t* ErrorMsg = nullptr;
+	std::wstring ErrorMsg;
 
 
 	static InitResult Success() { return InitResult(); }
@@ -32,7 +32,8 @@ struct InitResult
 		InitResult res;
 		res.Failed = true;
 		res.ErrorCode = errorCode;
-		res.ErrorMsg = errorMsg;
+		if(errorMsg)
+			res.ErrorMsg = std::wstring(errorMsg);
 		return res;
 	};
 
