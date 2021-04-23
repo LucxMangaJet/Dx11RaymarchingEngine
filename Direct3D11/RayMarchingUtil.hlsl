@@ -54,25 +54,30 @@ float SDF_Sphere(float3 p)
 	return length(p) - 1;
 }
 
-float SDF_Sierpinski(float3 z)
+//https://github.com/JPBotelho/Raymarched-Fractals/blob/master/Content/DistanceFunc.cginc
+float SDF_Mandelbulb(float3 p)
 {
-	int Iterations = 3;
-	float Scale = 1.1;
-	float Offset = 0.5;
+	float3 w = p;
+	float m = dot(w, w);
 
-	float r;
-	int n = 0;
-	while (n < Iterations)
+	float dz = 1.0;
+
+	for (int i = 0; i < 15; i++)
 	{
-		if (z.x + z.y < 0) z.xy = -z.yx; // fold 1
-		if (z.x + z.z < 0) z.xz = -z.zx; // fold 2
-		if (z.y + z.z < 0) z.zy = -z.yz; // fold 3	
-		z = z * Scale - Offset * (Scale - 1.0);
-		n++;
+		dz = 8 * pow(sqrt(m), 7.0) * dz + 1.0;
+		float r = length(w);
+		float b = 8 * acos(w.y / r);
+		float a = 8 * atan2(w.x, w.z);
+		w = p + pow(r, 8) * float3(sin(b) * sin(a), cos(b), sin(b) * cos(a));
+
+		m = dot(w, w);
+		if (m > 256.0)
+			break;
 	}
-	return (length(z)) * pow(Scale, -float(n));
+	return 0.25 * log(m) * sqrt(m) / dz;
 }
 
+//https://www.shadertoy.com/view/XtcGWn
 float SDF_Cube(float3 p)
 {
 	// If d.x < 0, then -1 < p.x < 1, and same logic applies to p.y, p.z
@@ -145,7 +150,7 @@ float SDF_Scene(float3 p)
 			else if (object.Type == 2)
 				val = min(val, SDF_Cube(tp / scale) * scalingCorrection);
 			else if (object.Type == 3)
-				val = min(val, SDF_Sierpinski(tp / scale) * scalingCorrection);
+				val = min(val, SDF_Mandelbulb(tp / scale) * scalingCorrection);
 
 		}
 		else
