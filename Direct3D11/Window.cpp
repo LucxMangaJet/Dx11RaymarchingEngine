@@ -1,8 +1,14 @@
 #include "Window.h"
 #include "AppInfo.h"
 
+//forward declaration for ImGUI to catch Win32 events. Impl in: ImGUIWin32.cpp
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+		return true;
+
 	switch (msg)
 	{
 	case WM_CLOSE:

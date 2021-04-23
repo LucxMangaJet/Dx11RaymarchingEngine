@@ -40,13 +40,14 @@ void ImGUIFacade::Update(const AppInfo& appInfo)
 
 void ImGUIFacade::Render(const AppInfo& appInfo)
 {
-	/*ImGui::Render();
-	g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-	g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());*/
+	ImGui::Render();
+	
+	//Do i need?? Or do i render stuff combined with the engine?!
+	//g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+	//g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
+
+	_direct3DHelper.Render(appInfo, ImGui::GetDrawData());
 }
-
-
 
 void ImGUIFacade::DeInitialize()
 {
