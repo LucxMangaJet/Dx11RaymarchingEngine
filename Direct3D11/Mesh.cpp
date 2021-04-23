@@ -1,8 +1,5 @@
 #include "Mesh.h"
 #include "Vertex.h"
-#include "Utils.h"
-
-
 
 InitResult Mesh::Initialize(ID3D11Device* pD3DDevice, MeshData* data)
 {

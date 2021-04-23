@@ -1,6 +1,5 @@
 #include "GameObject.h"
 #include "Vertex.h"
-#include "Utils.h"
 
 int GameObject::init(ID3D11Device* pD3DDevice, Mesh* mesh, Material* material)
 {

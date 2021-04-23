@@ -1,6 +1,5 @@
 #include "Material.h"
 #include <d3dcompiler.h>
-#include "Utils.h"
 #include <string>
 #include "PerRenderingDataContainer.h"
 

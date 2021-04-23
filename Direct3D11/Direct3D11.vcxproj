@@ -178,7 +178,6 @@
     <ClInclude Include="MeshGenerator.h" />
     <ClInclude Include="PerRenderingDataContainer.h" />
     <ClInclude Include="Time.h" />
-    <ClInclude Include="Utils.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

@@ -1,6 +1,5 @@
 #include "PerRenderingDataContainer.h"
 #include "Material.h"
-#include "Utils.h"
 #include <iomanip>
 #include <sstream>
 

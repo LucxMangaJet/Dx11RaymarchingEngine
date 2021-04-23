@@ -1,5 +1,4 @@
 #include "Direct3D.h"
-#include "Utils.h"
 #include "AppInfo.h"
 
 InitResult Direct3D::Initialize(const AppInfo& appInfo)

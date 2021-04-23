@@ -4,8 +4,6 @@
 #include <iomanip>
 #include <sstream>
 
-#pragma comment(lib, "Winmm.lib")
-
 using namespace std;
 
 InitResult Time::Initialize()
