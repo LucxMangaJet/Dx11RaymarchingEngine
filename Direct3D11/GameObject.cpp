@@ -21,8 +21,8 @@ void GameObject::update(float deltaTime)
 
 void GameObject::render(ID3D11DeviceContext* pD3DDeviceContext)
 {
-	_material->render(pD3DDeviceContext, &_worldMatrix);
-	_mesh->render(pD3DDeviceContext);
+	_material->Render(pD3DDeviceContext, &_worldMatrix);
+	_mesh->Render(pD3DDeviceContext);
 }
 
 void GameObject::SetPosition(float x, float y, float z)

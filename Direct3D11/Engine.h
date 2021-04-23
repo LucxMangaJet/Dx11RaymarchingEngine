@@ -6,20 +6,19 @@
 #include "Material.h"
 #include "Mesh.h"
 #include "GameObject.h"
-
-struct AppInfo;
+#include "AppInfo.h"
 
 class Engine
 {
 
 public:
 
-	int init(const AppInfo& appInfo);
+	InitResult Initialize(const AppInfo& appInfo);
 
-	void update(const AppInfo& appInfo);
-	void render(const AppInfo& appInfo);
+	void Update(const AppInfo& appInfo);
+	void Render(const AppInfo& appInfo);
 
-	void deInit();
+	void DeInitialize();
 
 protected:
 

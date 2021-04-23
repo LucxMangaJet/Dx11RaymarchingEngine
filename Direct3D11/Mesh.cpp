@@ -4,21 +4,21 @@
 
 
 
-int Mesh::init(ID3D11Device* pD3DDevice, MeshData* data)
+InitResult Mesh::Initialize(ID3D11Device* pD3DDevice, MeshData* data)
 {
 	_meshData = data;
+	InitResult result;
 
+	result = InitVertexBuffer(pD3DDevice);
+	if (result.Failed)return result;
 
-	int error = initVertexBuffer(pD3DDevice);
-	if (error != 0) return error;
+	result = InitIndexBuffer(pD3DDevice);
+	if (result.Failed)return result;
 
-	error = initIndexBuffer(pD3DDevice);
-	if (error != 0) return error;
-
-	return 0;
+	return InitResult::Success();
 }
 
-void Mesh::render(ID3D11DeviceContext* pD3DDeviceContext)
+void Mesh::Render(ID3D11DeviceContext* pD3DDeviceContext)
 {
 	static UINT offset = 0;
 
@@ -28,13 +28,13 @@ void Mesh::render(ID3D11DeviceContext* pD3DDeviceContext)
 	pD3DDeviceContext->DrawIndexed(_indexCount, 0, 0);
 }
 
-void Mesh::deInit()
+void Mesh::DeInitialize()
 {
 	safeRelease<ID3D11Buffer>(_pVertexBuffer);
 	safeRelease<ID3D11Buffer>(_pIndexBuffer);
 }
 
-int Mesh::initVertexBuffer(ID3D11Device* pD3DDevice)
+InitResult Mesh::InitVertexBuffer(ID3D11Device* pD3DDevice)
 {
 	_vertexCount = _meshData->Vertices.size();
 	_vertexStride = sizeof(Vertex);
@@ -50,12 +50,12 @@ int Mesh::initVertexBuffer(ID3D11Device* pD3DDevice)
 	initialData.pSysMem = &_meshData->Vertices[0];
 
 	HRESULT hr = pD3DDevice->CreateBuffer(&desc, &initialData, &_pVertexBuffer);
-	if (FAILED(hr)) return 30;
+	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Mesh: Failed to create vertex buffer."));
 
-	return 0;
+	return InitResult::Success();
 }
 
-int Mesh::initIndexBuffer(ID3D11Device* pD3DDevice)
+InitResult Mesh::InitIndexBuffer(ID3D11Device* pD3DDevice)
 {
 	_indexCount = _meshData->Indices.size();
 
@@ -68,7 +68,7 @@ int Mesh::initIndexBuffer(ID3D11Device* pD3DDevice)
 	initialData.pSysMem = &_meshData->Indices[0];
 
 	HRESULT hr = pD3DDevice->CreateBuffer(&desc, &initialData, &_pIndexBuffer);
-	if (FAILED(hr)) return 35;
+	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Mesh: failed to create index buffer"));
 
-	return 0;
+	return InitResult::Success();
 }

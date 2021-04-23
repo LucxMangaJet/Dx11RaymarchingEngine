@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "AppInfo.h"
 
-int D3D::init(const AppInfo& appInfo)
+InitResult D3D::Initialize(const AppInfo& appInfo)
 {
     // 1. create device, device context & swap chain
     DXGI_SWAP_CHAIN_DESC desc = {};
@@ -38,15 +38,15 @@ int D3D::init(const AppInfo& appInfo)
         &choosenLevel, // optional parameter for chosen feature level
         &_pD3DDeviceContext
     );
-    if (FAILED(hr)) return 20;
+    if (FAILED(hr)) return InitResult::Failure(20, TEXT("DX11: Failed to create swap chain."));
 
     // 2. create render target view
     ID3D11Texture2D* pBackBuffer = nullptr;
     hr = _pD3DSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
-    if (FAILED(hr)) return 22;
+    if (FAILED(hr)) return InitResult::Failure(22, TEXT("DX11: Failed to retrieved back buffer from swap chain."));
 
     hr = _pD3DDevice->CreateRenderTargetView(pBackBuffer, nullptr, &_pRenderTargetView);
-    if (FAILED(hr)) return 24;
+    if (FAILED(hr)) return InitResult::Failure(24, TEXT("DX11: Failed to create render target view."));
 
     safeRelease<ID3D11Texture2D>(pBackBuffer);
 
@@ -61,10 +61,10 @@ int D3D::init(const AppInfo& appInfo)
     depthStencilTextureDesc.SampleDesc.Count = 1;
 
     hr = _pD3DDevice->CreateTexture2D(&depthStencilTextureDesc, nullptr, &pDepthStencilTexture);
-    if (FAILED(hr)) return 26;
+    if (FAILED(hr)) return InitResult::Failure(26, TEXT("DX11: Failed to create depth stencil texture."));
 
     hr = _pD3DDevice->CreateDepthStencilView(pDepthStencilTexture, nullptr, &_pDepthStencilView);
-    if (FAILED(hr)) return 28;
+    if (FAILED(hr)) return InitResult::Failure(28, TEXT("DX11: Failed to create depth stencil view."));
 
     safeRelease<ID3D11Texture2D>(pDepthStencilTexture);
 
@@ -74,7 +74,7 @@ int D3D::init(const AppInfo& appInfo)
     rsDesc.CullMode = D3D11_CULL_BACK;
 
     hr = _pD3DDevice->CreateRasterizerState(&rsDesc, &_pRasterizerState);
-    if (FAILED(hr)) return 29;
+    if (FAILED(hr)) return InitResult::Failure(29, TEXT("DX11: Failed to create rasterizer state."));
 
     // 5. create viewport
     _viewPort.Width = appInfo.Width;
@@ -89,7 +89,7 @@ int D3D::init(const AppInfo& appInfo)
     _pD3DDeviceContext->RSSetState(_pRasterizerState);
     _pD3DDeviceContext->RSSetViewports(1, &_viewPort);
 
-    return 0;
+    return InitResult::Success();
 }
 
 
@@ -108,7 +108,7 @@ void D3D::endScene()
     _pD3DSwapChain->Present(0, 0);
 }
 
-void D3D::deInit()
+void D3D::DeInitialize()
 {
     safeRelease<ID3D11RasterizerState>(_pRasterizerState);
     safeRelease<ID3D11DepthStencilView>(_pDepthStencilView);

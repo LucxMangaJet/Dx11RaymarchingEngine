@@ -5,7 +5,7 @@ using namespace DirectX;
 
 
 
-int Camera::init(INT screenWidth, INT screenHeight, float fov, XMFLOAT3 position, XMFLOAT3 eular)
+InitResult Camera::Initialize(INT screenWidth, INT screenHeight, float fov, XMFLOAT3 position, XMFLOAT3 eular)
 {
 	_worldPosition = position;
 	_eularAngles = eular;
@@ -13,14 +13,14 @@ int Camera::init(INT screenWidth, INT screenHeight, float fov, XMFLOAT3 position
 
 	Update();
 
-	return 0;
+	return InitResult::Success();
 }
 
-void Camera::deInit()
+void Camera::DeInitialize()
 {
 }
 
-DirectX::XMFLOAT3 Camera::getForwardVector()
+DirectX::XMFLOAT3 Camera::GetForwardVector()
 {
 	XMMATRIX matrix = XMLoadFloat4x4(&_viewMatrix); 
 	XMFLOAT3 vector;
@@ -28,7 +28,7 @@ DirectX::XMFLOAT3 Camera::getForwardVector()
 	return vector;
 }
 
-XMFLOAT3 Camera::getRightVector()
+XMFLOAT3 Camera::GetRightVector()
 {
 	XMMATRIX matrix = XMLoadFloat4x4(&_viewMatrix);  
 	XMFLOAT3 vector;

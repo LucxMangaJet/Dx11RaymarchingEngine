@@ -1,14 +1,13 @@
 #pragma once
 #include <Windows.h>
-
-struct AppInfo;
+#include "AppInfo.h"
 
 class Window
 {
 public:
-	int init(const AppInfo& appInfo);
-	bool run();
-	void deInit();
+	InitResult Initialize(const AppInfo& appInfo);
+	bool Run();
+	void DeInitialize();
 
 	HWND getWindowHandle() { return _hWnd; }
 

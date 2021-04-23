@@ -5,35 +5,46 @@
 #include "PerRenderingDataContainer.h"
 
 
-int Material::init(ID3D11Device* pd3dDevice, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters)
+InitResult Material::Initialize(ID3D11Device* pd3dDevice, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters)
 {
 
-	int error = createVertexShader(pd3dDevice, vertexShaderName);
-	if (error != 0) return error;
+	InitResult result = CreateVertexShader(pd3dDevice, vertexShaderName);
+	if (result.Failed)return result;
 
-	error = createPixelShader(pd3dDevice, pixelShaderName);
-	if (error != 0) return error;
+	result = CreatePixelShader(pd3dDevice, pixelShaderName);
+	if (result.Failed)return result;
 
-	return 0;
+	return InitResult::Success();
 }
 
-void Material::render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix)
+void Material::Render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix)
 {
 	pD3DDeviceContext->IASetInputLayout(_pInputLayout);
 	pD3DDeviceContext->VSSetShader(_pVertexShader, nullptr, 0);
 	pD3DDeviceContext->PSSetShader(_pPixelShader, nullptr, 0);
 }
 
-void Material::deInit()
+void Material::DeInitialize()
 {
 	safeRelease<ID3D11VertexShader>(_pVertexShader);
 	safeRelease<ID3D11PixelShader>(_pPixelShader);
 	safeRelease<ID3D11InputLayout>(_pInputLayout);
 }
 
-int Material::createVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
+wchar_t* ToWideSet(char* ptr)
+{
+	size_t size = strlen(ptr) + 1;
+	wchar_t* res = new wchar_t[size];
+
+	size_t outSize;
+	mbstowcs_s(&outSize, res, size, ptr, size - 1);
+	return res;
+}
+
+InitResult Material::CreateVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 {
 	ID3DBlob* pCompiledCode = nullptr;
+	ID3DBlob* pCompileErrors = nullptr;
 	std::wstring compiledName = std::wstring(name) + L".cso";
 
 	HRESULT hr = D3DReadFileToBlob(compiledName.c_str(), &pCompiledCode);
@@ -48,29 +59,42 @@ int Material::createVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 			"vs_4_0", // shader type & version
 			0, 0, // optional flags
 			&pCompiledCode, // compiled code target
-			nullptr // optional blob for all compile errors
+			&pCompileErrors // optional blob for all compile errors
 		);
+	}
+
+	if (FAILED(hr))
+	{
+		std::wstringstream stream;
+		stream << TEXT("Material: Failed to compile vertex shader.");
 
 		if (hr == D3D11_ERROR_FILE_NOT_FOUND)
 		{
-			MessageBox(NULL, name, L"File not found", 0);
+			stream << TEXT("File not found: ");
+			stream << name;
 		}
+
+		if (pCompileErrors)
+		{
+			stream << TEXT("Compile Errors: ");
+			stream << ToWideSet((char*)pCompileErrors);
+		}
+
+		return InitResult::Failure(hr, stream.str().c_str());
 	}
 
-	if (FAILED(hr)) return 40;
-
 	hr = pD3DDevice->CreateVertexShader(pCompiledCode->GetBufferPointer(), pCompiledCode->GetBufferSize(), nullptr, &_pVertexShader);
-	if (FAILED(hr)) return 42;
+	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Material: Failed to create vertex shader."));
 
-	int error = createInputLayout(pD3DDevice, pCompiledCode);
-	if (error != 0) return error;
+	InitResult result = CreateInputLayout(pD3DDevice, pCompiledCode);
+	if (result.Failed) return result;
 
 	safeRelease<ID3DBlob>(pCompiledCode);
 
-	return 0;
+	return InitResult::Success();
 }
 
-int Material::createPixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
+InitResult Material::CreatePixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 {
 	ID3DBlob* pCompiledCode = nullptr;
 	ID3DBlob* pCompiledErrors = nullptr;
@@ -91,33 +115,36 @@ int Material::createPixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 			&pCompiledErrors // optional blob for all compile errors
 		);
 
+	}
+	if (FAILED(hr))
+	{
+		std::wstringstream stream;
+		stream << TEXT("Material: Failed to compile pixel shader.");
+
 		if (hr == D3D11_ERROR_FILE_NOT_FOUND)
 		{
-			MessageBox(NULL, name, L"File not found", 0);
+			stream << TEXT("File not found: ");
+			stream << name;
 		}
-	}
-	if (pCompiledErrors)
-	{
-		char* error = (char*)pCompiledErrors->GetBufferPointer();
-		size_t size = strlen(error) + 1;
-		wchar_t* res = new wchar_t[size];
 
-		size_t outSize;
-		mbstowcs_s(&outSize, res, size, error, size - 1);
+		if (pCompiledErrors)
+		{
+			stream << TEXT("Compile Errors: ");
+			stream << ToWideSet((char*)pCompiledErrors);
+		}
 
-		MessageBox(NULL, res, L"Error", 0);
+		return InitResult::Failure(hr, stream.str().c_str());
 	}
-	if (FAILED(hr)) return hr;
 
 	hr = pD3DDevice->CreatePixelShader(pCompiledCode->GetBufferPointer(), pCompiledCode->GetBufferSize(), nullptr, &_pPixelShader);
-	if (FAILED(hr)) return 48;
+	if (FAILED(hr)) InitResult::Failure(hr, TEXT("Material: Failed to create pixel shader."));
 
 	safeRelease<ID3DBlob>(pCompiledCode);
 
-	return 0;
+	return InitResult::Success();
 }
 
-int Material::createInputLayout(ID3D11Device* pD3DDevice, ID3DBlob* pBlob)
+InitResult Material::CreateInputLayout(ID3D11Device* pD3DDevice, ID3DBlob* pBlob)
 {
 	D3D11_INPUT_ELEMENT_DESC elements[5] = {};
 
@@ -148,9 +175,9 @@ int Material::createInputLayout(ID3D11Device* pD3DDevice, ID3DBlob* pBlob)
 
 
 	HRESULT hr = pD3DDevice->CreateInputLayout(elements, 5, pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &_pInputLayout);
-	if (FAILED(hr)) return 44;
+	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Material: Failed to create input layout."));
 
-	return 0;
+	return InitResult::Success();
 }
 
 

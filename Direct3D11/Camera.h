@@ -1,24 +1,25 @@
 #pragma once
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include "AppInfo.h"
 
 using namespace DirectX;
 
 class Camera
 {
 public:
-	int init(INT screenWidth, INT screenHeight, float fov, XMFLOAT3 position, XMFLOAT3 eular);
-	void deInit();
+	InitResult Initialize(INT screenWidth, INT screenHeight, float fov, XMFLOAT3 position, XMFLOAT3 eular);
+	void DeInitialize();
 
-	XMFLOAT3 getWorldPosition() { return _worldPosition; }
-	XMFLOAT3 getWorldRotation() { return _eularAngles; }
-	XMFLOAT3 getForwardVector();
-	XMFLOAT3 getRightVector();
+	XMFLOAT3 GetWorldPosition() { return _worldPosition; }
+	XMFLOAT3 GetWorldRotation() { return _eularAngles; }
+	XMFLOAT3 GetForwardVector();
+	XMFLOAT3 GetRightVector();
 
-	XMFLOAT4X4* getViewMatrix() { return &_viewMatrix; }
+	XMFLOAT4X4* GetViewMatrix() { return &_viewMatrix; }
 	
 
-	float getFOV() { return fov; }
+	float GetFOV() { return fov; }
 
 	void SetPosition(XMFLOAT3 position);
 	void SetEulerAngles(XMFLOAT3 euler);

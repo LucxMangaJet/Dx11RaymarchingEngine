@@ -8,27 +8,30 @@
 #define KEY_A 0x41
 #define KEY_PRESSED 0x8000
 
-int Engine::init(const AppInfo& appInfo)
+InitResult Engine::Initialize(const AppInfo& appInfo)
 {
+	InitResult result;
+
+	// create time
+	result = _time.Initialize();
+	if (result.Failed) return result;
+
+	//create render plane
 	MeshData sphereData = MeshGenerator::GenerateFace();
-	int error = _renderPlane.init(appInfo.D3DDevice, &sphereData);
-	if (error != 0) return ThrowErrorMSGBox(error);
+	result = _renderPlane.Initialize(appInfo.D3DDevice, &sphereData);
+	if (result.Failed) return result;
 
-	// 4. create camera
-	error = _camera.init(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, DirectX::XMFLOAT3(0, 0, -5), DirectX::XMFLOAT3(0, 0, 0));
-	if (error != 0) return ThrowErrorMSGBox(error);
+	// create camera
+	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, DirectX::XMFLOAT3(0, 0, -5), DirectX::XMFLOAT3(0, 0, 0));
+	if (result.Failed) return result;
 
-	// 5. create time
-	error = _time.init();
-	if (error != 0) return ThrowErrorMSGBox(error);
 
-	// 6. create material
+	// create material
 	MaterialParameters parameters1 = {};
 	parameters1.Ambient = { 0,0,0,0 };
 
-	error = _mainMaterial.init(appInfo.D3DDevice, NULL, L"RayMarchingVertex", L"RayMarchingPixel", parameters1);
-
-	if (error != 0) return ThrowErrorMSGBox(error);
+	result = _mainMaterial.Initialize(appInfo.D3DDevice, NULL, L"RayMarchingVertex", L"RayMarchingPixel", parameters1);
+	if (result.Failed) return result;
 
 	// 7. create light
 	LightData light = {};
@@ -37,12 +40,13 @@ int Engine::init(const AppInfo& appInfo)
 	light.DiffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	light.LightIntensity = 1.0f;
 
-	//8. GameObject
+	//create GameObject
 	_raymarchObject = {};
-	_raymarchObject.init(appInfo.D3DDevice,&_renderPlane, &_mainMaterial);
+	_raymarchObject.init(appInfo.D3DDevice, &_renderPlane, &_mainMaterial);
 
-	//per rendering data
-	_perRenderData.init(appInfo.D3DDevice);
+	//create per rendering data
+	result = _perRenderData.Initialize(appInfo.D3DDevice);
+	if (result.Failed) return result;
 	_perRenderData.SetResolution(appInfo.Width, appInfo.Height);
 	_perRenderData.SetLightData(light);
 
@@ -55,12 +59,12 @@ int Engine::init(const AppInfo& appInfo)
 	_oldMousePos = {};
 	_oldMousePos.x = appInfo.Width * 0.5f;
 	_oldMousePos.y = appInfo.Height * 0.5f;
-	return 0;
+	return InitResult::Success();
 }
 
-void Engine::update(const AppInfo& appInfo)
+void Engine::Update(const AppInfo& appInfo)
 {
-	_time.update();
+	_time.Update();
 
 	POINT mousePos;
 	if (GetCursorPos(&mousePos))
@@ -69,7 +73,7 @@ void Engine::update(const AppInfo& appInfo)
 		diff.x = mousePos.x - _oldMousePos.x;
 		diff.y = mousePos.y - _oldMousePos.y;
 
-		XMFLOAT3 eular = _camera.getWorldRotation();
+		XMFLOAT3 eular = _camera.GetWorldRotation();
 		eular.y += (float)diff.x / appInfo.Width;
 		eular.x += (float)diff.y / appInfo.Height;
 		_camera.SetEulerAngles(eular);
@@ -77,15 +81,15 @@ void Engine::update(const AppInfo& appInfo)
 
 	}
 
-	XMFLOAT3 f_position = _camera.getWorldPosition();
-	XMFLOAT3 f_forward = _camera.getForwardVector();
-	XMFLOAT3 f_right = _camera.getRightVector();
+	XMFLOAT3 f_position = _camera.GetWorldPosition();
+	XMFLOAT3 f_forward = _camera.GetForwardVector();
+	XMFLOAT3 f_right = _camera.GetRightVector();
 
 	XMVECTOR position = XMLoadFloat3(&f_position);
 	XMVECTOR forward = XMLoadFloat3(&f_forward);
 	XMVECTOR right = XMLoadFloat3(&f_right);
 
-	float deltaTime = _time.getDeltaTime();
+	float deltaTime = _time.GetDeltaTime();
 
 	if (GetKeyState(KEY_W) & KEY_PRESSED)
 	{
@@ -111,23 +115,23 @@ void Engine::update(const AppInfo& appInfo)
 
 }
 
-void Engine::render(const AppInfo& appInfo)
+void Engine::Render(const AppInfo& appInfo)
 {
 	//Setup per rendering buffer
-	_perRenderData.SetTime(_time.getTotalTime());
-	_perRenderData.SetCameraData(_camera.getFOV(), _camera.getWorldPosition(), _camera.getViewMatrix());
-	_perRenderData.bind(appInfo.D3DDeviceContext);
+	_perRenderData.SetTime(_time.GetTotalTime());
+	_perRenderData.SetCameraData(_camera.GetFOV(), _camera.GetWorldPosition(), _camera.GetViewMatrix());
+	_perRenderData.Bind(appInfo.D3DDeviceContext);
 
 	// rendering stuff
 	_raymarchObject.render(appInfo.D3DDeviceContext);
 }
 
-void Engine::deInit()
+void Engine::DeInitialize()
 {
 
-	_mainMaterial.deInit();
-	_time.deInit();
-	_camera.deInit();
-	_renderPlane.deInit();
-	_perRenderData.deInit();
+	_mainMaterial.DeInitialize();
+	_time.DeInitialize();
+	_camera.DeInitialize();
+	_renderPlane.DeInitialize();
+	_perRenderData.DeInitialize();
 }

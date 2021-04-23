@@ -24,15 +24,15 @@ struct MaterialParameters
 class Material
 {
 public:
-	int init(ID3D11Device* d3dDevice, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters);
-	virtual void render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix);
-	void deInit();
+	InitResult Initialize(ID3D11Device* d3dDevice, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters);
+	virtual void Render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix);
+	void DeInitialize();
 
 protected:
-	// helper methods
-	int createVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name);
-	int createPixelShader(ID3D11Device* pD3DDevice, LPCWSTR name);
-	int createInputLayout(ID3D11Device* pD3DDevice, ID3DBlob* pBlob);
+	// init methods
+	InitResult CreateVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name);
+	InitResult CreatePixelShader(ID3D11Device* pD3DDevice, LPCWSTR name);
+	InitResult CreateInputLayout(ID3D11Device* pD3DDevice, ID3DBlob* pBlob);
 
 	// shaders
 	ID3D11VertexShader* _pVertexShader = nullptr;

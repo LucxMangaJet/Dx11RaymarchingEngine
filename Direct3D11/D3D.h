@@ -1,18 +1,17 @@
 #pragma once
 #include <d3d11.h>
+#include "AppInfo.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxguid.lib")
 
-struct AppInfo;
-
 class D3D
 {
 public: 
-	int init(const AppInfo& appInfo);
+	InitResult Initialize(const AppInfo& appInfo);
 	void beginScene(FLOAT red, FLOAT green, FLOAT blue);
 	void endScene();
-	void deInit();
+	void DeInitialize();
 
 	ID3D11Device* getDevice() { return _pD3DDevice; }
 	ID3D11DeviceContext* getDeviceContext() { return _pD3DDeviceContext; }

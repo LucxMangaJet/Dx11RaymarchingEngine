@@ -3,6 +3,7 @@
 #include <DirectXMath.h>
 #include <vector>
 #include "Vertex.h"
+#include "AppInfo.h"
 
 using namespace DirectX;
 
@@ -15,13 +16,13 @@ struct MeshData
 class Mesh
 {
 public:
-	int init(ID3D11Device* pD3DDevice, MeshData* data);
-	void render(ID3D11DeviceContext* pD3DDeviceContext);
-	void deInit();
+	InitResult Initialize(ID3D11Device* pD3DDevice, MeshData* data);
+	void Render(ID3D11DeviceContext* pD3DDeviceContext);
+	void DeInitialize();
 
 private:
-	int initVertexBuffer(ID3D11Device* pD3DDevice);
-	int initIndexBuffer(ID3D11Device* pD3DDevice);
+	InitResult InitVertexBuffer(ID3D11Device* pD3DDevice);
+	InitResult InitIndexBuffer(ID3D11Device* pD3DDevice);
 
 	ID3D11Buffer* _pVertexBuffer = nullptr;
 	ID3D11Buffer* _pIndexBuffer = nullptr;

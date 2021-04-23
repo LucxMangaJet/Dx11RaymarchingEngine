@@ -4,27 +4,25 @@
 #include <iomanip>
 #include <sstream>
 
-int PerRenderingDataContainer::init(ID3D11Device* d3dDevice)
+InitResult PerRenderingDataContainer::Initialize(ID3D11Device* d3dDevice)
 {
-	clear();
+	Clear();
 
-	int result = createDX11Buffer(d3dDevice);
-	if (result != 0) return result;
-
-	return 0;
+	InitResult result = CreateDX11Buffer(d3dDevice);
+	return result;
 }
 
-void PerRenderingDataContainer::deInit()
+void PerRenderingDataContainer::DeInitialize()
 {
 	safeRelease<ID3D11Buffer>(_buffer);
 }
 
-void PerRenderingDataContainer::clear()
+void PerRenderingDataContainer::Clear()
 {
 	_data = std::make_unique<PerRenderingData>();
 }
 
-void PerRenderingDataContainer::bind(ID3D11DeviceContext* pD3DDeviceContext)
+void PerRenderingDataContainer::Bind(ID3D11DeviceContext* pD3DDeviceContext)
 {
 	D3D11_MAPPED_SUBRESOURCE data = {};
 	HRESULT hr = pD3DDeviceContext->Map(_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
@@ -95,7 +93,7 @@ void PerRenderingDataContainer::AddObject(int type, XMFLOAT3 position, XMFLOAT3 
 
 
 
-int PerRenderingDataContainer::createDX11Buffer(ID3D11Device* pD3DDevice)
+InitResult PerRenderingDataContainer::CreateDX11Buffer(ID3D11Device* pD3DDevice)
 {
 	D3D11_BUFFER_DESC desc = {};
 	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -104,7 +102,7 @@ int PerRenderingDataContainer::createDX11Buffer(ID3D11Device* pD3DDevice)
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	HRESULT hr = pD3DDevice->CreateBuffer(&desc, nullptr, &_buffer);
-	if (FAILED(hr)) return 101;
+	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Dx1:: Failed to create constant buffer."));
 
-	return 0;
+	return InitResult::Success();
 }

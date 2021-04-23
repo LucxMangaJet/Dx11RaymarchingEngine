@@ -63,15 +63,15 @@ class PerRenderingDataContainer
 {
 
 protected:
-	int createDX11Buffer(ID3D11Device* pD3DDevice);
+	InitResult CreateDX11Buffer(ID3D11Device* pD3DDevice);
 
 public:
 
-	int init(ID3D11Device* d3dDevice);
-	void deInit();
+	InitResult Initialize(ID3D11Device* d3dDevice);
+	void DeInitialize();
 
-	void clear();
-	void bind(ID3D11DeviceContext* pD3DDeviceCOntext);
+	void Clear();
+	void Bind(ID3D11DeviceContext* pD3DDeviceCOntext);
 
 	void SetTime(float time);
 	void SetResolution(float width, float height);

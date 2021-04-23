@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int Time::init()
+InitResult Time::Initialize()
 {
 	__int64 countsPerSec;
 	QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSec);
@@ -17,10 +17,10 @@ int Time::init()
 	__int64 currCont;
 	QueryPerformanceCounter((LARGE_INTEGER*)&currCont);
 	_prevCount = currCont;
-	return 0;
+	return InitResult::Success();
 }
 
-void Time::update()
+void Time::Update()
 {
 	__int64 currCount;
 	QueryPerformanceCounter((LARGE_INTEGER*)&currCount);
@@ -42,6 +42,6 @@ void Time::update()
 #endif
 }
 
-void Time::deInit()
+void Time::DeInitialize()
 {
 }

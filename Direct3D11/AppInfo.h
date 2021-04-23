@@ -19,15 +19,23 @@ struct AppInfo
 	ID3D11DeviceContext* D3DDeviceContext;
 };
 
-inline std::wstring IntToHexString(int nr)
+struct InitResult
 {
-	std::wostringstream oss;  // note the 'w'
-	oss << std::hex << nr;
-	return oss.str();
-}
+	bool Failed = false;
+	int ErrorCode = false;
+	const wchar_t* ErrorMsg = nullptr;
 
-inline int ThrowErrorMSGBox(int code)
-{
-	MessageBox(NULL, (std::to_wstring(code) + L" Hex: " + IntToHexString(code)).c_str(), L"Error", 0);
-	return code;
-}
+
+	static InitResult Success() { return InitResult(); }
+	static InitResult Failure(int errorCode, const wchar_t* errorMsg = nullptr) 
+	{
+		InitResult res;
+		res.Failed = true;
+		res.ErrorCode = errorCode;
+		res.ErrorMsg = errorMsg;
+		return res;
+	};
+
+};
+
+

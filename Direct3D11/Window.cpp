@@ -19,7 +19,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
-int Window::init(const AppInfo& appInfo)
+InitResult Window::Initialize(const AppInfo& appInfo)
 {
 	WNDCLASS wc = {};
 	wc.hInstance = appInfo.HInstance;
@@ -30,7 +30,7 @@ int Window::init(const AppInfo& appInfo)
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wc.lpfnWndProc = WndProc;
 
-	if (!RegisterClass(&wc)) return 10;
+	if (!RegisterClass(&wc)) return InitResult::Failure(10, TEXT("Win32 Failed to register class."));
 
 	INT halfScreenWidth = GetSystemMetrics(SM_CXSCREEN) / 2;
 	INT halfScreenHeight = GetSystemMetrics(SM_CYSCREEN) / 2;
@@ -44,16 +44,16 @@ int Window::init(const AppInfo& appInfo)
 	_hWnd = CreateWindow(wc.lpszClassName, wc.lpszClassName, style, 
 		r.left, r.top, r.right - r.left, r.bottom - r.top, nullptr, nullptr, appInfo.HInstance, nullptr);
 
-	if (!_hWnd) return 15;
+	if (!_hWnd) return InitResult::Failure(15, TEXT("Win32 Failed to create window"));
 
 	ShowWindow(_hWnd, appInfo.nCmdShow);
 	SetFocus(_hWnd); 
 
-	return 0;
+	return InitResult::Success();
 }
 
 
-bool Window::run()
+bool Window::Run()
 {
 	MSG msg = {};
 	if (PeekMessage(&msg, nullptr, 0, UINT_MAX, PM_REMOVE))
@@ -67,7 +67,7 @@ bool Window::run()
 	return true;
 }
 
-void Window::deInit()
+void Window::DeInitialize()
 {
 	// TODO: destroy window if it is not destroyed
 }

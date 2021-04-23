@@ -1,13 +1,14 @@
 #pragma once
+#include "AppInfo.h"
 class Time
 {
 public:
-	int init();
-	void update();
-	void deInit();
+	InitResult Initialize();
+	void Update();
+	void DeInitialize();
 
-	float getDeltaTime() { return _deltaTime; }
-	float getTotalTime() { return _totalTime; }
+	inline float GetDeltaTime() { return _deltaTime; }
+	inline float GetTotalTime() { return _totalTime; }
 
 private:
 
