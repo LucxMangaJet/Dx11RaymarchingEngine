@@ -1,10 +1,12 @@
 #pragma once
 #include <Windows.h>
 
+struct AppInfo;
+
 class Window
 {
 public:
-	int init(HINSTANCE hInstance, INT width, INT height, int nCmdShow);
+	int init(const AppInfo& appInfo);
 	bool run();
 	void deInit();
 

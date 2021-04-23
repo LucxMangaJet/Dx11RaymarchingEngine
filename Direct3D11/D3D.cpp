@@ -1,19 +1,20 @@
 #include "D3D.h"
 #include "Utils.h"
+#include "AppInfo.h"
 
-int D3D::init(HWND hWnd, INT width, INT height, bool isWindowed)
+int D3D::init(const AppInfo& appInfo)
 {
     // 1. create device, device context & swap chain
     DXGI_SWAP_CHAIN_DESC desc = {};
     desc.BufferCount = 1;
-    desc.BufferDesc.Width = width;
-    desc.BufferDesc.Height = height;
+    desc.BufferDesc.Width = appInfo.Width;
+    desc.BufferDesc.Height = appInfo.Height;
     desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     desc.SampleDesc.Count = 1;
     desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-    desc.OutputWindow = hWnd;
-    desc.Windowed = isWindowed;
+    desc.OutputWindow = appInfo.MainWindow;
+    desc.Windowed = appInfo.IsWindowed;
 
     D3D_FEATURE_LEVEL supportedLevels[] = { 
         D3D_FEATURE_LEVEL_12_1,
@@ -34,7 +35,7 @@ int D3D::init(HWND hWnd, INT width, INT height, bool isWindowed)
         supportedLevels, 6, // supported direct 3d versions (versions & array size)
         D3D11_SDK_VERSION, // api version the application was build with
         &desc, &_pD3DSwapChain, &_pD3DDevice,
-        &choosenLevel, // optional parameter for choosen feature level
+        &choosenLevel, // optional parameter for chosen feature level
         &_pD3DDeviceContext
     );
     if (FAILED(hr)) return 20;
@@ -53,8 +54,8 @@ int D3D::init(HWND hWnd, INT width, INT height, bool isWindowed)
     ID3D11Texture2D* pDepthStencilTexture = nullptr;
     D3D11_TEXTURE2D_DESC depthStencilTextureDesc = {};
     depthStencilTextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    depthStencilTextureDesc.Width = width;
-    depthStencilTextureDesc.Height = height;
+    depthStencilTextureDesc.Width = appInfo.Width;
+    depthStencilTextureDesc.Height = appInfo.Height;
     depthStencilTextureDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
     depthStencilTextureDesc.ArraySize = 1;
     depthStencilTextureDesc.SampleDesc.Count = 1;
@@ -76,8 +77,8 @@ int D3D::init(HWND hWnd, INT width, INT height, bool isWindowed)
     if (FAILED(hr)) return 29;
 
     // 5. create viewport
-    _viewPort.Width = width;
-    _viewPort.Height = height;
+    _viewPort.Width = appInfo.Width;
+    _viewPort.Height = appInfo.Height;
     _viewPort.TopLeftX = 0.0f;
     _viewPort.TopLeftY = 0.0f;
     _viewPort.MinDepth = 0.0f;
@@ -90,6 +91,8 @@ int D3D::init(HWND hWnd, INT width, INT height, bool isWindowed)
 
     return 0;
 }
+
+
 
 void D3D::beginScene(FLOAT red, FLOAT green, FLOAT blue)
 {

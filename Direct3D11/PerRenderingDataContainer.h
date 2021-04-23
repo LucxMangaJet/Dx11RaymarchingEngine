@@ -2,6 +2,7 @@
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include "D3D.h"
+#include <memory>
 
 using namespace DirectX;
 
@@ -66,8 +67,8 @@ protected:
 
 public:
 
-	int init(D3D* d3d);
-	void deinit();
+	int init(ID3D11Device* d3dDevice);
+	void deInit();
 
 	void clear();
 	void bind(ID3D11DeviceContext* pD3DDeviceCOntext);
@@ -82,6 +83,7 @@ public:
 private:
 
 	int _objectIndex = 0;
-	PerRenderingData _data = {};
+	std::unique_ptr<PerRenderingData> _data;
+
 	ID3D11Buffer* _buffer = nullptr;
 };

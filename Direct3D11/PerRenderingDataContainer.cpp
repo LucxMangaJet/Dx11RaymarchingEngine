@@ -4,24 +4,24 @@
 #include <iomanip>
 #include <sstream>
 
-int PerRenderingDataContainer::init(D3D* d3d)
+int PerRenderingDataContainer::init(ID3D11Device* d3dDevice)
 {
 	clear();
 
-	int result = createDX11Buffer(d3d->getDevice());
+	int result = createDX11Buffer(d3dDevice);
 	if (result != 0) return result;
 
 	return 0;
 }
 
-void PerRenderingDataContainer::deinit()
+void PerRenderingDataContainer::deInit()
 {
 	safeRelease<ID3D11Buffer>(_buffer);
 }
 
 void PerRenderingDataContainer::clear()
 {
-	_data = PerRenderingData();
+	_data = std::make_unique<PerRenderingData>();
 }
 
 void PerRenderingDataContainer::bind(ID3D11DeviceContext* pD3DDeviceContext)
@@ -32,7 +32,7 @@ void PerRenderingDataContainer::bind(ID3D11DeviceContext* pD3DDeviceContext)
 
 	PerRenderingData* pBuffer = reinterpret_cast<PerRenderingData*>(data.pData);
 
-	*pBuffer = _data;
+	*pBuffer = *_data;
 
 	pD3DDeviceContext->Unmap(_buffer, 0);
 
@@ -41,13 +41,13 @@ void PerRenderingDataContainer::bind(ID3D11DeviceContext* pD3DDeviceContext)
 
 void PerRenderingDataContainer::SetTime(float time)
 {
-	_data.Time = time;
+	_data->Time = time;
 }
 
 void PerRenderingDataContainer::SetResolution(float width, float height)
 {
-	_data.Height = height;
-	_data.Width = width;
+	_data->Height = height;
+	_data->Width = width;
 }
 
 void PerRenderingDataContainer::SetCameraData(float fov, XMFLOAT3 position, XMFLOAT4X4* view)
@@ -57,12 +57,12 @@ void PerRenderingDataContainer::SetCameraData(float fov, XMFLOAT3 position, XMFL
 	data.ViewMatrix = *view;
 	data.Position = position;
 
-	_data.CameraData = data;
+	_data->CameraData = data;
 }
 
 void PerRenderingDataContainer::SetLightData(LightData data)
 {
-	_data.LightData = data;
+	_data->LightData = data;
 }
 
 void PerRenderingDataContainer::ResetObjects()
@@ -73,7 +73,7 @@ void PerRenderingDataContainer::ResetObjects()
 void PerRenderingDataContainer::AddObject(int type, XMFLOAT3 position, XMFLOAT3 eulerAngles, XMFLOAT3 scale, Operation operation , XMFLOAT3 modulo )
 {
 	RMObject object;
-	object.Type = type;
+	object.Type = (float) type;
 	object.Scale = scale;
 	object.Operation =(float)(int)operation;
 	object.Modulo = modulo;
@@ -87,10 +87,10 @@ void PerRenderingDataContainer::AddObject(int type, XMFLOAT3 position, XMFLOAT3 
 	XMMATRIX comb = translation * rotation;
 	XMStoreFloat4x4(&object.TranslationRotationMatrix, comb);
 
-	_data.Objects.Objects[_objectIndex] = object;
+	_data->Objects.Objects[_objectIndex] = object;
 
 	_objectIndex++;
-	_data.Objects.Count = _objectIndex;
+	_data->Objects.Count = (float) _objectIndex;
 }
 
 

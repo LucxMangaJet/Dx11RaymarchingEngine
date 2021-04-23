@@ -5,14 +5,13 @@
 #include "PerRenderingDataContainer.h"
 
 
-int Material::init(D3D* d3d, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters)
+int Material::init(ID3D11Device* pd3dDevice, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters)
 {
-	ID3D11Device* pD3DDevice = d3d->getDevice();
 
-	int error = createVertexShader(pD3DDevice, vertexShaderName);
+	int error = createVertexShader(pd3dDevice, vertexShaderName);
 	if (error != 0) return error;
 
-	error = createPixelShader(pD3DDevice, pixelShaderName);
+	error = createPixelShader(pd3dDevice, pixelShaderName);
 	if (error != 0) return error;
 
 	return 0;

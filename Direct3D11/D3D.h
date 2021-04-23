@@ -4,10 +4,12 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxguid.lib")
 
+struct AppInfo;
+
 class D3D
 {
 public: 
-	int init(HWND hWnd, INT width, INT height, bool isWindowed);
+	int init(const AppInfo& appInfo);
 	void beginScene(FLOAT red, FLOAT green, FLOAT blue);
 	void endScene();
 	void deInit();
@@ -18,7 +20,7 @@ public:
 private:
 	// COM - Component Object Model
 	ID3D11Device* _pD3DDevice = nullptr; // object for creating direct 3d objects
-	ID3D11DeviceContext* _pD3DDeviceContext = nullptr; // object for modify renderpipeline
+	ID3D11DeviceContext* _pD3DDeviceContext = nullptr; // object for modify render pipeline
 	IDXGISwapChain* _pD3DSwapChain = nullptr; // holds references front & back buffer
 	ID3D11RenderTargetView* _pRenderTargetView = nullptr; // target to render on (here back buffer)
 	ID3D11DepthStencilView* _pDepthStencilView = nullptr; // reference to depth & stencil buffer

@@ -24,7 +24,7 @@ struct MaterialParameters
 class Material
 {
 public:
-	int init(D3D* d3d, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters);
+	int init(ID3D11Device* d3dDevice, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters);
 	virtual void render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix);
 	void deInit();
 
