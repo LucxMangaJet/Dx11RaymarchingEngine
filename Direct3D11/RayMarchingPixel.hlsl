@@ -38,6 +38,4 @@ float4 main(PixelInput IN) : SV_TARGET
 
 	float4 color = float4(saturate(Light.AmbientColor + Light.DiffuseColor * diffuse + float3(specular,0,0)),1);
 	return color;
-
-	return 1;
 }
