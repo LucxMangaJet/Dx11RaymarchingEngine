@@ -4,7 +4,7 @@
 
 static ImGuiMouseCursor     g_LastMouseCursor = ImGuiMouseCursor_COUNT;
 bool UpdateMouseCursor();
-
+void UpdateMousePosition(HWND hwd);
 
 InitResult ImGUIWin32::Initialize(const AppInfo& appInfo)
 {
@@ -63,7 +63,7 @@ void ImGUIWin32::Update(const AppInfo& appInfo)
 	// io.KeysDown[], io.MousePos, io.MouseDown[], io.MouseWheel: filled by the WndProc handler below.
 
 	// Update OS mouse position
-	UpdateMouseCursor();
+	UpdateMousePosition(appInfo.MainWindow);
 
 	// Update OS mouse cursor with the cursor requested by imgui
 	ImGuiMouseCursor mouse_cursor = io.MouseDrawCursor ? ImGuiMouseCursor_None : ImGui::GetMouseCursor();
@@ -72,6 +72,28 @@ void ImGUIWin32::Update(const AppInfo& appInfo)
 		g_LastMouseCursor = mouse_cursor;
 		UpdateMouseCursor();
 	}
+}
+
+static void UpdateMousePosition(HWND hwd)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	IM_ASSERT(hwd != 0);
+
+	// Set OS mouse position if requested (rarely used, only when ImGuiConfigFlags_NavEnableSetMousePos is enabled by user)
+	if (io.WantSetMousePos)
+	{
+		POINT pos = { (int)io.MousePos.x, (int)io.MousePos.y };
+		if (::ClientToScreen(hwd, &pos))
+			::SetCursorPos(pos.x, pos.y);
+	}
+
+	// Set mouse position
+	io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+	POINT pos;
+	if (HWND active_window = ::GetForegroundWindow())
+		if (active_window == hwd || ::IsChild(active_window, hwd))
+			if (::GetCursorPos(&pos) && ::ScreenToClient(hwd, &pos))
+				io.MousePos = ImVec2((float)pos.x, (float)pos.y);
 }
 
 
@@ -135,6 +157,7 @@ void ImGUIWin32::DeInitialize()
 // Copy this line into your .cpp file to forward declare the function.
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif
+
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui::GetCurrentContext() == NULL)

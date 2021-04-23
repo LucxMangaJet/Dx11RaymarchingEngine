@@ -27,17 +27,6 @@ void Time::Update()
 
 	_totalTime += _deltaTime;
 	_prevCount = currCount;
-
-#if _DEBUG
-	std::wstringstream stream ;
-	stream << TEXT("FPS : ");
-	stream << std::fixed << std::setprecision(0) << (1.0f / _deltaTime);
-	stream << TEXT(" DT: ");
-	stream << std::setprecision(5) << _deltaTime;
-	stream << std::endl;
-
-	OutputDebugString(stream.str().c_str());
-#endif
 }
 
 void Time::DeInitialize()
