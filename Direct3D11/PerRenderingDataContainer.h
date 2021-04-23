@@ -3,6 +3,7 @@
 #include <d3d11.h>
 #include "D3D.h"
 #include <memory>
+#include "AppInfo.h"
 
 using namespace DirectX;
 

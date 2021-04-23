@@ -47,6 +47,7 @@ InitResult Window::Initialize(const AppInfo& appInfo)
 	if (!_hWnd) return InitResult::Failure(15, TEXT("Win32 Failed to create window"));
 
 	ShowWindow(_hWnd, appInfo.nCmdShow);
+	UpdateWindow(_hWnd);
 	SetFocus(_hWnd); 
 
 	return InitResult::Success();

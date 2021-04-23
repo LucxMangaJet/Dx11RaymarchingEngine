@@ -1,8 +1,8 @@
-#include "D3D.h"
+#include "Direct3D.h"
 #include "Utils.h"
 #include "AppInfo.h"
 
-InitResult D3D::Initialize(const AppInfo& appInfo)
+InitResult Direct3D::Initialize(const AppInfo& appInfo)
 {
     // 1. create device, device context & swap chain
     DXGI_SWAP_CHAIN_DESC desc = {};
@@ -94,21 +94,21 @@ InitResult D3D::Initialize(const AppInfo& appInfo)
 
 
 
-void D3D::beginScene(FLOAT red, FLOAT green, FLOAT blue)
+void Direct3D::BeginScene(float red, float green, float blue)
 {
     // clear back buffer with solid color
-    const FLOAT color[] = { red, green, blue, 1.0f };
+    const float color[] = { red, green, blue, 1.0f };
     _pD3DDeviceContext->ClearRenderTargetView(_pRenderTargetView, color);
     _pD3DDeviceContext->ClearDepthStencilView(_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0xffffff);
 }
 
-void D3D::endScene()
+void Direct3D::EndScene()
 {
     // swap back with front buffer
     _pD3DSwapChain->Present(0, 0);
 }
 
-void D3D::DeInitialize()
+void Direct3D::DeInitialize()
 {
     safeRelease<ID3D11RasterizerState>(_pRasterizerState);
     safeRelease<ID3D11DepthStencilView>(_pDepthStencilView);

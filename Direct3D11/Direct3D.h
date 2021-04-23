@@ -5,16 +5,16 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxguid.lib")
 
-class D3D
+class Direct3D
 {
 public: 
 	InitResult Initialize(const AppInfo& appInfo);
-	void beginScene(FLOAT red, FLOAT green, FLOAT blue);
-	void endScene();
+	void BeginScene(float red, float green, float blue); //clear render target view
+	void EndScene(); //Presents the swap chain
 	void DeInitialize();
 
-	ID3D11Device* getDevice() { return _pD3DDevice; }
-	ID3D11DeviceContext* getDeviceContext() { return _pD3DDeviceContext; }
+	ID3D11Device* GetDevice() { return _pD3DDevice; }
+	ID3D11DeviceContext* GetDeviceContext() { return _pD3DDeviceContext; }
 
 private:
 	// COM - Component Object Model

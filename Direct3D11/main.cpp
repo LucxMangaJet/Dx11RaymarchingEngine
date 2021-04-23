@@ -1,17 +1,19 @@
 #include <Windows.h>
 #include "Window.h"
-#include "D3D.h"
+#include "Direct3D.h"
 #include <string>
 #include "AppInfo.h"
 #include "Engine.h"
+#include "ImGUIFacade.h"
 
 static AppInfo g_AppInfo; //Contains global information and pointers to commonly used objects for initialization (Dx11 & WinApi)
-static D3D* g_d3d;
+static Direct3D* g_direct3D;
 static Window* g_window;
 static Engine* g_engine;
+static ImGUIFacade* g_gui;
 
 void RunMainLoop();
-void CleanupApplication();
+void Shutdown();
 bool FailedInit(InitResult result);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine, int nCmdShow)
@@ -34,13 +36,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	g_window = &window;
 
 	// D3D11 Setup
-	D3D d3d;
+	Direct3D d3d;
 	result = d3d.Initialize(g_AppInfo);
 	if (FailedInit(result)) return result.ErrorCode;
 
-	g_AppInfo.D3DDevice = d3d.getDevice();
-	g_AppInfo.D3DDeviceContext = d3d.getDeviceContext();
-	g_d3d = &d3d;
+	g_AppInfo.D3DDevice = d3d.GetDevice();
+	g_AppInfo.D3DDeviceContext = d3d.GetDeviceContext();
+	g_direct3D = &d3d;
 
 	//Engine Setup
 	Engine engine;
@@ -49,34 +51,44 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 
 	g_engine = &engine;
 
+	//ImGUI Setup
+	ImGUIFacade gui;
+	result = gui.Initialize(g_AppInfo);
+	if (FailedInit(result)) return result.ErrorCode;
+	g_gui = &gui;
+
+
 	RunMainLoop();
 
-	CleanupApplication();
+	Shutdown();
 	return 0;
 }
 
 void RunMainLoop()
 {
-
-	// 8. run application
 	while (true)
 	{
+		//handle messages
 		if (!g_window->Run()) break;
 
+		//update
+		g_gui->Update(g_AppInfo);
 		g_engine->Update(g_AppInfo);
 
-		// 8.2. draw objects 
-		g_d3d->beginScene(0.0f, 0.0f, 0.0f);
+		// render
+		g_direct3D->BeginScene(0.0f, 0.0f, 0.0f);
 
 		g_engine->Render(g_AppInfo);
+		g_gui->Render(g_AppInfo);
 
-		g_d3d->endScene();
+		g_direct3D->EndScene();
 	}
 }
 
-void CleanupApplication()
+void Shutdown()
 {
-	g_d3d->DeInitialize();
+	g_gui->DeInitialize();
+	g_direct3D->DeInitialize();
 	g_window->DeInitialize();
 	g_engine->DeInitialize();
 }
