@@ -77,6 +77,56 @@ float SDF_Mandelbulb(float3 p)
 	return 0.25 * log(m) * sqrt(m) / dz;
 }
 
+//https://github.com/JPBotelho/Raymarched-Fractals/blob/master/Content/DistanceFunc.cginc
+float SDF_Sierpinski(float3 p)
+{
+	const float3 va = float3(0.0, 0.575735, 0.0);
+	const float3 vb = float3(0.0, -1.0, 1.15470);
+	const float3 vc = float3(1.0, -1.0, -0.57735);
+	const float3 vd = float3(-1.0, -1.0, -0.57735);
+
+	float a = 0;
+	float s = 1;
+	float r = 1;
+	float dm;
+	float3 v;
+	int iter = 15;
+
+	[loop]
+	for (int i = 0; i < iter; i++)
+	{
+		float d, t;
+		d = dot(p - va, p - va);
+
+		v = va;
+		dm = d;
+		t = 0;
+
+		d = dot(p - vb, p - vb);
+		if (d < dm)
+		{
+			v = vb;
+			dm = d;
+			t = 1.0;
+		}
+
+		d = dot(p - vc, p - vc);
+
+		if (d < dm) { v = vc; dm = d; t = 2.0; }
+		d = dot(p - vd, p - vd);
+		if (d < dm) { v = vd; dm = d; t = 3.0; }
+
+		p = v + 2 * (p - v);
+		r *= 2;
+		a = t + 4 * a;
+		s *= 4;
+	}
+	//Original v. (But it includes unnecessary calculations and truncation)
+	//return float2((sqrt(dm)-1.0)/r, a/s);
+
+	return (sqrt(dm) - 1.0) / r;
+}
+
 //https://www.shadertoy.com/view/XtcGWn
 float SDF_Cube(float3 p)
 {
@@ -143,24 +193,14 @@ float SDF_Scene(float3 p)
 		float scalingCorrection = min(scale.x, min(scale.y, scale.z));
 		float val = 10000;
 
-		if (length(object.Modulo) == 0)
-		{
-			if (object.Type == 1)
-				val = min(val, SDF_Sphere(tp / scale) * scalingCorrection);
-			else if (object.Type == 2)
-				val = min(val, SDF_Cube(tp / scale) * scalingCorrection);
-			else if (object.Type == 3)
-				val = min(val, SDF_Mandelbulb(tp / scale) * scalingCorrection);
-
-		}
-		else
-		{
-			if (object.Type == 1)
-				val = min(val, SDF_Sphere(mod3(tp / scale, object.Modulo)) * scalingCorrection);
-			else if (object.Type == 2)
-				val = min(val, SDF_Cube(mod3(tp / scale, object.Modulo)) * scalingCorrection);
-
-		}
+		if (object.Type == 1)
+			val = SDF_Sphere(tp / scale) * scalingCorrection;
+		else if (object.Type == 2)
+			val = SDF_Cube(tp / scale) * scalingCorrection;
+		else if (object.Type == 3)
+			val = SDF_Mandelbulb(tp / scale) * scalingCorrection;
+		else if (object.Type == 4)
+			val = SDF_Sierpinski(tp / scale) * scalingCorrection;
 
 
 		if (object.Operation == 0)
@@ -176,10 +216,12 @@ float SDF_Scene(float3 p)
 
 float3 SDF_EstimateNormal(float3 p)
 {
+	float step = EPSILON;
+
 	return normalize(float3(
-		SDF_Scene(float3(p.x + EPSILON, p.y, p.z)) - SDF_Scene(float3(p.x - EPSILON, p.y, p.z)),
-		SDF_Scene(float3(p.x, p.y + EPSILON, p.z)) - SDF_Scene(float3(p.x, p.y - EPSILON, p.z)),
-		SDF_Scene(float3(p.x, p.y, p.z + EPSILON)) - SDF_Scene(float3(p.x, p.y, p.z - EPSILON))
+		SDF_Scene(float3(p.x + step, p.y, p.z)) - SDF_Scene(float3(p.x - step, p.y, p.z)),
+		SDF_Scene(float3(p.x, p.y + step, p.z)) - SDF_Scene(float3(p.x, p.y - step, p.z)),
+		SDF_Scene(float3(p.x, p.y, p.z + step)) - SDF_Scene(float3(p.x, p.y, p.z - step))
 		));
 }
 

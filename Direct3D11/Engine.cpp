@@ -46,7 +46,7 @@ int Engine::init(const AppInfo& appInfo)
 	_perRenderData.SetResolution(appInfo.Width, appInfo.Height);
 	_perRenderData.SetLightData(light);
 
-	_perRenderData.AddObject(3, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(1, 1, 1), Operation::Union);
+	_perRenderData.AddObject(4, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(10, 10, 10), Operation::Union);
 	_perRenderData.AddObject(1, XMFLOAT3(0, -3, 5), XMFLOAT3(), XMFLOAT3(1, 1, 1), Operation::Union);
 	//perRenderingData.AddObject(1, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(1.5, 1.5, 1.5), Operation::Difference);
 	//perRenderingData.AddObject(1, XMFLOAT3(2, 0, 5), XMFLOAT3(0, 1, 0), XMFLOAT3(1, 1, 1));
