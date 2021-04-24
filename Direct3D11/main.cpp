@@ -1,23 +1,28 @@
 #include <Windows.h>
-#include "Window.h"
+#include "MainWindow.h"
 #include "Direct3D.h"
 #include <string>
 #include "AppInfo.h"
 #include "Engine.h"
 #include "ImGUIFacade.h"
 #include "Event.h"
+#include "GUIConsole.h"
 
 static AppInfo g_AppInfo; //Contains global information and pointers to commonly used objects for initialization (Dx11 & WinApi)
 static Direct3D* g_direct3D;
-static Window* g_window;
+static MainWindow* g_window;
 static Engine* g_engine;
 static ImGUIFacade* g_gui;
 static Time* g_time;
-static ActionEvent* g_OnGuiEvent;
+
+//UI
+static GUIConsole* g_console;
+
 
 void RunMainLoop();
 void Shutdown();
 bool FailedInit(InitResult result);
+void OnResize(UINT width, UINT height);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine, int nCmdShow)
 {
@@ -31,12 +36,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	InitResult result;
 
 	// Window Setup
-	Window window;
+	MainWindow window;
 	result = window.Initialize(g_AppInfo);
 	if (FailedInit(result)) return result.ErrorCode;
 
 	g_AppInfo.MainWindow = window.getWindowHandle();
 	g_window = &window;
+	window.SetOnResizeCallback(OnResize);
 
 	// D3D11 Setup
 	Direct3D d3d;
@@ -66,10 +72,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	if (FailedInit(result)) return result.ErrorCode;
 	g_gui = &gui;
 
-	//Setup OnGUI event
-	ActionEvent onGUIEvent;
-	g_OnGuiEvent = &onGUIEvent;
-
+	//GUI Setup
+	GUIConsole console = GUIConsole();
+	g_console = &console;
 
 	RunMainLoop();
 
@@ -87,9 +92,10 @@ void RunMainLoop()
 		//update
 		g_time->Update();
 		g_engine->Update(g_AppInfo);
-
 		g_gui->Update(g_AppInfo);
-		g_OnGuiEvent->Invoke();
+
+		static bool consoleOpen;
+		g_console->Draw("Console", &consoleOpen);
 
 		// render
 		g_direct3D->BeginScene(0.0f, 0.0f, 0.0f);
@@ -109,6 +115,12 @@ void Shutdown()
 	g_engine->DeInitialize();
 }
 
+void OnResize(UINT width, UINT height)
+{
+	g_AppInfo.Width = width;
+	g_AppInfo.Height = height;
+	g_direct3D->OnResize(g_AppInfo);
+}
 
 bool FailedInit(InitResult result)
 {
@@ -125,7 +137,7 @@ bool FailedInit(InitResult result)
 
 		stream << std::endl;
 		MessageBox(NULL, stream.str().c_str(), TEXT("Init Error"), 0);
-		
+
 		return true;
 	}
 

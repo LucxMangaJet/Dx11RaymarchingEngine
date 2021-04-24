@@ -149,8 +149,8 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Direct3D.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="Event.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GUIConsole.cpp" />
     <ClCompile Include="ImGUIDirect3D.cpp" />
     <ClCompile Include="ImGUIFacade.cpp" />
     <ClCompile Include="ImGUIWin32.cpp" />
@@ -160,7 +160,7 @@
     <ClCompile Include="MeshGenerator.cpp" />
     <ClCompile Include="PerRenderingDataContainer.cpp" />
     <ClCompile Include="Time.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\imgui\imconfig.h" />
@@ -172,6 +172,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GUIConsole.h" />
     <ClInclude Include="ImGUIDirect3D.h" />
     <ClInclude Include="ImGUIFacade.h" />
     <ClInclude Include="ImGUIWin32.h" />
@@ -181,7 +182,7 @@
     <ClInclude Include="PerRenderingDataContainer.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Vertex.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="RayMarchingUtil.hlsl">

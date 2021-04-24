@@ -49,6 +49,7 @@ void ImGUIFacade::Render(const AppInfo& appInfo)
 	_direct3DHelper.Render(appInfo, ImGui::GetDrawData());
 }
 
+
 void ImGUIFacade::DeInitialize()
 {
 	_win32Helper.DeInitialize();

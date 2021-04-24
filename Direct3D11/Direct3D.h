@@ -12,11 +12,17 @@ public:
 	void BeginScene(float red, float green, float blue); //clear render target view
 	void EndScene(); //Presents the swap chain
 	void DeInitialize();
+	void OnResize(const AppInfo& appInfo);
 
 	ID3D11Device* GetDevice() { return _pD3DDevice; }
 	ID3D11DeviceContext* GetDeviceContext() { return _pD3DDeviceContext; }
 
 private:
+
+	InitResult CreateRenderTargetView();
+	InitResult CreateDepthStencilView(const AppInfo& appInfo);
+
+
 	// COM - Component Object Model
 	ID3D11Device* _pD3DDevice = nullptr; // object for creating direct 3d objects
 	ID3D11DeviceContext* _pD3DDeviceContext = nullptr; // object for modify render pipeline
