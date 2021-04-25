@@ -6,19 +6,17 @@
 #include "Engine.h"
 #include "ImGUIFacade.h"
 #include "Event.h"
-#include "GUIConsole.h"
+#include "GUIMainSetup.h"
 
 static AppInfo g_AppInfo; //Contains global information and pointers to commonly used objects for initialization (Dx11 & WinApi)
 static Direct3D* g_direct3D;
 static MainWindow* g_window;
 static Engine* g_engine;
-static ImGUIFacade* g_gui;
+static ImGUIFacade* g_imgui;
 static Time* g_time;
+static GUIMainSetup* g_gui;
 
-//UI
-static GUIConsole* g_console;
-
-
+int Setup();
 void RunMainLoop();
 void Shutdown();
 bool FailedInit(InitResult result);
@@ -67,14 +65,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	g_engine = &engine;
 
 	//ImGUI Setup
-	ImGUIFacade gui;
-	result = gui.Initialize(g_AppInfo);
+	ImGUIFacade imgui;
+	result = imgui.Initialize(g_AppInfo);
 	if (FailedInit(result)) return result.ErrorCode;
-	g_gui = &gui;
+	g_imgui = &imgui;
 
 	//GUI Setup
-	GUIConsole console = GUIConsole();
-	g_console = &console;
+	GUIMainSetup gui;
+	gui.Init(g_AppInfo);
+	gui.Show();
+	g_gui = &gui;
+
 
 	RunMainLoop();
 
@@ -92,16 +93,14 @@ void RunMainLoop()
 		//update
 		g_time->Update();
 		g_engine->Update(g_AppInfo);
-		g_gui->Update(g_AppInfo);
-
-		static bool consoleOpen;
-		g_console->Draw(g_AppInfo);
+		g_imgui->Update(g_AppInfo);
+		g_gui->Draw(g_AppInfo);
 
 		// render
 		g_direct3D->BeginScene(0.0f, 0.0f, 0.0f);
 
 		g_engine->Render(g_AppInfo);
-		g_gui->Render(g_AppInfo);
+		g_imgui->Render(g_AppInfo);
 
 		g_direct3D->EndScene();
 	}
@@ -109,7 +108,7 @@ void RunMainLoop()
 
 void Shutdown()
 {
-	g_gui->DeInitialize();
+	g_imgui->DeInitialize();
 	g_direct3D->DeInitialize();
 	g_window->DeInitialize();
 	g_engine->DeInitialize();

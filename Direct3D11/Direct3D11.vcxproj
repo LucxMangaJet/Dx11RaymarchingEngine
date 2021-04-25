@@ -151,6 +151,9 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GUIConsole.cpp" />
+    <ClCompile Include="GUIInfo.cpp" />
+    <ClCompile Include="GUIMainSetup.cpp" />
+    <ClCompile Include="GUIMenu.cpp" />
     <ClCompile Include="ImGUIDirect3D.cpp" />
     <ClCompile Include="ImGUIFacade.cpp" />
     <ClCompile Include="ImGUIWin32.cpp" />
@@ -174,6 +177,9 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GUIBase.h" />
     <ClInclude Include="GUIConsole.h" />
+    <ClInclude Include="GUIInfo.h" />
+    <ClInclude Include="GUIMainSetup.h" />
+    <ClInclude Include="GUIMenu.h" />
     <ClInclude Include="ImGUIDirect3D.h" />
     <ClInclude Include="ImGUIFacade.h" />
     <ClInclude Include="ImGUIWin32.h" />

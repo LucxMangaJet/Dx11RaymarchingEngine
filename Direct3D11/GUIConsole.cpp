@@ -54,7 +54,8 @@ void GUIConsole::Draw(const AppInfo& info)
 {
 	if (!_isShown)return;
 
-	ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_Once);
+	ImGui::SetNextWindowCollapsed(true, ImGuiCond_Once);
 	if (!ImGui::Begin("Console", &_isShown))
 	{
 		ImGui::End();

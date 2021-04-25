@@ -22,7 +22,6 @@ public:
 	~GUIConsole();
 
 	void Draw(const AppInfo& info) override;
-	void Draw(const char* title, bool* p_open);
 	void AddLog(const char* fmt, ...) IM_FMTARGS(2);
 
 private:
