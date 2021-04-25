@@ -9,7 +9,7 @@ class GameObject
 {
 public:
 
-	int init(ID3D11Device* pD3DDevice, Mesh* mesh, Material* material);
+	int Init(ID3D11Device* pD3DDevice, Mesh* mesh, Material* material);
 	void update(float deltaTime);
 	void render(ID3D11DeviceContext* pD3DDeviceContext);
 	void SetPosition(float x, float y, float z);

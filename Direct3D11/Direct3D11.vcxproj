@@ -154,6 +154,7 @@
     <ClCompile Include="GUIInfo.cpp" />
     <ClCompile Include="GUIMainSetup.cpp" />
     <ClCompile Include="GUIMenu.cpp" />
+    <ClCompile Include="GUIPLayerController.cpp" />
     <ClCompile Include="ImGUIDirect3D.cpp" />
     <ClCompile Include="ImGUIFacade.cpp" />
     <ClCompile Include="ImGUIWin32.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshGenerator.cpp" />
     <ClCompile Include="PerRenderingDataContainer.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
@@ -180,6 +182,7 @@
     <ClInclude Include="GUIInfo.h" />
     <ClInclude Include="GUIMainSetup.h" />
     <ClInclude Include="GUIMenu.h" />
+    <ClInclude Include="GUIPLayerController.h" />
     <ClInclude Include="ImGUIDirect3D.h" />
     <ClInclude Include="ImGUIFacade.h" />
     <ClInclude Include="ImGUIWin32.h" />
@@ -187,6 +190,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshGenerator.h" />
     <ClInclude Include="PerRenderingDataContainer.h" />
+    <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="MainWindow.h" />

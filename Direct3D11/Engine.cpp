@@ -2,11 +2,7 @@
 #include "AppInfo.h"
 #include "MeshGenerator.h"
 
-#define KEY_W 0x57
-#define KEY_S 0x53
-#define KEY_D 0x44
-#define KEY_A 0x41
-#define KEY_PRESSED 0x8000
+
 
 InitResult Engine::Initialize(const AppInfo& appInfo)
 {
@@ -38,7 +34,11 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 
 	//create GameObject
 	_raymarchObject = {};
-	_raymarchObject.init(appInfo.D3DDevice, &_renderPlane, &_mainMaterial);
+	_raymarchObject.Init(appInfo.D3DDevice, &_renderPlane, &_mainMaterial);
+
+	//create PC
+	_playerController = {};
+	_playerController.Init(appInfo, &_camera);
 
 	//create per rendering data
 	result = _perRenderData.Initialize(appInfo.D3DDevice);
@@ -52,60 +52,13 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	//perRenderingData.AddObject(1, XMFLOAT3(2, 0, 5), XMFLOAT3(0, 1, 0), XMFLOAT3(1, 1, 1));
 	//perRenderingData.AddObject(2, XMFLOAT3(3, 0, 5), XMFLOAT3(0, 2, 0), XMFLOAT3(1, 1, 1), Operation::Difference);
 
-	_oldMousePos = {};
-	_oldMousePos.x = appInfo.Width * 0.5f;
-	_oldMousePos.y = appInfo.Height * 0.5f;
+
 	return InitResult::Success();
 }
 
 void Engine::Update(const AppInfo& appInfo)
 {
-	POINT mousePos;
-	if (GetCursorPos(&mousePos))
-	{
-		POINT diff;
-		diff.x = mousePos.x - _oldMousePos.x;
-		diff.y = mousePos.y - _oldMousePos.y;
-
-		XMFLOAT3 eular = _camera.GetWorldRotation();
-		eular.y += (float)diff.x / appInfo.Width;
-		eular.x += (float)diff.y / appInfo.Height;
-		_camera.SetEulerAngles(eular);
-		_oldMousePos = mousePos;
-
-	}
-
-	XMFLOAT3 f_position = _camera.GetWorldPosition();
-	XMFLOAT3 f_forward = _camera.GetForwardVector();
-	XMFLOAT3 f_right = _camera.GetRightVector();
-
-	XMVECTOR position = XMLoadFloat3(&f_position);
-	XMVECTOR forward = XMLoadFloat3(&f_forward);
-	XMVECTOR right = XMLoadFloat3(&f_right);
-
-	float deltaTime = appInfo.Time->GetDeltaTime();
-
-	if (GetKeyState(KEY_W) & KEY_PRESSED)
-	{
-		position = XMVectorAdd(position, XMVectorScale(forward, deltaTime));
-	}
-	if (GetKeyState(KEY_S) & KEY_PRESSED)
-	{
-		position = XMVectorAdd(position, XMVectorScale(forward, -deltaTime));
-	}
-	if (GetKeyState(KEY_A) & KEY_PRESSED)
-	{
-		position = XMVectorAdd(position, XMVectorScale(right, -deltaTime));
-	}
-	if (GetKeyState(KEY_D) & KEY_PRESSED)
-	{
-		position = XMVectorAdd(position, XMVectorScale(right, deltaTime));
-	}
-
-	XMStoreFloat3(&f_position, position);
-	_camera.SetPosition(f_position);
-
-	_camera.Update();
+	_playerController.Update(appInfo);
 
 }
 
@@ -122,7 +75,6 @@ void Engine::Render(const AppInfo& appInfo)
 
 void Engine::DeInitialize()
 {
-
 	_mainMaterial.DeInitialize();
 	_camera.DeInitialize();
 	_renderPlane.DeInitialize();

@@ -16,7 +16,6 @@ static ImGUIFacade* g_imgui;
 static Time* g_time;
 static GUIMainSetup* g_gui;
 
-int Setup();
 void RunMainLoop();
 void Shutdown();
 bool FailedInit(InitResult result);
@@ -34,47 +33,42 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	InitResult result;
 
 	// Window Setup
-	MainWindow window;
-	result = window.Initialize(g_AppInfo);
+	g_window = new MainWindow();
+	result = g_window->Initialize(g_AppInfo);
 	if (FailedInit(result)) return result.ErrorCode;
 
-	g_AppInfo.MainWindow = window.getWindowHandle();
-	g_window = &window;
-	window.SetOnResizeCallback(OnResize);
+	g_AppInfo.MainWindow = g_window->getWindowHandle();
+	g_window->SetOnResizeCallback(OnResize);
 
 	// D3D11 Setup
-	Direct3D d3d;
-	result = d3d.Initialize(g_AppInfo);
+	g_direct3D = new Direct3D();
+	result = g_direct3D->Initialize(g_AppInfo);
 	if (FailedInit(result)) return result.ErrorCode;
 
-	g_AppInfo.D3DDevice = d3d.GetDevice();
-	g_AppInfo.D3DDeviceContext = d3d.GetDeviceContext();
-	g_direct3D = &d3d;
+	g_AppInfo.D3DDevice = g_direct3D->GetDevice();
+	g_AppInfo.D3DDeviceContext = g_direct3D->GetDeviceContext();
 
 	//Time Setup
-	Time time;
-	result = time.Initialize();
+	g_time = new Time();
+	result = g_time->Initialize();
 	if (FailedInit(result)) return result.ErrorCode;
-	g_time = &time;
 	g_AppInfo.Time = g_time;
 
 	//Engine Setup
-	Engine engine;
-	result = engine.Initialize(g_AppInfo);
+	g_engine = new Engine();
+	result = g_engine->Initialize(g_AppInfo);
 	if (FailedInit(result)) return result.ErrorCode;
-	g_engine = &engine;
+	g_AppInfo.Engine = g_engine;
 
 	//ImGUI Setup
-	ImGUIFacade imgui;
-	result = imgui.Initialize(g_AppInfo);
+	g_imgui = new ImGUIFacade();
+	result = g_imgui->Initialize(g_AppInfo);
 	if (FailedInit(result)) return result.ErrorCode;
-	g_imgui = &imgui;
 
 	//GUI Setup
-	GUIMainSetup gui;
-	gui.Init(g_AppInfo);
-	gui.Show();
-	g_gui = &gui;
+	g_gui = new GUIMainSetup();
+	g_gui->Init(g_AppInfo);
+	g_gui->Show();
 
 
 	RunMainLoop();
@@ -94,7 +88,9 @@ void RunMainLoop()
 		g_time->Update();
 		g_engine->Update(g_AppInfo);
 		g_imgui->Update(g_AppInfo);
+
 		g_gui->Draw(g_AppInfo);
+
 
 		// render
 		g_direct3D->BeginScene(0.0f, 0.0f, 0.0f);
@@ -112,6 +108,13 @@ void Shutdown()
 	g_direct3D->DeInitialize();
 	g_window->DeInitialize();
 	g_engine->DeInitialize();
+
+	delete g_engine;
+	delete g_time;
+	delete g_direct3D;
+	delete g_window;
+	delete g_imgui;
+	delete g_gui;
 }
 
 void OnResize(UINT width, UINT height)

@@ -1,12 +1,16 @@
 #include "GUIMainSetup.h"
 #include <functional>
 
+
 InitResult GUIMainSetup::Init(const AppInfo& appInfo)
 {
+
 	_menu.Show();
 	_menu.SetCallback([this](GUIMenuEventType t) {OnGuiMenuEvent(t); });
 
 	_console.Show();
+
+	_info.Init(appInfo);
 	_info.Show();
 	return InitResult::Success();
 }

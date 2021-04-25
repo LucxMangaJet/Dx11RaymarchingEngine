@@ -1,5 +1,11 @@
 #include "GUIInfo.h"
+#include "AppInfo.h"
+#include "Engine.h"
 
+void GUIInfo::Init(const AppInfo& appInfo)
+{
+	guiPLayerController.Init(appInfo);
+}
 
 void GUIInfo::Draw(const AppInfo& info)
 {
@@ -11,6 +17,8 @@ void GUIInfo::Draw(const AppInfo& info)
 	ImGui::Begin("Info");                   
 	
 	ImGui::Text("%.1f FPS (%.1f ms)",ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
+
+	guiPLayerController.Draw(info);
 
 	ImGui::End();
 

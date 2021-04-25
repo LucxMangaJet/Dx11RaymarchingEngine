@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "GameObject.h"
 #include "AppInfo.h"
+#include "PlayerController.h"
 
 class Engine
 {
@@ -18,6 +19,8 @@ public:
 	void Update(const AppInfo& appInfo);
 	void Render(const AppInfo& appInfo);
 
+	PlayerController* GetPlayerController() { return &_playerController; }
+
 	void DeInitialize();
 
 protected:
@@ -28,6 +31,6 @@ protected:
 	Material _mainMaterial;
 	Mesh _renderPlane;
 
-	POINT _oldMousePos;
 	GameObject _raymarchObject;
+	PlayerController _playerController;
 };

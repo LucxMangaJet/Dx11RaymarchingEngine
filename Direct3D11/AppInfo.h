@@ -8,6 +8,7 @@
 
 
 class Time;
+class Engine;
 
 struct AppInfo
 {
@@ -21,6 +22,7 @@ struct AppInfo
 	ID3D11Device* D3DDevice;
 	ID3D11DeviceContext* D3DDeviceContext;
 	Time* Time;
+	Engine* Engine;
 };
 
 struct InitResult
