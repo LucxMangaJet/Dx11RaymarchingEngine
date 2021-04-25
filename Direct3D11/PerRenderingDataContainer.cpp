@@ -2,10 +2,11 @@
 #include "Material.h"
 #include <iomanip>
 #include <sstream>
+#include <stdexcept>
 
 InitResult PerRenderingDataContainer::Initialize(ID3D11Device* d3dDevice)
 {
-	Clear();
+	_data = std::make_unique<PerRenderingData>();
 
 	InitResult result = CreateDX11Buffer(d3dDevice);
 	return result;
@@ -18,7 +19,8 @@ void PerRenderingDataContainer::DeInitialize()
 
 void PerRenderingDataContainer::Clear()
 {
-	_data = std::make_unique<PerRenderingData>();
+	_data->Objects.Count = 0;
+	_objectIndex = 0;
 }
 
 void PerRenderingDataContainer::Bind(ID3D11DeviceContext* pD3DDeviceContext)
@@ -62,35 +64,20 @@ void PerRenderingDataContainer::SetLightData(LightData data)
 	_data->LightData = data;
 }
 
-void PerRenderingDataContainer::ResetObjects()
+
+void PerRenderingDataContainer::AddObject(RMObjectData data)
 {
-	_objectIndex = 0;
-}
+	if (_objectIndex >= 255)
+	{
+		throw std::exception("Error, too many objects");
+	}
 
-void PerRenderingDataContainer::AddObject(int type, XMFLOAT3 position, XMFLOAT3 eulerAngles, XMFLOAT3 scale, Operation operation , XMFLOAT3 modulo )
-{
-	RMObject object;
-	object.Type = (float) type;
-	object.Scale = scale;
-	object.Operation =(float)(int)operation;
-	object.Modulo = modulo;
-
-	XMVECTOR xmvRotation = XMLoadFloat3(&eulerAngles);
-	XMVECTOR xmvTranslation = XMLoadFloat3(&position);
-
-	XMMATRIX rotation = XMMatrixRotationRollPitchYawFromVector(-xmvRotation);
-	XMMATRIX translation = XMMatrixTranslationFromVector(-xmvTranslation);
-
-	XMMATRIX comb = translation * rotation;
-	XMStoreFloat4x4(&object.TranslationRotationMatrix, comb);
-
-	_data->Objects.Objects[_objectIndex] = object;
+	_data->Objects.Objects[_objectIndex] = data;
 
 	_objectIndex++;
+
 	_data->Objects.Count = (float) _objectIndex;
 }
-
-
 
 InitResult PerRenderingDataContainer::CreateDX11Buffer(ID3D11Device* pD3DDevice)
 {

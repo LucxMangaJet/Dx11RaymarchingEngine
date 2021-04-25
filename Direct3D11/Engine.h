@@ -8,6 +8,10 @@
 #include "GameObject.h"
 #include "AppInfo.h"
 #include "PlayerController.h"
+#include <vector>
+#include "RMObject.h"
+
+struct  LightData;
 
 class Engine
 {
@@ -21,6 +25,12 @@ public:
 
 	PlayerController* GetPlayerController() { return &_playerController; }
 
+	std::vector<RMObject*> const * const GetAllObjects() { return &_objects; }
+
+	RMObject* CreateObject(RMObjectType type, std::wstring name = std::wstring(L"Unnamed"),
+		XMFLOAT3 position = XMFLOAT3(), XMFLOAT3 eularAngles = XMFLOAT3(), XMFLOAT3 scale = XMFLOAT3(1, 1, 1),
+		XMFLOAT3 repetition = XMFLOAT3(), RMOperation operation = RMOperation::Union);
+
 	void DeInitialize();
 
 protected:
@@ -30,7 +40,10 @@ protected:
 
 	Material _mainMaterial;
 	Mesh _renderPlane;
+	LightData _light;
 
 	GameObject _raymarchObject;
 	PlayerController _playerController;
+
+	std::vector<RMObject*> _objects;
 };

@@ -164,6 +164,7 @@
     <ClCompile Include="MeshGenerator.cpp" />
     <ClCompile Include="PerRenderingDataContainer.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="RMObject.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
@@ -191,6 +192,7 @@
     <ClInclude Include="MeshGenerator.h" />
     <ClInclude Include="PerRenderingDataContainer.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="RMObject.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="MainWindow.h" />

@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include "AppInfo.h"
 #include "MeshGenerator.h"
-
+#include "RMObject.h"
 
 
 InitResult Engine::Initialize(const AppInfo& appInfo)
@@ -26,11 +26,10 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	if (result.Failed) return result;
 
 	// 7. create light
-	LightData light = {};
-	light.LightDirection = { 1.0f, 0.0f, 0.0f };
-	light.AmbientColor = { 0.2f, 0.2f, 0.2f, 1.0f };
-	light.DiffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-	light.LightIntensity = 1.0f;
+	_light.LightDirection = { 1.0f, 0.0f, 0.0f };
+	_light.AmbientColor = { 0.2f, 0.2f, 0.2f, 1.0f };
+	_light.DiffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+	_light.LightIntensity = 1.0f;
 
 	//create GameObject
 	_raymarchObject = {};
@@ -43,15 +42,10 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	//create per rendering data
 	result = _perRenderData.Initialize(appInfo.D3DDevice);
 	if (result.Failed) return result;
-	_perRenderData.SetResolution(appInfo.Width, appInfo.Height);
-	_perRenderData.SetLightData(light);
 
-	_perRenderData.AddObject(4, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(10, 10, 10), Operation::Union);
-	_perRenderData.AddObject(1, XMFLOAT3(0, -3, 5), XMFLOAT3(), XMFLOAT3(1, 1, 1), Operation::Union, XMFLOAT3(20, 20, 20));
-	//perRenderingData.AddObject(1, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(1.5, 1.5, 1.5), Operation::Difference);
-	//perRenderingData.AddObject(1, XMFLOAT3(2, 0, 5), XMFLOAT3(0, 1, 0), XMFLOAT3(1, 1, 1));
-	//perRenderingData.AddObject(2, XMFLOAT3(3, 0, 5), XMFLOAT3(0, 2, 0), XMFLOAT3(1, 1, 1), Operation::Difference);
 
+	CreateObject(RMObjectType::Sphere, std::wstring(L"Sphere"), XMFLOAT3(1,0,5));
+	CreateObject(RMObjectType::Sierpinski, std::wstring(L"Triangle"), XMFLOAT3(0,0,5));
 
 	return InitResult::Success();
 }
@@ -65,16 +59,48 @@ void Engine::Update(const AppInfo& appInfo)
 void Engine::Render(const AppInfo& appInfo)
 {
 	//Setup per rendering buffer
+	_perRenderData.Clear();
+
+	_perRenderData.SetResolution(appInfo.Width, appInfo.Height);
+	_perRenderData.SetLightData(_light);
 	_perRenderData.SetTime(appInfo.Time->GetTotalTime());
 	_perRenderData.SetCameraData(_camera.GetFOV(), _camera.GetWorldPosition(), _camera.GetViewMatrix());
+
+	for (int i=0; i < _objects.size(); i++)
+	{
+		_perRenderData.AddObject(_objects[i]->GetObjectData());
+	}
+
 	_perRenderData.Bind(appInfo.D3DDeviceContext);
 
 	// rendering stuff
 	_raymarchObject.render(appInfo.D3DDeviceContext);
 }
 
+
+RMObject* Engine::CreateObject(RMObjectType type, std::wstring name, XMFLOAT3 position /*= XMFLOAT3()*/, XMFLOAT3 eularAngles /*= XMFLOAT3()*/, XMFLOAT3 scale /*= XMFLOAT3()*/, XMFLOAT3 repetition /*= XMFLOAT3()*/, RMOperation operation /*= RMOperation::Union*/)
+{
+	RMObject* object = new RMObject();
+	object->Name = name;
+	object->Type = type;
+	object->Position = position;
+	object->EularAngles = eularAngles;
+	object->Scale = scale;
+	object->Repetition = repetition;
+	object->Operation = operation;
+
+	_objects.push_back(object);
+	return object;
+}
+
 void Engine::DeInitialize()
 {
+	for (int i = 0; i < _objects.size(); i++)
+	{
+		delete _objects[i];
+	}
+	_objects.clear();
+
 	_mainMaterial.DeInitialize();
 	_camera.DeInitialize();
 	_renderPlane.DeInitialize();

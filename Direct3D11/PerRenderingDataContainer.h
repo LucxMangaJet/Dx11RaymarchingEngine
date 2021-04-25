@@ -4,24 +4,17 @@
 #include "D3D.h"
 #include <memory>
 #include "AppInfo.h"
+#include "RMObject.h"
 
 using namespace DirectX;
 
-struct RMObject
-{
-	XMFLOAT3 Scale;
-	float Type;
-	float Operation;
-	XMFLOAT3 Modulo;
-	XMFLOAT4X4 TranslationRotationMatrix;
-};
 
 struct RMObjectCollectionData
 {
 	float Count;
 	XMFLOAT3 __padding;
 
-	RMObject Objects[256];
+	RMObjectData Objects[256];
 };
 
 struct LightData
@@ -78,8 +71,7 @@ public:
 	void SetResolution(float width, float height);
 	void SetCameraData(float fov,XMFLOAT3 position, XMFLOAT4X4* view);
 	void SetLightData(LightData data);
-	void ResetObjects();
-	void AddObject(int type, XMFLOAT3 position, XMFLOAT3 eulerAngles, XMFLOAT3 scale, Operation operation = Operation::Union, XMFLOAT3 modulo = XMFLOAT3() );
+	void AddObject(RMObjectData data );
 
 private:
 
