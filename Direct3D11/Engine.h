@@ -27,7 +27,7 @@ public:
 
 	std::vector<RMObject*> const * const GetAllObjects() { return &_objects; }
 
-	RMObject* CreateObject(RMObjectType type, std::wstring name = std::wstring(L"Unnamed"),
+	RMObject* CreateObject(RMObjectType type, std::string name = std::string("Unnamed"),
 		XMFLOAT3 position = XMFLOAT3(), XMFLOAT3 eularAngles = XMFLOAT3(), XMFLOAT3 scale = XMFLOAT3(1, 1, 1),
 		XMFLOAT3 repetition = XMFLOAT3(), RMOperation operation = RMOperation::Union);
 

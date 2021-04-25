@@ -44,8 +44,8 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	if (result.Failed) return result;
 
 
-	CreateObject(RMObjectType::Sphere, std::wstring(L"Sphere"), XMFLOAT3(1,0,5));
-	CreateObject(RMObjectType::Sierpinski, std::wstring(L"Triangle"), XMFLOAT3(0,0,5));
+	CreateObject(RMObjectType::Sphere, std::string("Sphere"), XMFLOAT3(1,0,5));
+	CreateObject(RMObjectType::Sierpinski, std::string("Triangle"), XMFLOAT3(0,0,5));
 
 	return InitResult::Success();
 }
@@ -78,7 +78,7 @@ void Engine::Render(const AppInfo& appInfo)
 }
 
 
-RMObject* Engine::CreateObject(RMObjectType type, std::wstring name, XMFLOAT3 position /*= XMFLOAT3()*/, XMFLOAT3 eularAngles /*= XMFLOAT3()*/, XMFLOAT3 scale /*= XMFLOAT3()*/, XMFLOAT3 repetition /*= XMFLOAT3()*/, RMOperation operation /*= RMOperation::Union*/)
+RMObject* Engine::CreateObject(RMObjectType type, std::string name, XMFLOAT3 position /*= XMFLOAT3()*/, XMFLOAT3 eularAngles /*= XMFLOAT3()*/, XMFLOAT3 scale /*= XMFLOAT3()*/, XMFLOAT3 repetition /*= XMFLOAT3()*/, RMOperation operation /*= RMOperation::Union*/)
 {
 	RMObject* object = new RMObject();
 	object->Name = name;

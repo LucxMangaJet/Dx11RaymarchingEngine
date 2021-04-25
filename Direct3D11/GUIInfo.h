@@ -2,6 +2,7 @@
 #include "GUIBase.h"
 #include "imgui.h"
 #include "GUIPLayerController.h"
+#include "GUIRMObject.h"
 
 struct  AppInfo;
 
@@ -14,6 +15,7 @@ public:
 private:
 	ImVec2 _position { 0,0 };
 
+	GUIObjects guiObjects;
 	GUIPLayerController guiPLayerController;
 };
 

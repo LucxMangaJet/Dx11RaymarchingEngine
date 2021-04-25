@@ -3,7 +3,7 @@
 
 RMObject::RMObject()
 {
-	Name = std::wstring();
+	Name = std::string();
 	Position = XMFLOAT3();
 	EularAngles = XMFLOAT3();
 	Scale = XMFLOAT3(1, 1, 1);

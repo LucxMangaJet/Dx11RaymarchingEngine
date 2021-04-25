@@ -11,11 +11,8 @@ void GUIPLayerController::Init(const AppInfo& appInfo)
 
 void GUIPLayerController::Draw(const AppInfo& appInfo)
 {
-	if (!ImGui::BeginChild("GUIPlayerController")) return;
-
-
+	ImGui::Separator();
 	ImGui::DragFloat("Movement Speed", &_playerController->_movementSpeed, 1.0f, 1, 10);
 	ImGui::DragFloat("Mouse Sensitivity", &_playerController->_mouseSensitivity, 1.0f, 1, 10);
-
-	ImGui::EndChild();
+	ImGui::Separator();
 }

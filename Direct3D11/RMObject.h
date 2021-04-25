@@ -36,7 +36,7 @@ public:
 	RMObject();
 	RMObjectData GetObjectData();
 
-	std::wstring Name;
+	std::string Name;
 
 	XMFLOAT3 Position;
 	XMFLOAT3 EularAngles;

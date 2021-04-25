@@ -20,6 +20,8 @@ void GUIInfo::Draw(const AppInfo& info)
 
 	guiPLayerController.Draw(info);
 
+	guiObjects.Draw(info);
+
 	ImGui::End();
 
 }
