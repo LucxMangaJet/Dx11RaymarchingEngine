@@ -185,7 +185,11 @@
     <ClInclude Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="RayMarchingUtil.hlsl">
+    <Text Include="Shader\RayMarchingSDF.hlsl">
+      <DeploymentContent>true</DeploymentContent>
+      <FileType>Document</FileType>
+    </Text>
+    <Text Include="Shader\RayMarchingUtil.hlsl">
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
@@ -195,7 +199,7 @@
       <FileType>Document</FileType>
       <DeploymentContent>true</DeploymentContent>
     </Text>
-    <FxCompile Include="LightPixelShader.hlsl">
+    <FxCompile Include="Shader\LightPixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -204,7 +208,7 @@
       <DeploymentContent>true</DeploymentContent>
       <FileType>Document</FileType>
     </FxCompile>
-    <FxCompile Include="LightVertexShader.hlsl">
+    <FxCompile Include="Shader\LightVertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -213,7 +217,7 @@
       <DeploymentContent>true</DeploymentContent>
       <FileType>Document</FileType>
     </FxCompile>
-    <Text Include="RayMarchingPixel.hlsl">
+    <Text Include="Shader\RayMarchingPixel.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <DeploymentContent>true</DeploymentContent>
@@ -221,7 +225,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.5</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.5</ShaderModel>
     </Text>
-    <Text Include="RayMarchingVertex.hlsl">
+    <Text Include="Shader\RayMarchingVertex.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <DeploymentContent>true</DeploymentContent>

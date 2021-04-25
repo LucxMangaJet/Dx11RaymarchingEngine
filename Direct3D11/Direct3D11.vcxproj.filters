@@ -144,10 +144,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="LightPixelShader.hlsl">
+    <FxCompile Include="Shader\LightPixelShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="LightVertexShader.hlsl">
+    <FxCompile Include="Shader\LightVertexShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
@@ -155,13 +155,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="RayMarchingVertex.hlsl">
+    <Text Include="Shader\RayMarchingPixel.hlsl">
       <Filter>Shader</Filter>
     </Text>
-    <Text Include="RayMarchingPixel.hlsl">
+    <Text Include="Shader\RayMarchingUtil.hlsl">
       <Filter>Shader</Filter>
     </Text>
-    <Text Include="RayMarchingUtil.hlsl">
+    <Text Include="Shader\RayMarchingVertex.hlsl">
+      <Filter>Shader</Filter>
+    </Text>
+    <Text Include="Shader\RayMarchingSDF.hlsl">
       <Filter>Shader</Filter>
     </Text>
   </ItemGroup>

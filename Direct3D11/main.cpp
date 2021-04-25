@@ -29,8 +29,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	g_AppInfo.HInstance = hInstance;
 	g_AppInfo.nCmdShow = nCmdShow;
 
-	g_AppInfo.Width = 800;
-	g_AppInfo.Height = 600;
+	g_AppInfo.Width = 1024;
+	g_AppInfo.Height = 576;
 	g_AppInfo.IsWindowed = true;
 
 	InitResult result;

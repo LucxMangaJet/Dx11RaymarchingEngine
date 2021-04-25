@@ -26,7 +26,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	MaterialParameters parameters1 = {};
 	parameters1.Ambient = { 0,0,0,0 };
 
-	result = _mainMaterial.Initialize(appInfo.D3DDevice, NULL, L"RayMarchingVertex", L"RayMarchingPixel", parameters1);
+	result = _mainMaterial.Initialize(appInfo.D3DDevice, NULL, L"Shader/RayMarchingVertex", L"Shader/RayMarchingPixel", parameters1);
 	if (result.Failed) return result;
 
 	// 7. create light
@@ -47,7 +47,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	_perRenderData.SetLightData(light);
 
 	_perRenderData.AddObject(4, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(10, 10, 10), Operation::Union);
-	_perRenderData.AddObject(1, XMFLOAT3(0, -3, 5), XMFLOAT3(), XMFLOAT3(1, 1, 1), Operation::Union);
+	_perRenderData.AddObject(1, XMFLOAT3(0, -3, 5), XMFLOAT3(), XMFLOAT3(1, 1, 1), Operation::Union, XMFLOAT3(20, 20, 20));
 	//perRenderingData.AddObject(1, XMFLOAT3(0, 0, 5), XMFLOAT3(), XMFLOAT3(1.5, 1.5, 1.5), Operation::Difference);
 	//perRenderingData.AddObject(1, XMFLOAT3(2, 0, 5), XMFLOAT3(0, 1, 0), XMFLOAT3(1, 1, 1));
 	//perRenderingData.AddObject(2, XMFLOAT3(3, 0, 5), XMFLOAT3(0, 2, 0), XMFLOAT3(1, 1, 1), Operation::Difference);

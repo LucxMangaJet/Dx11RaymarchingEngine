@@ -44,6 +44,7 @@ InitResult Material::CreateVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 {
 	ID3DBlob* pCompiledCode = nullptr;
 	ID3DBlob* pCompileErrors = nullptr;
+
 	std::wstring compiledName = std::wstring(name) + TEXT(".cso");
 
 	HRESULT hr = D3DReadFileToBlob(compiledName.c_str(), &pCompiledCode);
