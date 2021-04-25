@@ -19,7 +19,6 @@ GUIConsole::GUIConsole()
 	Commands.push_back("CLASSIFY");
 	AutoScroll = true;
 	ScrollToBottom = false;
-	AddLog("Welcome to Dear ImGui!");
 }
 
 GUIConsole::~GUIConsole()
@@ -54,7 +53,7 @@ void GUIConsole::Draw(const AppInfo& info)
 {
 	if (!_isShown)return;
 
-	ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(520, 400), ImGuiCond_Once);
 	ImGui::SetNextWindowCollapsed(true, ImGuiCond_Once);
 	if (!ImGui::Begin("Console", &_isShown))
 	{
@@ -72,21 +71,10 @@ void GUIConsole::Draw(const AppInfo& info)
 		ImGui::EndPopup();
 	}
 
-	ImGui::TextWrapped(
-		"This example implements a console with basic coloring, completion (TAB key) and history (Up/Down keys). A more elaborate "
-		"implementation may want to store entries along with extra data such as timestamp, emitter, etc.");
-	ImGui::TextWrapped("Enter 'HELP' for help.");
-
 	// TODO: display items starting from the bottom
-
-	if (ImGui::SmallButton("Add Debug Text")) { AddLog("%d some text", Items.size()); AddLog("some more text"); AddLog("display very important message here!"); }
-	ImGui::SameLine();
-	if (ImGui::SmallButton("Add Debug Error")) { AddLog("[error] something went wrong"); }
-	ImGui::SameLine();
 	if (ImGui::SmallButton("Clear")) { ClearLog(); }
 	ImGui::SameLine();
 	bool copy_to_clipboard = ImGui::SmallButton("Copy");
-	//static float t = 0.0f; if (ImGui::GetTime() - t > 0.02f) { t = ImGui::GetTime(); AddLog("Spam %f", t); }
 
 	ImGui::Separator();
 
