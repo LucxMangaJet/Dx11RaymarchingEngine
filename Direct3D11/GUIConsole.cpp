@@ -48,10 +48,14 @@ void   GUIConsole::AddLog(const char* fmt, ...) IM_FMTARGS(2)
 	Items.push_back(Strdup(buf));
 }
 
-void GUIConsole::Draw(const char* title, bool* p_open)
+
+
+void GUIConsole::Draw(const AppInfo& info)
 {
+	if (!_isShown)return;
+
 	ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(title, p_open))
+	if (!ImGui::Begin("Console", &_isShown))
 	{
 		ImGui::End();
 		return;
@@ -63,7 +67,7 @@ void GUIConsole::Draw(const char* title, bool* p_open)
 	if (ImGui::BeginPopupContextItem())
 	{
 		if (ImGui::MenuItem("Close Console"))
-			*p_open = false;
+			_isShown = false;
 		ImGui::EndPopup();
 	}
 
@@ -184,6 +188,7 @@ void GUIConsole::Draw(const char* title, bool* p_open)
 
 	ImGui::End();
 }
+
 
 void   GUIConsole::ExecCommand(const char* command_line)
 {

@@ -95,7 +95,7 @@ void RunMainLoop()
 		g_gui->Update(g_AppInfo);
 
 		static bool consoleOpen;
-		g_console->Draw("Console", &consoleOpen);
+		g_console->Draw(g_AppInfo);
 
 		// render
 		g_direct3D->BeginScene(0.0f, 0.0f, 0.0f);

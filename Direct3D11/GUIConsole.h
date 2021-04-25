@@ -2,9 +2,10 @@
 #include <vector>
 #include "imgui.h"
 #include <ctype.h>
+#include "GUIBase.h"
 
 //From ImGUI Example
-class GUIConsole
+class GUIConsole : public GUIBase
 {
 	char                  InputBuf[256];
 	std::vector<char*>       Items;
@@ -14,11 +15,13 @@ class GUIConsole
 	ImGuiTextFilter       Filter;
 	bool                  AutoScroll;
 	bool                  ScrollToBottom;
+	
 
 public:
 	GUIConsole();
 	~GUIConsole();
 
+	void Draw(const AppInfo& info) override;
 	void Draw(const char* title, bool* p_open);
 	void AddLog(const char* fmt, ...) IM_FMTARGS(2);
 
