@@ -1,4 +1,4 @@
-#include "RayMarchingUtil.hlsl"
+#include "RayMarchingUtil.inc"
 
 struct PixelInput
 {
@@ -18,7 +18,7 @@ float4 main(PixelInput IN) : SV_TARGET
 		// Didn't hit anything
 	if (depth > MAX_DIST - EPSILON)
 	{
-		return 0;
+		discard;
 	}
 
 	float3 contactPoint = Camera.Position + depth * forward;

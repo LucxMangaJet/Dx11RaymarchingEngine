@@ -70,10 +70,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	g_gui->Init(g_AppInfo);
 	g_gui->Show();
 
-
 	RunMainLoop();
 
 	Shutdown();
+
 	return 0;
 }
 
@@ -109,7 +109,7 @@ void Shutdown()
 	g_window->DeInitialize();
 	g_engine->DeInitialize();
 
-	delete g_engine;
+	delete g_engine; //change to smart_ptr?
 	delete g_time;
 	delete g_direct3D;
 	delete g_window;

@@ -12,11 +12,14 @@ InitResult PlayerController::Init(const AppInfo& appInfo, Camera* camera)
 
 	_camera = camera;
 
+	_movementSpeed = 10; //Hardcoded
+
 	return InitResult();
 }
 
 void PlayerController::Update(const AppInfo& appInfo)
 {
+
 	POINT mousePos;
 	if (GetCursorPos(&mousePos))
 	{

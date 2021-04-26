@@ -1,3 +1,5 @@
+#include "BufferStructure.inc"
+
 float SDF_Sphere(float3 p)
 {
 	return length(p) - 1;
@@ -6,24 +8,32 @@ float SDF_Sphere(float3 p)
 //https://github.com/JPBotelho/Raymarched-Fractals/blob/master/Content/DistanceFunc.cginc
 float SDF_Mandelbulb(float3 p)
 {
-	float3 w = p;
-	float m = dot(w, w);
+	float power = Time/10 + 1;
 
-	float dz = 1.0;
+	 float3 z = p;
+    float r = 0;
+    float dr = 1;
+    for(int i = 0; i < 5; i++) 
+    {
+        r = length(z);
+        if(r > 100) break;
+        
+        float theta = acos(z.z / r);
+        float phi = atan2(z.y, z.x);
+        
+        dr = power * pow(r, power-1)*dr+1;
+        
+        r = pow(r, power);
+        theta *= power;
+        phi *= power;
+        
+        z = r * float3(sin(theta) * cos(phi), 
+                sin(theta) * sin(phi), 
+                cos(theta));
 
-	for (int i = 0; i < 15; i++)
-	{
-		dz = 8 * pow(sqrt(m), 7.0) * dz + 1.0;
-		float r = length(w);
-		float b = 8 * acos(w.y / r);
-		float a = 8 * atan2(w.x, w.z);
-		w = p + pow(r, 8) * float3(sin(b) * sin(a), cos(b), sin(b) * cos(a));
-
-		m = dot(w, w);
-		if (m > 256.0)
-			break;
-	}
-	return 0.25 * log(m) * sqrt(m) / dz;
+        z += p;
+    }
+    return 0.5 * log(r) * r / dr;
 }
 
 //https://github.com/JPBotelho/Raymarched-Fractals/blob/master/Content/DistanceFunc.cginc

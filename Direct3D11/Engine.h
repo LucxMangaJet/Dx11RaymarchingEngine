@@ -39,10 +39,14 @@ protected:
 	Camera _camera;
 
 	Material _mainMaterial;
+	Material _skyboxMaterial;
+	
 	Mesh _renderPlane;
 	LightData _light;
 
 	GameObject _raymarchObject;
+	GameObject _skyboxObject;
+
 	PlayerController _playerController;
 
 	std::vector<RMObject*> _objects;

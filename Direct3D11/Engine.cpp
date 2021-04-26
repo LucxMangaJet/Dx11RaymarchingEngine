@@ -14,7 +14,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	if (result.Failed) return result;
 
 	// create camera
-	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, DirectX::XMFLOAT3(0, 0, -5), DirectX::XMFLOAT3(0, 0, 0));
+	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, DirectX::XMFLOAT3(100, 100, 100), DirectX::XMFLOAT3(0, 0, 0));
 	if (result.Failed) return result;
 
 
@@ -25,15 +25,18 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	result = _mainMaterial.Initialize(appInfo.D3DDevice, NULL, L"Shader/RayMarchingVertex", L"Shader/RayMarchingPixel", parameters1);
 	if (result.Failed) return result;
 
+	result = _skyboxMaterial.Initialize(appInfo.D3DDevice, NULL, L"Shader/SkyboxVertex", L"Shader/SkyboxPixel", parameters1);
+	if (result.Failed) return result;
+
 	// 7. create light
-	_light.LightDirection = { 1.0f, 0.0f, 0.0f };
-	_light.AmbientColor = { 0.2f, 0.2f, 0.2f, 1.0f };
+	_light.LightDirection = { 0.0f, -0.1f, 0.0f };
+	_light.AmbientColor = { 0.0f, 0.0f, 0.0f, 1.0f };
 	_light.DiffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	_light.LightIntensity = 1.0f;
 
 	//create GameObject
-	_raymarchObject = {};
 	_raymarchObject.Init(appInfo.D3DDevice, &_renderPlane, &_mainMaterial);
+	_skyboxObject.Init(appInfo.D3DDevice, &_renderPlane, &_skyboxMaterial);
 
 	//create PC
 	_playerController = {};
@@ -43,9 +46,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	result = _perRenderData.Initialize(appInfo.D3DDevice);
 	if (result.Failed) return result;
 
-
-	CreateObject(RMObjectType::Sphere, std::string("Sphere"), XMFLOAT3(1,0,5));
-	CreateObject(RMObjectType::Sierpinski, std::string("Triangle"), XMFLOAT3(0,0,5));
+	CreateObject(RMObjectType::Mandelbulb, std::string("Bulb"), XMFLOAT3(0, 0, 5),XMFLOAT3(), XMFLOAT3(5,5,5), XMFLOAT3(40,40,40));
 
 	return InitResult::Success();
 }
@@ -66,7 +67,7 @@ void Engine::Render(const AppInfo& appInfo)
 	_perRenderData.SetTime(appInfo.Time->GetTotalTime());
 	_perRenderData.SetCameraData(_camera.GetFOV(), _camera.GetWorldPosition(), _camera.GetViewMatrix());
 
-	for (int i=0; i < _objects.size(); i++)
+	for (int i = 0; i < _objects.size(); i++)
 	{
 		_perRenderData.AddObject(_objects[i]->GetObjectData());
 	}
@@ -74,6 +75,7 @@ void Engine::Render(const AppInfo& appInfo)
 	_perRenderData.Bind(appInfo.D3DDeviceContext);
 
 	// rendering stuff
+	_skyboxObject.render(appInfo.D3DDeviceContext);
 	_raymarchObject.render(appInfo.D3DDeviceContext);
 }
 
