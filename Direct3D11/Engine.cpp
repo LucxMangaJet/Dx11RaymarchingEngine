@@ -46,7 +46,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	result = _perRenderData.Initialize(appInfo.D3DDevice);
 	if (result.Failed) return result;
 
-	CreateObject(RMObjectType::Mandelbulb, std::string("Bulb"), XMFLOAT3(0, 0, 5),XMFLOAT3(), XMFLOAT3(5,5,5), XMFLOAT3(40,40,40));
+	CreateObject(RMObjectType::Maze, std::string("Bulb"), XMFLOAT3(0, 0, 5));
 
 	return InitResult::Success();
 }

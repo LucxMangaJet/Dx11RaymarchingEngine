@@ -246,6 +246,7 @@
     <None Include="Shader\BufferStructure.inc">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="Shader\Noise.inc" />
     <None Include="Shader\RayMarchingSDF.inc">
       <DeploymentContent>true</DeploymentContent>
     </None>

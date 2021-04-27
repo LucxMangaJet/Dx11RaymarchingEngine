@@ -216,6 +216,9 @@
     <None Include="Shader\BufferStructure.inc">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shader\Noise.inc">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Shader\RayMarchingPixel.hlsl">

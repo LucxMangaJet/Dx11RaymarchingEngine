@@ -26,7 +26,8 @@ enum class RMObjectType
 	Sphere,
 	Box,
 	Mandelbulb,
-	Sierpinski
+	Sierpinski,
+	Maze
 };
 
 class RMObject

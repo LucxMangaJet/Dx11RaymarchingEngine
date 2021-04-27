@@ -73,6 +73,9 @@ float SDF_Scene(float3 p)
 			val = SDF_Mandelbulb(tp / scale) * scalingCorrection;
 		else if (object.Type == 4)
 			val = SDF_Sierpinski(tp / scale) * scalingCorrection;
+		else if(object.Type == 5)
+			val = SDF_Maze(tp / scale) * scalingCorrection;
+
 
 		//operation
 		if (object.Operation == 0)
@@ -95,6 +98,7 @@ float3 SDF_EstimateNormal(float3 p)
 		SDF_Scene(float3(p.x, p.y + step, p.z)) - SDF_Scene(float3(p.x, p.y - step, p.z)),
 		SDF_Scene(float3(p.x, p.y, p.z + step)) - SDF_Scene(float3(p.x, p.y, p.z - step))
 		));
+
 }
 
 float RayMarch(float3 position, float3 forward, float min, float max)

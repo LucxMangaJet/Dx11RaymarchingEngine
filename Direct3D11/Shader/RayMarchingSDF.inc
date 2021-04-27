@@ -1,8 +1,24 @@
 #include "BufferStructure.inc"
+#include "Noise.inc"
 
 float SDF_Sphere(float3 p)
 {
 	return length(p) - 1;
+}
+
+
+
+// Implicit Maze-Like Patterns - Fizzer
+// http://amietia.com/slashmaze.html
+float SDF_Maze(float3 p)
+{
+   float3 cp = frac(p) - .5;
+   float3 acp = abs(cp);
+   float3 ofs = step(acp.yzx, acp.xyz) * step(acp.zxy, acp.xyz) * sign(cp);
+   float3 op = floor(p) + .5 + ofs * .5;
+   float f = snoise(op);
+   float2 cp2 = abs(f > 1. / 3. ? f > 2. / 3. ? cp.xz : cp.yz : cp.xy);
+   return max(cp2.x, cp2.y) - .1;
 }
 
 //https://github.com/JPBotelho/Raymarched-Fractals/blob/master/Content/DistanceFunc.cginc
