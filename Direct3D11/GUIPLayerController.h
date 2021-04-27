@@ -2,8 +2,9 @@
 #include "GUIBase.h"
 
 class PlayerController;
+class Camera;
 
-class GUIPLayerController : public GUIBase
+class GUIPlayerController : public GUIBase
 {
 public:
 	void Init(const AppInfo& appInfo);
@@ -11,6 +12,6 @@ public:
 
 private:
 	PlayerController* _playerController;
-
+	Camera* _camera;
 };
 

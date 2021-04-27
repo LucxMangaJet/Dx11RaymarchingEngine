@@ -16,6 +16,6 @@ private:
 	ImVec2 _position { 0,0 };
 
 	GUIObjects guiObjects;
-	GUIPLayerController guiPLayerController;
+	GUIPlayerController guiPLayerController;
 };
 

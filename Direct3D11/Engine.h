@@ -24,6 +24,7 @@ public:
 	void Render(const AppInfo& appInfo);
 
 	PlayerController* GetPlayerController() { return &_playerController; }
+	Camera* GetActiveCamera() { return &_camera; }
 
 	std::vector<RMObject*> const * const GetAllObjects() { return &_objects; }
 

@@ -14,7 +14,7 @@ class PlayerController
 
 public:
 
-	InitResult Init(const AppInfo& AppInfo, Camera* camera);
+	InitResult Init(const AppInfo& AppInfos, Camera* camera);
 	void Update(const AppInfo& appInfo);
 
 	float _mouseSensitivity = 3;

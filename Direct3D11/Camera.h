@@ -13,6 +13,10 @@ public:
 
 	XMFLOAT3 GetWorldPosition() { return _worldPosition; }
 	XMFLOAT3 GetWorldRotation() { return _eularAngles; }
+
+	XMFLOAT3* GetWorldPositionPtr() { return &_worldPosition; }
+	XMFLOAT3* GetWorldRotationPtr() { return &_eularAngles; }
+
 	XMFLOAT3 GetForwardVector();
 	XMFLOAT3 GetRightVector();
 
