@@ -4,7 +4,6 @@
 #define MAX_MARCHING_STEPS 128
 #define EPSILON 0.001
 
-
 float SDF_Union(float a, float b)
 {
 	return min(a, b);
@@ -89,9 +88,10 @@ float SDF_Scene(float3 p)
 	return res;
 }
 
-float3 SDF_EstimateNormal(float3 p)
+float3 SDF_EstimateNormal(float3 p, float depth)
 {
-	float step = EPSILON;
+ //This should be correctly calculated based on FOV or similar (Distance between pixels)
+	float step = depth *depth *EPSILON;
 
 	return normalize(float3(
 		SDF_Scene(float3(p.x + step, p.y, p.z)) - SDF_Scene(float3(p.x - step, p.y, p.z)),

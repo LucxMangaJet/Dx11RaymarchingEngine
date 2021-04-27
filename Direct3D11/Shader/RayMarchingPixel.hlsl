@@ -24,7 +24,7 @@ float4 main(PixelInput IN) : SV_TARGET
 	float3 contactPoint = Camera.Position + depth * forward;
 	float3 normalizedLight = normalize(Light.LightDirection);
 
-	float3 normalizedNormal = SDF_EstimateNormal(Camera.Position + depth * forward);
+	float3 normalizedNormal = SDF_EstimateNormal(Camera.Position + depth * forward, depth);
 
 	// and http://en.wikipedia.org/wiki/Phong_shading
 	// diffuse light
