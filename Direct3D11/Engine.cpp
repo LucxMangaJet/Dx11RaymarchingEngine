@@ -80,7 +80,7 @@ void Engine::Render(const AppInfo& appInfo)
 }
 
 
-RMObject* Engine::CreateObject(RMObjectType type, std::string name, XMFLOAT3 position /*= XMFLOAT3()*/, XMFLOAT3 eularAngles /*= XMFLOAT3()*/, XMFLOAT3 scale /*= XMFLOAT3()*/, XMFLOAT3 repetition /*= XMFLOAT3()*/, RMOperation operation /*= RMOperation::Union*/)
+RMObject* Engine::CreateObject(RMObjectType type, std::string name, V3 position /*= V3()*/, V3 eularAngles /*= V3()*/, V3 scale /*= V3()*/, V3 repetition /*= V3()*/, RMOperation operation /*= RMOperation::Union*/)
 {
 	RMObject* object = new RMObject();
 	object->Name = name;

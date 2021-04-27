@@ -49,7 +49,7 @@ void PerRenderingDataContainer::SetResolution(float width, float height)
 	_data->Width = width;
 }
 
-void PerRenderingDataContainer::SetCameraData(float fov, XMFLOAT3 position, XMFLOAT4X4* view)
+void PerRenderingDataContainer::SetCameraData(float fov, V3 position, M4X4* view)
 {
 	CameraData data = {};
 	data.FOV = fov;

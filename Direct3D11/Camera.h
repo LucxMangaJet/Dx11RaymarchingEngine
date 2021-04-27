@@ -1,38 +1,35 @@
 #pragma once
 #include <d3d11.h>
-#include <DirectXMath.h>
 #include "AppInfo.h"
-
-using namespace DirectX;
 
 class Camera
 {
 public:
-	InitResult Initialize(INT screenWidth, INT screenHeight, float fov, XMFLOAT3 position, XMFLOAT3 eular);
+	InitResult Initialize(INT screenWidth, INT screenHeight, float fov, V3 position, V3 eular);
 	void DeInitialize();
 
-	XMFLOAT3 GetWorldPosition() { return _worldPosition; }
-	XMFLOAT3 GetWorldRotation() { return _eularAngles; }
+	V3 GetWorldPosition() { return _worldPosition; }
+	V3 GetWorldRotation() { return _eularAngles; }
 
-	XMFLOAT3* GetWorldPositionPtr() { return &_worldPosition; }
-	XMFLOAT3* GetWorldRotationPtr() { return &_eularAngles; }
+	V3* GetWorldPositionPtr() { return &_worldPosition; }
+	V3* GetWorldRotationPtr() { return &_eularAngles; }
 
-	XMFLOAT3 GetForwardVector();
-	XMFLOAT3 GetRightVector();
+	V3 GetForwardVector();
+	V3 GetRightVector();
 
-	XMFLOAT4X4* GetViewMatrix() { return &_viewMatrix; }
+	M4X4* GetViewMatrix() { return &_viewMatrix; }
 	
 
 	float GetFOV() { return fov; }
 
-	void SetPosition(XMFLOAT3 position);
-	void SetEulerAngles(XMFLOAT3 euler);
+	void SetPosition(V3 position);
+	void SetEulerAngles(V3 euler);
 	void Update();
 
 private:
-	XMFLOAT3 _worldPosition;
-	XMFLOAT3 _eularAngles;
+	V3 _worldPosition;
+	V3 _eularAngles;
 
-	XMFLOAT4X4 _viewMatrix = {};
+	M4X4 _viewMatrix = {};
 	float fov;
 };

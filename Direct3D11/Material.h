@@ -27,7 +27,7 @@ class Material
 {
 public:
 	InitResult Initialize(ID3D11Device* d3dDevice, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters);
-	virtual void Render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix);
+	virtual void Render(ID3D11DeviceContext* pD3DDeviceContext, M4X4* worldMatrix);
 	void DeInitialize();
 
 protected:

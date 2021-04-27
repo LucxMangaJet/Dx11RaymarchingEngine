@@ -16,7 +16,7 @@ InitResult Material::Initialize(ID3D11Device* pd3dDevice, LPCWSTR textureName, L
 	return InitResult::Success();
 }
 
-void Material::Render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* worldMatrix)
+void Material::Render(ID3D11DeviceContext* pD3DDeviceContext, M4X4* worldMatrix)
 {
 	pD3DDeviceContext->IASetInputLayout(_pInputLayout);
 	pD3DDeviceContext->VSSetShader(_pVertexShader, nullptr, 0);

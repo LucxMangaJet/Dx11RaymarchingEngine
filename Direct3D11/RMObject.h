@@ -1,16 +1,14 @@
 #pragma once
-#include <DirectXMath.h>
 #include <string>
-
-using namespace DirectX;
+#include "AppInfo.h"
 
 struct RMObjectData
 {
-	XMFLOAT3 Scale;
+	V3 Scale;
 	float Type;
 	float Operation;
-	XMFLOAT3 Repetition;
-	XMFLOAT4X4 TranslationRotationMatrix;
+	V3 Repetition;
+	M4X4 TranslationRotationMatrix;
 };
 
 enum class RMOperation
@@ -37,13 +35,13 @@ public:
 	RMObject();
 	RMObjectData GetObjectData();
 
-	std::string Name;
+	STR Name;
 
-	XMFLOAT3 Position;
-	XMFLOAT3 EularAngles;
-	XMFLOAT3 Scale;
+	V3 Position;
+	V3 EularAngles;
+	V3 Scale;
 
-	XMFLOAT3 Repetition;
+	V3 Repetition;
 
 	RMObjectType Type;
 	RMOperation Operation;

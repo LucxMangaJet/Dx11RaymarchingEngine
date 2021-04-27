@@ -1,13 +1,15 @@
 #include "RMObject.h"
+#include <DirectXMath.h>
 
+using namespace DirectX;
 
 RMObject::RMObject()
 {
 	Name = std::string();
-	Position = XMFLOAT3();
-	EularAngles = XMFLOAT3();
-	Scale = XMFLOAT3(1, 1, 1);
-	Repetition = XMFLOAT3();
+	Position = V3();
+	EularAngles = V3();
+	Scale = V3(1, 1, 1);
+	Repetition = V3();
 
 	Type = RMObjectType::None;
 	Operation = RMOperation::Union;

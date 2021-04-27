@@ -11,6 +11,7 @@ class Time;
 class Engine;
 
 typedef DirectX::XMFLOAT3 V3;
+typedef DirectX::XMFLOAT4X4 M4X4;
 typedef std::string STR;
 typedef std::wstring WSTR;
 

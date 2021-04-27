@@ -29,7 +29,7 @@ void GameObject::SetPosition(float x, float y, float z)
 	_position = { x, y, z };
 }
 
-XMFLOAT3 GameObject::GetPosition()
+V3 GameObject::GetPosition()
 {
 	return _position;
 }

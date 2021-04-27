@@ -12,14 +12,14 @@ using namespace DirectX;
 struct RMObjectCollectionData
 {
 	float Count;
-	XMFLOAT3 __padding;
+	V3 __padding;
 
 	RMObjectData Objects[256];
 };
 
 struct LightData
 {
-	XMFLOAT3 LightDirection;
+	V3 LightDirection;
 	float LightIntensity;
 	XMFLOAT4 AmbientColor;
 	XMFLOAT4 DiffuseColor;
@@ -27,8 +27,8 @@ struct LightData
 
 struct CameraData
 {
-	XMFLOAT4X4 ViewMatrix;
-	XMFLOAT3 Position;
+	M4X4 ViewMatrix;
+	V3 Position;
 	float FOV;
 };
 
@@ -69,7 +69,7 @@ public:
 
 	void SetTime(float time);
 	void SetResolution(float width, float height);
-	void SetCameraData(float fov,XMFLOAT3 position, XMFLOAT4X4* view);
+	void SetCameraData(float fov,V3 position, M4X4* view);
 	void SetLightData(LightData data);
 	void AddObject(RMObjectData data );
 

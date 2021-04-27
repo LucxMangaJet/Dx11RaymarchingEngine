@@ -13,16 +13,16 @@ public:
 	void update(float deltaTime);
 	void render(ID3D11DeviceContext* pD3DDeviceContext);
 	void SetPosition(float x, float y, float z);
-	XMFLOAT3 GetPosition();
+	V3 GetPosition();
 
-	XMFLOAT4X4* getWorldMatrix() { return &_worldMatrix; }
+	M4X4* getWorldMatrix() { return &_worldMatrix; }
 
 private:
 
-	XMFLOAT3 _position;
-	XMFLOAT3 _euler;
+	V3 _position;
+	V3 _euler;
 
 	Mesh* _mesh = nullptr;
 	Material* _material = nullptr;
-	XMFLOAT4X4 _worldMatrix = {};
+	M4X4 _worldMatrix = {};
 };
