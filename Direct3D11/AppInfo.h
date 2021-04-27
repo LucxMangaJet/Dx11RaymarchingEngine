@@ -5,10 +5,15 @@
 #include <string>
 #include <iomanip>
 #include <sstream>
-
+#include <DirectXMath.h>
 
 class Time;
 class Engine;
+
+typedef DirectX::XMFLOAT3 V3;
+typedef std::string STR;
+typedef std::wstring WSTR;
+
 
 struct AppInfo
 {

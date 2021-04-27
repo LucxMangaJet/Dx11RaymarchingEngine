@@ -14,7 +14,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	if (result.Failed) return result;
 
 	// create camera
-	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, DirectX::XMFLOAT3(100, 100, 100), DirectX::XMFLOAT3(0, 0, 0));
+	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, V3(100, 100, 100), V3(0, 0, 0));
 	if (result.Failed) return result;
 
 
@@ -46,8 +46,8 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	result = _perRenderData.Initialize(appInfo.D3DDevice);
 	if (result.Failed) return result;
 
-	CreateObject(RMObjectType::Mandelbulb, std::string("Bulb"), XMFLOAT3(0, 0, 0), XMFLOAT3(), XMFLOAT3(1,1,1), XMFLOAT3(5,5,5));
-
+	CreateObject(RMObjectType::Mandelbulb, STR("Bulb"), V3(0, 0, 0), V3(), V3(1,1,1), V3(5,5,5));
+	
 	return InitResult::Success();
 }
 
