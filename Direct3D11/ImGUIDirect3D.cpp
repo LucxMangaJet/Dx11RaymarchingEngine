@@ -24,9 +24,9 @@ InitResult ImGUIDirect3D::Initialize(const AppInfo& appInfo)
 				_pd3dDeviceContext = appInfo.D3DDeviceContext;
 				_pFactory = pFactory;
 			}
-			else return InitResult::Failure(201, TEXT("ImGUI Direct3D: Failed to retrieve Factory"));
-		}else return InitResult::Failure(202, TEXT("ImGUI Direct3D: Failed to retrieve DXGIAdapter"));
-	}else return InitResult::Failure(203, TEXT("ImGUI Direct3D: Failed to retrieve DXGIDevice"));
+			else return InitResult::Failure(201, "ImGUI Direct3D: Failed to retrieve Factory");
+		}else return InitResult::Failure(202, "ImGUI Direct3D: Failed to retrieve DXGIAdapter");
+	}else return InitResult::Failure(203, "ImGUI Direct3D: Failed to retrieve DXGIDevice");
 			
 	SafeRelease(pDXGIDevice);
 	SafeRelease(pDXGIAdapter);
@@ -317,11 +317,11 @@ InitResult ImGUIDirect3D::InitD3DObjects()
 
 		ID3DBlob* vertexShaderBlob;
 		if (FAILED(D3DCompile(vertexShader, strlen(vertexShader), NULL, NULL, NULL, "main", "vs_4_0", 0, 0, &vertexShaderBlob, NULL)))
-			return InitResult::Failure(204, TEXT("ImGUI Direct3D: Failed to compile vertex shader.")); 
+			return InitResult::Failure(204, "ImGUI Direct3D: Failed to compile vertex shader."); 
 		if (_pd3dDevice->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), NULL, &_pVertexShader) != S_OK)
 		{
 			vertexShaderBlob->Release();
-			return InitResult::Failure(205, TEXT("ImGUI Direct3D: Failed to create vertex shader."));
+			return InitResult::Failure(205, "ImGUI Direct3D: Failed to create vertex shader.");
 		}
 
 		// Create the input layout
@@ -334,7 +334,7 @@ InitResult ImGUIDirect3D::InitD3DObjects()
 		if (_pd3dDevice->CreateInputLayout(local_layout, 3, vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &_pInputLayout) != S_OK)
 		{
 			vertexShaderBlob->Release();
-			return InitResult::Failure(206, TEXT("ImGUI Direct3D: Failed to create input layout."));
+			return InitResult::Failure(206, "ImGUI Direct3D: Failed to create input layout.");
 		}
 		vertexShaderBlob->Release();
 
@@ -370,11 +370,11 @@ InitResult ImGUIDirect3D::InitD3DObjects()
 
 		ID3DBlob* pixelShaderBlob;
 		if (FAILED(D3DCompile(pixelShader, strlen(pixelShader), NULL, NULL, NULL, "main", "ps_4_0", 0, 0, &pixelShaderBlob, NULL)))
-			return InitResult::Failure(207, TEXT("ImGUI Direct3D: Failed to compile pixel shader."));
+			return InitResult::Failure(207, "ImGUI Direct3D: Failed to compile pixel shader.");
 		if (_pd3dDevice->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), NULL, &_pPixelShader) != S_OK)
 		{
 			pixelShaderBlob->Release();
-			return InitResult::Failure(208, TEXT("ImGUI Direct3D: Failed to create pixel shader."));
+			return InitResult::Failure(208, "ImGUI Direct3D: Failed to create pixel shader.");
 		}
 		pixelShaderBlob->Release();
 	}

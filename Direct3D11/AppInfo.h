@@ -35,17 +35,17 @@ struct InitResult
 {
 	bool Failed = false;
 	int ErrorCode = false;
-	std::wstring ErrorMsg;
+	std::string ErrorMsg;
 
 
 	static InitResult Success() { return InitResult(); }
-	static InitResult Failure(int errorCode, const wchar_t* errorMsg = nullptr) 
+	static InitResult Failure(int errorCode, LPCSTR errorMsg = nullptr) 
 	{
 		InitResult res;
 		res.Failed = true;
 		res.ErrorCode = errorCode;
 		if(errorMsg)
-			res.ErrorMsg = std::wstring(errorMsg);
+			res.ErrorMsg = std::string(errorMsg);
 		return res;
 	};
 

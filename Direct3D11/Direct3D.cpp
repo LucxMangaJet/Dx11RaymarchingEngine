@@ -37,7 +37,7 @@ InitResult Direct3D::Initialize(const AppInfo& appInfo)
 		&choosenLevel, // optional parameter for chosen feature level
 		&_pD3DDeviceContext
 	);
-	if (FAILED(hr)) return InitResult::Failure(20, TEXT("DX11: Failed to create swap chain."));
+	if (FAILED(hr)) return InitResult::Failure(20, "DX11: Failed to create swap chain.");
 
 	// 2. create render target view
 	InitResult result = CreateRenderTargetView();
@@ -52,7 +52,7 @@ InitResult Direct3D::Initialize(const AppInfo& appInfo)
 	rsDesc.CullMode = D3D11_CULL_BACK;
 
 	hr = _pD3DDevice->CreateRasterizerState(&rsDesc, &_pRasterizerState);
-	if (FAILED(hr)) return InitResult::Failure(29, TEXT("DX11: Failed to create rasterizer state."));
+	if (FAILED(hr)) return InitResult::Failure(29, "DX11: Failed to create rasterizer state.");
 
 	// 5. create viewport
 	_viewPort.Width = appInfo.Width;
@@ -75,10 +75,10 @@ InitResult Direct3D::CreateRenderTargetView()
 
 	ID3D11Texture2D* pBackBuffer = nullptr;
 	HRESULT hr = _pD3DSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
-	if (FAILED(hr)) return InitResult::Failure(22, TEXT("DX11: Failed to retrieved back buffer from swap chain."));
+	if (FAILED(hr)) return InitResult::Failure(22, "DX11: Failed to retrieved back buffer from swap chain.");
 
 	hr = _pD3DDevice->CreateRenderTargetView(pBackBuffer, nullptr, &_pRenderTargetView);
-	if (FAILED(hr)) return InitResult::Failure(24, TEXT("DX11: Failed to create render target view."));
+	if (FAILED(hr)) return InitResult::Failure(24, "DX11: Failed to create render target view.");
 
 	SafeRelease<ID3D11Texture2D>(pBackBuffer);
 	return InitResult::Success();
@@ -96,10 +96,10 @@ InitResult Direct3D::CreateDepthStencilView(const AppInfo& appInfo)
 	depthStencilTextureDesc.SampleDesc.Count = 1;
 
 	HRESULT hr = _pD3DDevice->CreateTexture2D(&depthStencilTextureDesc, nullptr, &pDepthStencilTexture);
-	if (FAILED(hr)) return InitResult::Failure(26, TEXT("DX11: Failed to create depth stencil texture."));
+	if (FAILED(hr)) return InitResult::Failure(26, "DX11: Failed to create depth stencil texture.");
 
 	hr = _pD3DDevice->CreateDepthStencilView(pDepthStencilTexture, nullptr, &_pDepthStencilView);
-	if (FAILED(hr)) return InitResult::Failure(28, TEXT("DX11: Failed to create depth stencil view."));
+	if (FAILED(hr)) return InitResult::Failure(28, "DX11: Failed to create depth stencil view.");
 
 	SafeRelease<ID3D11Texture2D>(pDepthStencilTexture);
 

@@ -40,7 +40,7 @@ InitResult Material::CreateVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 	if (result.Failed) return result;
 
 	HRESULT hr = pD3DDevice->CreateVertexShader(compiledCode->GetBufferPointer(), compiledCode->GetBufferSize(), nullptr, &_pVertexShader);
-	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Material: Failed to create vertex shader."));
+	if (FAILED(hr)) return InitResult::Failure(hr, "Material: Failed to create vertex shader.");
 
 	result = CreateInputLayout(pD3DDevice, compiledCode);
 	if (result.Failed) return result;
@@ -58,7 +58,7 @@ InitResult Material::CreatePixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 	if (result.Failed) return result;
 
 	HRESULT hr = pD3DDevice->CreatePixelShader(pCompiledCode->GetBufferPointer(), pCompiledCode->GetBufferSize(), nullptr, &_pPixelShader);
-	if (FAILED(hr)) InitResult::Failure(hr, TEXT("Material: Failed to create pixel shader."));
+	if (FAILED(hr)) InitResult::Failure(hr, "Material: Failed to create pixel shader.");
 
 	SafeRelease<ID3DBlob>(pCompiledCode);
 
@@ -96,7 +96,7 @@ InitResult Material::CreateInputLayout(ID3D11Device* pD3DDevice, ID3DBlob* pBlob
 
 
 	HRESULT hr = pD3DDevice->CreateInputLayout(elements, 5, pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &_pInputLayout);
-	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Material: Failed to create input layout."));
+	if (FAILED(hr)) return InitResult::Failure(hr, "Material: Failed to create input layout.");
 
 	return InitResult::Success();
 }

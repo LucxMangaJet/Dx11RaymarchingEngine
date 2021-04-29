@@ -88,7 +88,7 @@ InitResult PerRenderingDataContainer::CreateDX11Buffer(ID3D11Device* pD3DDevice)
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	HRESULT hr = pD3DDevice->CreateBuffer(&desc, nullptr, &_buffer);
-	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Dx1:: Failed to create constant buffer."));
+	if (FAILED(hr)) return InitResult::Failure(hr, "Dx11: Failed to create constant buffer.");
 
 	return InitResult::Success();
 }

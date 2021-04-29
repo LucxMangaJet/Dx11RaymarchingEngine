@@ -1,16 +1,6 @@
 #include "ShaderUtility.h"
 #include <d3dcompiler.h>
 
-wchar_t* ToWideSet(char* ptr)
-{
-	size_t size = strlen(ptr) + 1;
-	wchar_t* res = new wchar_t[size];
-
-	size_t outSize;
-	mbstowcs_s(&outSize, res, size, ptr, size - 1);
-	return res;
-}
-
 InitResult ShaderUtility::CompileShader(LPCWSTR shaderPath, ShaderType shaderType, ID3DBlob** compiledCode)
 {
 	ID3DBlob* pCompileErrors = nullptr;
@@ -28,7 +18,7 @@ InitResult ShaderUtility::CompileShader(LPCWSTR shaderPath, ShaderType shaderTyp
 
 	if (FAILED(hr))
 	{
-		std::wstringstream stream;
+		std::stringstream stream;
 		stream << TEXT("Material: Failed to compile vertex shader.");
 
 		if (hr == D3D11_ERROR_FILE_NOT_FOUND)
@@ -40,7 +30,7 @@ InitResult ShaderUtility::CompileShader(LPCWSTR shaderPath, ShaderType shaderTyp
 		if (pCompileErrors)
 		{
 			stream << TEXT("Compile Errors: ");
-			stream << ToWideSet((char*)pCompileErrors->GetBufferPointer());
+			stream << (char*)pCompileErrors->GetBufferPointer();
 		}
 
 		return InitResult::Failure(hr, stream.str().c_str());

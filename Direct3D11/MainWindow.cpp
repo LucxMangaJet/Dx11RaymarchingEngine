@@ -48,7 +48,7 @@ InitResult MainWindow::Initialize(const AppInfo& appInfo)
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wc.lpfnWndProc = MainWindow::WndProc;
 
-	if (!RegisterClass(&wc)) return InitResult::Failure(10, TEXT("Win32 Failed to register class."));
+	if (!RegisterClass(&wc)) return InitResult::Failure(10, "Win32 Failed to register class.");
 
 	INT halfScreenWidth = GetSystemMetrics(SM_CXSCREEN) / 2;
 	INT halfScreenHeight = GetSystemMetrics(SM_CYSCREEN) / 2;
@@ -62,7 +62,7 @@ InitResult MainWindow::Initialize(const AppInfo& appInfo)
 	_hWnd = CreateWindow(wc.lpszClassName, wc.lpszClassName, style,
 		r.left, r.top, r.right - r.left, r.bottom - r.top, nullptr, nullptr, appInfo.HInstance, this);
 
-	if (!_hWnd) return InitResult::Failure(15, TEXT("Win32 Failed to create window"));
+	if (!_hWnd) return InitResult::Failure(15, "Win32 Failed to create window");
 
 	ShowWindow(_hWnd, appInfo.nCmdShow);
 	UpdateWindow(_hWnd);

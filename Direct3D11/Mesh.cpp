@@ -47,7 +47,7 @@ InitResult Mesh::InitVertexBuffer(ID3D11Device* pD3DDevice)
 	initialData.pSysMem = &_meshData->Vertices[0];
 
 	HRESULT hr = pD3DDevice->CreateBuffer(&desc, &initialData, &_pVertexBuffer);
-	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Mesh: Failed to create vertex buffer."));
+	if (FAILED(hr)) return InitResult::Failure(hr, "Mesh: Failed to create vertex buffer.");
 
 	return InitResult::Success();
 }
@@ -65,7 +65,7 @@ InitResult Mesh::InitIndexBuffer(ID3D11Device* pD3DDevice)
 	initialData.pSysMem = &_meshData->Indices[0];
 
 	HRESULT hr = pD3DDevice->CreateBuffer(&desc, &initialData, &_pIndexBuffer);
-	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Mesh: failed to create index buffer"));
+	if (FAILED(hr)) return InitResult::Failure(hr, "Mesh: failed to create index buffer");
 
 	return InitResult::Success();
 }

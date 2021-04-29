@@ -49,7 +49,7 @@ InitResult ComputeShaderRendering::InitiateOutputView(const AppInfo& appInfo)
 
 	ID3D11Texture2D* texture = 0;
 	HRESULT result = appInfo.D3DDevice->CreateTexture2D(&texDesc, NULL, &texture);
-	if (FAILED(result)) return InitResult::Failure(result, TEXT("Failed to create Compute shader texture."));
+	if (FAILED(result)) return InitResult::Failure(result, "Failed to create Compute shader texture.");
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	srvDesc.Format = format;
@@ -59,7 +59,7 @@ InitResult ComputeShaderRendering::InitiateOutputView(const AppInfo& appInfo)
 
 	ID3D11ShaderResourceView* outputTextureSRV;
 	result = appInfo.D3DDevice->CreateShaderResourceView(texture, &srvDesc, &outputTextureSRV);
-	if (FAILED(result)) return InitResult::Failure(result, TEXT("Failed to create compute shader resource view."));
+	if (FAILED(result)) return InitResult::Failure(result, "Failed to create compute shader resource view.");
 	_outputSRV = outputTextureSRV;
 
 	D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
@@ -69,7 +69,7 @@ InitResult ComputeShaderRendering::InitiateOutputView(const AppInfo& appInfo)
 
 	ID3D11UnorderedAccessView* outputTextureUAV;
 	result = appInfo.D3DDevice->CreateUnorderedAccessView(texture, &uavDesc, &outputTextureUAV);
-	if (FAILED(result)) return InitResult::Failure(result, TEXT("Failed to create compute shader unordered access view."));
+	if (FAILED(result)) return InitResult::Failure(result, "Failed to create compute shader unordered access view.");
 	_outputUAV = outputTextureUAV;
 
 	SafeRelease(texture);
@@ -85,7 +85,7 @@ InitResult ComputeShaderRendering::InitiateComputeShader(const AppInfo& appInfo,
 	if (result.Failed) return result;
 
 	HRESULT hres = appInfo.D3DDevice->CreateComputeShader(compiledCode->GetBufferPointer(), compiledCode->GetBufferSize(), nullptr, &_computeShader);
-	if (FAILED(hres)) return InitResult::Failure(hres, TEXT("Failed to create compute shader."));
+	if (FAILED(hres)) return InitResult::Failure(hres, "Failed to create compute shader.");
 
 
 
