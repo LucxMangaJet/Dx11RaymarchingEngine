@@ -28,8 +28,8 @@ InitResult ImGUIDirect3D::Initialize(const AppInfo& appInfo)
 		}else return InitResult::Failure(202, TEXT("ImGUI Direct3D: Failed to retrieve DXGIAdapter"));
 	}else return InitResult::Failure(203, TEXT("ImGUI Direct3D: Failed to retrieve DXGIDevice"));
 			
-	safeRelease(pDXGIDevice);
-	safeRelease(pDXGIAdapter);
+	SafeRelease(pDXGIDevice);
+	SafeRelease(pDXGIAdapter);
 
 	_pd3dDevice->AddRef();
 	_pd3dDeviceContext->AddRef();
@@ -53,7 +53,7 @@ void ImGUIDirect3D::Render(const AppInfo& appInfo, ImDrawData* draw_data)
 	// Create and grow vertex/index buffers if needed
 	if (!_pVertexBuffer || _VertexBufferSize < draw_data->TotalVtxCount)
 	{
-		safeRelease(_pVertexBuffer);
+		SafeRelease(_pVertexBuffer);
 		_VertexBufferSize = draw_data->TotalVtxCount + 5000;
 		D3D11_BUFFER_DESC desc;
 		memset(&desc, 0, sizeof(D3D11_BUFFER_DESC));
@@ -67,7 +67,7 @@ void ImGUIDirect3D::Render(const AppInfo& appInfo, ImDrawData* draw_data)
 	}
 	if (!_pIndexBuffer || _IndexBufferSize < draw_data->TotalIdxCount)
 	{
-		safeRelease(_pIndexBuffer);
+		SafeRelease(_pIndexBuffer);
 		_IndexBufferSize = draw_data->TotalIdxCount + 10000;
 		D3D11_BUFFER_DESC desc;
 		memset(&desc, 0, sizeof(D3D11_BUFFER_DESC));
@@ -233,18 +233,18 @@ void ImGUIDirect3D::DeInitialize()
 	if (!_pd3dDevice)
 		return;
 
-	safeRelease(_pFontSampler);
-	safeRelease(_pFontTextureView);
+	SafeRelease(_pFontSampler);
+	SafeRelease(_pFontTextureView);
 	ImGui::GetIO().Fonts->SetTexID(NULL);	// We copied g_pFontTextureView to io.Fonts->TexID so let's clear that as well.
-	safeRelease(_pVertexBuffer);
-	safeRelease(_pIndexBuffer);
-	safeRelease(_pBlendState);
-	safeRelease(_pDepthStencilState);
-	safeRelease(_pRasterizerState);
-	safeRelease(_pVertexConstantBuffer);
-	safeRelease(_pVertexShader);
-	safeRelease(_pPixelShader);
-	safeRelease(_pInputLayout);
+	SafeRelease(_pVertexBuffer);
+	SafeRelease(_pIndexBuffer);
+	SafeRelease(_pBlendState);
+	SafeRelease(_pDepthStencilState);
+	SafeRelease(_pRasterizerState);
+	SafeRelease(_pVertexConstantBuffer);
+	SafeRelease(_pVertexShader);
+	SafeRelease(_pPixelShader);
+	SafeRelease(_pInputLayout);
 }
 
 void ImGUIDirect3D::SetupRenderState(ImDrawData* drawData, ID3D11DeviceContext* ctx)

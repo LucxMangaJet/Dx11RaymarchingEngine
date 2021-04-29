@@ -14,7 +14,7 @@ InitResult PerRenderingDataContainer::Initialize(ID3D11Device* d3dDevice)
 
 void PerRenderingDataContainer::DeInitialize()
 {
-	safeRelease<ID3D11Buffer>(_buffer);
+	SafeRelease<ID3D11Buffer>(_buffer);
 }
 
 void PerRenderingDataContainer::Clear()

@@ -147,6 +147,7 @@
     <ClCompile Include="..\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ComputeShaderRendering.cpp" />
     <ClCompile Include="Direct3D.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -164,8 +165,10 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshGenerator.cpp" />
     <ClCompile Include="PerRenderingDataContainer.cpp" />
+    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="RMObject.cpp" />
+    <ClCompile Include="ShaderUtility.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
@@ -175,6 +178,7 @@
     <ClInclude Include="..\imgui\imgui_internal.h" />
     <ClInclude Include="AppInfo.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ComputeShaderRendering.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Event.h" />
@@ -193,8 +197,10 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshGenerator.h" />
     <ClInclude Include="PerRenderingDataContainer.h" />
+    <ClInclude Include="Physics.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="RMObject.h" />
+    <ClInclude Include="ShaderUtility.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="MainWindow.h" />
@@ -237,6 +243,12 @@
     <None Include="Shader\RayMarchingUtil.inc">
       <DeploymentContent>true</DeploymentContent>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shader\Render.compute">
+      <DeploymentContent>true</DeploymentContent>
+      <FileType>Document</FileType>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,6 +10,7 @@
 #include "PlayerController.h"
 #include <vector>
 #include "RMObject.h"
+#include "Physics.h"
 
 struct  LightData;
 
@@ -49,6 +50,8 @@ protected:
 	GameObject _skyboxObject;
 
 	PlayerController _playerController;
+
+	Physics _physics;
 
 	std::vector<RMObject*> _objects;
 };

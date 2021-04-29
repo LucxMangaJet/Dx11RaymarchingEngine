@@ -52,7 +52,7 @@ struct InitResult
 };
 
 template <class T>
-void safeRelease(T*& obj)
+void SafeRelease(T*& obj)
 {
 	if (obj != nullptr)
 	{

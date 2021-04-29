@@ -2,7 +2,7 @@
 #include <d3dcompiler.h>
 #include <string>
 #include "PerRenderingDataContainer.h"
-
+#include "ShaderUtility.h"
 
 InitResult Material::Initialize(ID3D11Device* pd3dDevice, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters)
 {
@@ -25,71 +25,27 @@ void Material::Render(ID3D11DeviceContext* pD3DDeviceContext, M4X4* worldMatrix)
 
 void Material::DeInitialize()
 {
-	safeRelease<ID3D11VertexShader>(_pVertexShader);
-	safeRelease<ID3D11PixelShader>(_pPixelShader);
-	safeRelease<ID3D11InputLayout>(_pInputLayout);
+	SafeRelease<ID3D11VertexShader>(_pVertexShader);
+	SafeRelease<ID3D11PixelShader>(_pPixelShader);
+	SafeRelease<ID3D11InputLayout>(_pInputLayout);
 }
 
-wchar_t* ToWideSet(char* ptr)
-{
-	size_t size = strlen(ptr) + 1;
-	wchar_t* res = new wchar_t[size];
 
-	size_t outSize;
-	mbstowcs_s(&outSize, res, size, ptr, size - 1);
-	return res;
-}
 
 InitResult Material::CreateVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 {
-	ID3DBlob* pCompiledCode = nullptr;
-	ID3DBlob* pCompileErrors = nullptr;
+	ID3DBlob* compiledCode;
 
-	std::wstring compiledName = std::wstring(name) + TEXT(".cso");
-
-	HRESULT hr = D3DReadFileToBlob(compiledName.c_str(), &pCompiledCode);
-	//MessageBox(NULL, std::to_wstring(hr).c_str(), name , 0);
-	if (FAILED(hr))
-	{
-		std::wstring rawName = std::wstring(name) + TEXT(".hlsl");
-		hr = D3DCompileFromFile(
-			rawName.c_str(), // shader filename
-			nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, // optional macros & includes
-			"main", // entry point function name
-			"vs_4_0", // shader type & version
-			0, 0, // optional flags
-			&pCompiledCode, // compiled code target
-			&pCompileErrors // optional blob for all compile errors
-		);
-	}
-
-	if (FAILED(hr))
-	{
-		std::wstringstream stream;
-		stream << TEXT("Material: Failed to compile vertex shader.");
-
-		if (hr == D3D11_ERROR_FILE_NOT_FOUND)
-		{
-			stream << TEXT("File not found: ");
-			stream << name;
-		}
-
-		if (pCompileErrors)
-		{
-			stream << TEXT("Compile Errors: ");
-			stream << ToWideSet((char*)pCompileErrors->GetBufferPointer());
-		}
-
-		return InitResult::Failure(hr, stream.str().c_str());
-	}
-
-	hr = pD3DDevice->CreateVertexShader(pCompiledCode->GetBufferPointer(), pCompiledCode->GetBufferSize(), nullptr, &_pVertexShader);
-	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Material: Failed to create vertex shader."));
-
-	InitResult result = CreateInputLayout(pD3DDevice, pCompiledCode);
+	InitResult result = ShaderUtility::CompileShader(name, ShaderType::VertexShader, &compiledCode);
 	if (result.Failed) return result;
 
-	safeRelease<ID3DBlob>(pCompiledCode);
+	HRESULT hr = pD3DDevice->CreateVertexShader(compiledCode->GetBufferPointer(), compiledCode->GetBufferSize(), nullptr, &_pVertexShader);
+	if (FAILED(hr)) return InitResult::Failure(hr, TEXT("Material: Failed to create vertex shader."));
+
+	result = CreateInputLayout(pD3DDevice, compiledCode);
+	if (result.Failed) return result;
+
+	SafeRelease<ID3DBlob>(compiledCode);
 
 	return InitResult::Success();
 }
@@ -97,49 +53,14 @@ InitResult Material::CreateVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 InitResult Material::CreatePixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 {
 	ID3DBlob* pCompiledCode = nullptr;
-	ID3DBlob* pCompiledErrors = nullptr;
-	std::wstring compiledName = std::wstring(name) + TEXT(".cso");
+	
+	InitResult result = ShaderUtility::CompileShader(name, ShaderType::PixelShader, &pCompiledCode);
+	if (result.Failed) return result;
 
-	HRESULT hr = D3DReadFileToBlob(compiledName.c_str(), &pCompiledCode);
-
-	if (FAILED(hr))
-	{
-		std::wstring rawName = std::wstring(name) + TEXT(".hlsl");
-		hr = D3DCompileFromFile(
-			rawName.c_str(), // shader filename
-			nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, // optional macros & includes
-			"main", // entry point function name
-			"ps_4_0", // shader type & version
-			0, 0, // optional flags
-			&pCompiledCode, // compiled code target
-			&pCompiledErrors // optional blob for all compile errors
-		);
-
-	}
-	if (FAILED(hr))
-	{
-		std::wstringstream stream;
-		stream << TEXT("Material: Failed to compile pixel shader.");
-
-		if (hr == D3D11_ERROR_FILE_NOT_FOUND)
-		{
-			stream << TEXT("File not found: ");
-			stream << name;
-		}
-
-		if (pCompiledErrors)
-		{
-			stream << TEXT("Compile Errors: ");
-			stream << ToWideSet((char*)pCompiledErrors->GetBufferPointer());
-		}
-
-		return InitResult::Failure(hr, stream.str().c_str());
-	}
-
-	hr = pD3DDevice->CreatePixelShader(pCompiledCode->GetBufferPointer(), pCompiledCode->GetBufferSize(), nullptr, &_pPixelShader);
+	HRESULT hr = pD3DDevice->CreatePixelShader(pCompiledCode->GetBufferPointer(), pCompiledCode->GetBufferSize(), nullptr, &_pPixelShader);
 	if (FAILED(hr)) InitResult::Failure(hr, TEXT("Material: Failed to create pixel shader."));
 
-	safeRelease<ID3DBlob>(pCompiledCode);
+	SafeRelease<ID3DBlob>(pCompiledCode);
 
 	return InitResult::Success();
 }

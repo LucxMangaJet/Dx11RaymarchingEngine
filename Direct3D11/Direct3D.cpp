@@ -80,7 +80,7 @@ InitResult Direct3D::CreateRenderTargetView()
 	hr = _pD3DDevice->CreateRenderTargetView(pBackBuffer, nullptr, &_pRenderTargetView);
 	if (FAILED(hr)) return InitResult::Failure(24, TEXT("DX11: Failed to create render target view."));
 
-	safeRelease<ID3D11Texture2D>(pBackBuffer);
+	SafeRelease<ID3D11Texture2D>(pBackBuffer);
 	return InitResult::Success();
 }
 
@@ -101,7 +101,7 @@ InitResult Direct3D::CreateDepthStencilView(const AppInfo& appInfo)
 	hr = _pD3DDevice->CreateDepthStencilView(pDepthStencilTexture, nullptr, &_pDepthStencilView);
 	if (FAILED(hr)) return InitResult::Failure(28, TEXT("DX11: Failed to create depth stencil view."));
 
-	safeRelease<ID3D11Texture2D>(pDepthStencilTexture);
+	SafeRelease<ID3D11Texture2D>(pDepthStencilTexture);
 
 	return InitResult::Success();
 }
@@ -124,20 +124,20 @@ void Direct3D::EndScene()
 
 void Direct3D::DeInitialize()
 {
-	safeRelease<ID3D11RasterizerState>(_pRasterizerState);
-	safeRelease<ID3D11DepthStencilView>(_pDepthStencilView);
-	safeRelease<ID3D11RenderTargetView>(_pRenderTargetView);
-	safeRelease<ID3D11Device>(_pD3DDevice);
-	safeRelease<ID3D11DeviceContext>(_pD3DDeviceContext);
-	safeRelease<IDXGISwapChain>(_pD3DSwapChain);
+	SafeRelease<ID3D11RasterizerState>(_pRasterizerState);
+	SafeRelease<ID3D11DepthStencilView>(_pDepthStencilView);
+	SafeRelease<ID3D11RenderTargetView>(_pRenderTargetView);
+	SafeRelease<ID3D11Device>(_pD3DDevice);
+	SafeRelease<ID3D11DeviceContext>(_pD3DDeviceContext);
+	SafeRelease<IDXGISwapChain>(_pD3DSwapChain);
 }
 
 
 void Direct3D::OnResize(const AppInfo& appInfo)
 {
 
-	safeRelease(_pRenderTargetView);
-	safeRelease(_pDepthStencilView);
+	SafeRelease(_pRenderTargetView);
+	SafeRelease(_pDepthStencilView);
 	_pD3DDeviceContext->OMSetRenderTargets(0, 0, 0);
 
 	_pD3DSwapChain->ResizeBuffers(0, appInfo.Width, appInfo.Height, DXGI_FORMAT_UNKNOWN, 0);

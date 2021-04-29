@@ -1,0 +1,42 @@
+#include "RayMarchingUtil.inc"
+
+
+RWTexture2D<float4> ColorMap;
+
+[numthreads(16, 16, 1)]
+void CS(int3 dispatchThreadID : SV_DispatchThreadID) 
+{
+	float2 csPos = dispatchThreadID.xy / float2(Width, Height) - float2(0.5, 0.5);
+
+	float3 viewDir = RayDirection(Camera.FOV, csPos, float2(Width, Height));
+
+	float3 forward = mul(Camera.ViewMatrix, float4(viewDir, 0.0)).xyz;
+	float MAX_DIST = 1000;
+
+	float depth = RayMarch(Camera.Position, forward, 0, MAX_DIST);
+
+	// Didn't hit anything
+	if (depth > MAX_DIST - EPSILON)
+	{
+		return;
+	}
+
+	float3 contactPoint = Camera.Position + depth * forward;
+	float3 normalizedLight = normalize(Light.LightDirection);
+
+	float3 normalizedNormal = SDF_EstimateNormal(Camera.Position + depth * forward, depth);
+
+	// and http://en.wikipedia.org/wiki/Phong_shading
+	// diffuse light
+	float diffuse = dot(-normalizedLight, normalizedNormal); // calculate light intensity
+	diffuse = max(diffuse, 0.0f); // dot product can be negative
+	diffuse *= Light.LightIntensity; // adjust light intensity by multiplicator
+
+	//specular
+	float3 h = normalize(normalize(Camera.Position - contactPoint) - normalizedLight);
+	float specular = pow(saturate(dot(h, normalizedNormal)), 48.0f);
+
+	float4 color = float4(saturate(Light.AmbientColor + Light.DiffuseColor * diffuse + float3(specular, 0, 0)), 1);
+
+	ColorMap[dispatchThreadID.xy] = color;
+}

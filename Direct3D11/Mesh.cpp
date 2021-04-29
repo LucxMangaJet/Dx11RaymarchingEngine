@@ -27,8 +27,8 @@ void Mesh::Render(ID3D11DeviceContext* pD3DDeviceContext)
 
 void Mesh::DeInitialize()
 {
-	safeRelease<ID3D11Buffer>(_pVertexBuffer);
-	safeRelease<ID3D11Buffer>(_pIndexBuffer);
+	SafeRelease<ID3D11Buffer>(_pVertexBuffer);
+	SafeRelease<ID3D11Buffer>(_pIndexBuffer);
 }
 
 InitResult Mesh::InitVertexBuffer(ID3D11Device* pD3DDevice)

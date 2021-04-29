@@ -8,6 +8,9 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 {
 	InitResult result;
 
+	//Physics
+	_physics.Initiate(appInfo);
+
 	//create render plane
 	MeshData sphereData = MeshGenerator::GenerateFace();
 	result = _renderPlane.Initialize(appInfo.D3DDevice, &sphereData);
@@ -22,10 +25,10 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	MaterialParameters parameters1 = {};
 	parameters1.Ambient = { 0,0,0,0 };
 
-	result = _mainMaterial.Initialize(appInfo.D3DDevice, NULL, L"Shader/RayMarchingVertex", L"Shader/RayMarchingPixel", parameters1);
+	result = _mainMaterial.Initialize(appInfo.D3DDevice, NULL, L"Shader/RayMarchingVertex.hlsl", L"Shader/RayMarchingPixel.hlsl", parameters1);
 	if (result.Failed) return result;
 
-	result = _skyboxMaterial.Initialize(appInfo.D3DDevice, NULL, L"Shader/SkyboxVertex", L"Shader/SkyboxPixel", parameters1);
+	result = _skyboxMaterial.Initialize(appInfo.D3DDevice, NULL, L"Shader/SkyboxVertex.hlsl", L"Shader/SkyboxPixel.hlsl", parameters1);
 	if (result.Failed) return result;
 
 	// 7. create light
@@ -54,7 +57,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 void Engine::Update(const AppInfo& appInfo)
 {
 	_playerController.Update(appInfo);
-
+	_physics.Update(appInfo);
 }
 
 void Engine::Render(const AppInfo& appInfo)
