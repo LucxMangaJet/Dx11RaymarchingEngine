@@ -1,13 +1,14 @@
-#include "GUIInfo.h"
+#include "GUISettings.h"
 #include "AppInfo.h"
 #include "Engine.h"
+#include "ShaderHandler.h"
 
-void GUIInfo::Init(const AppInfo& appInfo)
+void GUISettings::Init(const AppInfo& appInfo)
 {
 	_guiPLayerController.Init(appInfo);
 }
 
-void GUIInfo::Draw(const AppInfo& info)
+void GUISettings::Draw(const AppInfo& info)
 {
 	if (!_isShown) return;
 
@@ -16,8 +17,14 @@ void GUIInfo::Draw(const AppInfo& info)
 	ImGui::SetNextWindowCollapsed(true, ImGuiCond_Once);
 
 	ImGui::Begin("Settings");                   
-	
+	ImGui::Spacing();
 	ImGui::Text("%.1f FPS (%.1f ms)",ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
+	ImGui::Spacing();
+
+	if (ImGui::Button("Recompile all Shaders (Requires restart)"))
+	{
+		info.ShaderHander->LoadAllShaders(true);
+	}
 
 	_guiPLayerController.Draw(info);
 

@@ -2,7 +2,7 @@
 #include "GUIBase.h"
 #include "GUIConsole.h"
 #include "GUIMenu.h"
-#include "GUIInfo.h"
+#include "GUISettings.h"
 
 
 class GUIMainSetup : public GUIBase
@@ -20,7 +20,7 @@ public:
 
 		GUIConsole _console;
 		GUIMenu _menu;
-		GUIInfo _info;
+		GUISettings _info;
 		bool _showDemo;
 };
 

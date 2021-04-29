@@ -68,7 +68,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	g_shaderHandler->AddShader("RayMarchingVertex", TEXT("Shader/RayMarchingVertex.hlsl"), ShaderType::VertexShader);
 	g_shaderHandler->AddShader("RayMarchingPixel", TEXT("Shader/RayMarchingPixel.hlsl"), ShaderType::PixelShader);
 
-	result = g_shaderHandler->CompileAllShaders();
+	result = g_shaderHandler->LoadAllShaders();
 	if (FailedInit(result)) return result.ErrorCode;
 
 	//Time Setup

@@ -19,7 +19,7 @@ public:
 	void AddShader(LPCSTR shaderName, LPCWSTR shaderPath, ShaderType type);
 	ID3DBlob* GetShader(LPCSTR shader);
 
-	InitResult CompileAllShaders();
+	InitResult LoadAllShaders(bool recompileAll = false);
 
 	void DeInitialize();
 	 

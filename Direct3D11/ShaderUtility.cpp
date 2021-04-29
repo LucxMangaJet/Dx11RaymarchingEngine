@@ -1,6 +1,7 @@
 #include "ShaderUtility.h"
 #include <d3dcompiler.h>
 #include "PerformanceTimer.h"
+#include <fstream>
 
 InitResult ShaderUtility::CompileShader(LPCWSTR shaderPath, ShaderType shaderType, ID3DBlob** compiledCode)
 {
@@ -49,6 +50,24 @@ InitResult ShaderUtility::CompileShader(LPCWSTR shaderPath, ShaderType shaderTyp
 
 	SafeRelease(pCompileErrors);
     return InitResult::Success();
+}
+
+InitResult ShaderUtility::ReadFileToBlob(LPCWSTR path, ID3DBlob** blob)
+{
+	HRESULT res = D3DReadFileToBlob(path, blob);
+	if (FAILED(res)) return InitResult::Failure(res, "Failed to read file to blob");
+	return InitResult();
+}
+
+void ShaderUtility::WriteToFile(ID3DBlob* data, LPCWSTR path)
+{
+	D3DWriteBlobToFile(data, path, true);
+}
+
+bool ShaderUtility::DoesFileExist(LPCWSTR path)
+{
+	std::ifstream file(path);
+	return file.good();
 }
 
 LPCSTR ShaderUtility::ShaderTypeToTarget(ShaderType type)

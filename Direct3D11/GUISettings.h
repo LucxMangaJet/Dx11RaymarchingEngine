@@ -7,7 +7,7 @@
 
 struct  AppInfo;
 
-class GUIInfo :public GUIBase
+class GUISettings :public GUIBase
 {
 public:
 	void Init(const AppInfo& appInfo);

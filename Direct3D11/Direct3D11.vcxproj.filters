@@ -89,9 +89,6 @@
     <ClCompile Include="PerRenderingDataContainer.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="GUIInfo.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="GUIMenu.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -125,11 +122,14 @@
     <ClCompile Include="Lights.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUILights.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderHandler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUILights.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUISettings.cpp">
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,9 +196,6 @@
     <ClInclude Include="Vertex.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="GUIInfo.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="GUIMenu.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
@@ -240,6 +237,9 @@
     </ClInclude>
     <ClInclude Include="ShaderHandler.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUISettings.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

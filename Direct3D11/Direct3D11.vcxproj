@@ -153,7 +153,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GUIConsole.cpp" />
-    <ClCompile Include="GUIInfo.cpp" />
+    <ClCompile Include="GUISettings.cpp" />
     <ClCompile Include="GUILights.cpp" />
     <ClCompile Include="GUIMainSetup.cpp" />
     <ClCompile Include="GUIMenu.cpp" />
@@ -190,7 +190,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GUIBase.h" />
     <ClInclude Include="GUIConsole.h" />
-    <ClInclude Include="GUIInfo.h" />
+    <ClInclude Include="GUISettings.h" />
     <ClInclude Include="GUILights.h" />
     <ClInclude Include="GUIMainSetup.h" />
     <ClInclude Include="GUIMenu.h" />
