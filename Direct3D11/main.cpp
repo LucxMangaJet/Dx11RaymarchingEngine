@@ -7,6 +7,7 @@
 #include "ImGUIFacade.h"
 #include "Event.h"
 #include "GUIMainSetup.h"
+#include "loguru.hpp"
 
 static AppInfo g_AppInfo; //Contains global information and pointers to commonly used objects for initialization (Dx11 & WinApi)
 static Direct3D* g_direct3D;
@@ -23,6 +24,7 @@ void OnResize(UINT width, UINT height);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine, int nCmdShow)
 {
+	int i = 0;
 	g_AppInfo.HInstance = hInstance;
 	g_AppInfo.nCmdShow = nCmdShow;
 
@@ -31,6 +33,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	g_AppInfo.IsWindowed = true;
 
 	InitResult result;
+
+	//Setup logging
+	loguru::g_stderr_verbosity = 1;
+	loguru::add_file("player.log", loguru::Truncate, loguru::Verbosity_MAX);
+	LOG_F(INFO, "Starting Application");
 
 	// Window Setup
 	g_window = new MainWindow();
@@ -129,15 +136,17 @@ bool FailedInit(InitResult result)
 	if (result.Failed)
 	{
 		std::stringstream stream;
-		stream << TEXT("I:");
+		stream << "I:";
 		stream << result.ErrorCode;
-		stream << TEXT(" H: ");
+		stream << " H: ";
 		stream << std::hex << result.ErrorCode;
 
-		stream << TEXT(" ");
+		stream << " ";
 		stream << result.ErrorMsg;
 
 		stream << std::endl;
+
+		LOG_F(ERROR, stream.str().c_str());
 		MessageBoxA(NULL, stream.str().c_str(), "Init Error", 0);
 
 		return true;

@@ -19,17 +19,17 @@ InitResult ShaderUtility::CompileShader(LPCWSTR shaderPath, ShaderType shaderTyp
 	if (FAILED(hr))
 	{
 		std::stringstream stream;
-		stream << TEXT("Material: Failed to compile vertex shader.");
+		stream << "Material: Failed to compile shader.";
 
 		if (hr == D3D11_ERROR_FILE_NOT_FOUND)
 		{
-			stream << TEXT("File not found: ");
+			stream << "File not found: ";
 			stream << shaderPath;
 		}
 
 		if (pCompileErrors)
 		{
-			stream << TEXT("Compile Errors: ");
+			stream << "Compile Errors: ";
 			stream << (char*)pCompileErrors->GetBufferPointer();
 		}
 

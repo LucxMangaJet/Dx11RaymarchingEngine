@@ -119,6 +119,9 @@
     <ClCompile Include="ShaderUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\loguru\loguru.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Time.h">
@@ -212,6 +215,9 @@
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="ShaderUtility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\loguru\loguru.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
