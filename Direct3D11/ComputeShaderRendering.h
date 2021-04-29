@@ -5,14 +5,14 @@
 class ComputeShaderRendering
 {
 public:
-	InitResult Initiate(const AppInfo& appInfo, LPCWSTR shaderName);
+	InitResult Initiate(const AppInfo& appInfo, LPCSTR shaderName);
 
 	void Render(const AppInfo& appInfo);
 
 private:
 
 	InitResult InitiateOutputView(const AppInfo& appInfo);
-	InitResult InitiateComputeShader(const AppInfo& appInfo, LPCWSTR shaderName);
+	InitResult InitiateComputeShader(const AppInfo& appInfo, LPCSTR shaderName);
 
 	ID3D11ShaderResourceView* _outputSRV;
 	ID3D11UnorderedAccessView* _outputUAV;

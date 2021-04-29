@@ -1,9 +1,9 @@
 #include "ComputeShaderRendering.h"
 #include <d3dcompiler.h>
 #include "ShaderUtility.h"
+#include "ShaderHandler.h"
 
-
-InitResult ComputeShaderRendering::Initiate(const AppInfo& appInfo, LPCWSTR shaderName)
+InitResult ComputeShaderRendering::Initiate(const AppInfo& appInfo, LPCSTR shaderName)
 {
 	InitResult result;
 
@@ -77,17 +77,14 @@ InitResult ComputeShaderRendering::InitiateOutputView(const AppInfo& appInfo)
 	return InitResult::Success();
 }
 
-InitResult ComputeShaderRendering::InitiateComputeShader(const AppInfo& appInfo, LPCWSTR shaderName)
+InitResult ComputeShaderRendering::InitiateComputeShader(const AppInfo& appInfo, LPCSTR shaderName)
 {
-	ID3DBlob* compiledCode;
+	ID3DBlob* pCompiledCode = appInfo.ShaderHander->GetShader(shaderName);
 
-	InitResult result = ShaderUtility::CompileShader(shaderName, ShaderType::ComputeShader, &compiledCode);
-	if (result.Failed) return result;
+	if (pCompiledCode == nullptr) return InitResult::Failure(302, "Compute Shader not found.");
 
-	HRESULT hres = appInfo.D3DDevice->CreateComputeShader(compiledCode->GetBufferPointer(), compiledCode->GetBufferSize(), nullptr, &_computeShader);
+	HRESULT hres = appInfo.D3DDevice->CreateComputeShader(pCompiledCode->GetBufferPointer(), pCompiledCode->GetBufferSize(), nullptr, &_computeShader);
 	if (FAILED(hres)) return InitResult::Failure(hres, "Failed to create compute shader.");
-
-
 
 	return InitResult::Success();
 }

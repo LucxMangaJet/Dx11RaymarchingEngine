@@ -24,7 +24,8 @@ InitResult ShaderUtility::CompileShader(LPCWSTR shaderPath, ShaderType shaderTyp
 	if (FAILED(hr))
 	{
 		std::stringstream stream;
-		stream << "Material: Failed to compile shader.";
+		stream << "Failed to compile shader ";
+		stream << target;
 
 		if (hr == D3D11_ERROR_FILE_NOT_FOUND)
 		{

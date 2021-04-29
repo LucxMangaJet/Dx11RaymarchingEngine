@@ -13,5 +13,6 @@ public:
 private:
 	PlayerController* _playerController;
 	Camera* _camera;
+	bool _isUnfolded;
 };
 

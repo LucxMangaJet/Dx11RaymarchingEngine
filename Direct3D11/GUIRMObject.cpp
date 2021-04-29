@@ -7,7 +7,8 @@ void GUIObjects::Draw(const AppInfo& appInfo)
 {
 	std::vector<RMObject*>const  objects = *appInfo.Engine->GetAllObjects();
 
-	ImGui::TextWrapped("Objects");
+	_isUnfolded = ImGui::CollapsingHeader("Objects");
+	if (!_isUnfolded) return;
 
 	if (ImGui::Button("AddObject"))
 	{

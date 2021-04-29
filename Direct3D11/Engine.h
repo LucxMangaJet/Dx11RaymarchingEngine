@@ -12,8 +12,8 @@
 #include "RMObject.h"
 #include "Physics.h"
 #include "ComputeShaderRendering.h"
+#include "Lights.h"
 
-struct  LightData;
 
 class Engine
 {
@@ -27,6 +27,7 @@ public:
 
 	PlayerController* GetPlayerController() { return &_playerController; }
 	Camera* GetActiveCamera() { return &_camera; }
+	Lights* GetLights() { return &_lights; }
 
 	std::vector<RMObject*> const * const GetAllObjects() { return &_objects; }
 
@@ -45,7 +46,7 @@ protected:
 	Material _skyboxMaterial;
 	
 	Mesh _renderPlane;
-	LightData _light;
+	Lights _lights;
 
 	GameObject _raymarchObject;
 	GameObject _skyboxObject;

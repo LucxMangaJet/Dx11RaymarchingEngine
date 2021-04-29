@@ -6,5 +6,8 @@ class GUIObjects : public GUIBase
 public:
 	void Draw(const AppInfo& appInfo) override;
 
+private:
+
+	bool _isUnfolded;
 };
 

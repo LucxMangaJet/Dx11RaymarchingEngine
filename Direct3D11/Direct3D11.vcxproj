@@ -116,7 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../imgui/;../loguru/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../imgui/;../loguru/;../json/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,6 +154,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GUIConsole.cpp" />
     <ClCompile Include="GUIInfo.cpp" />
+    <ClCompile Include="GUILights.cpp" />
     <ClCompile Include="GUIMainSetup.cpp" />
     <ClCompile Include="GUIMenu.cpp" />
     <ClCompile Include="GUIPLayerController.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="ImGUIDirect3D.cpp" />
     <ClCompile Include="ImGUIFacade.cpp" />
     <ClCompile Include="ImGUIWin32.cpp" />
+    <ClCompile Include="Lights.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -169,6 +171,7 @@
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="RMObject.cpp" />
+    <ClCompile Include="ShaderHandler.cpp" />
     <ClCompile Include="ShaderUtility.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="MainWindow.cpp" />
@@ -188,6 +191,7 @@
     <ClInclude Include="GUIBase.h" />
     <ClInclude Include="GUIConsole.h" />
     <ClInclude Include="GUIInfo.h" />
+    <ClInclude Include="GUILights.h" />
     <ClInclude Include="GUIMainSetup.h" />
     <ClInclude Include="GUIMenu.h" />
     <ClInclude Include="GUIPLayerController.h" />
@@ -195,6 +199,7 @@
     <ClInclude Include="ImGUIDirect3D.h" />
     <ClInclude Include="ImGUIFacade.h" />
     <ClInclude Include="ImGUIWin32.h" />
+    <ClInclude Include="Lights.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshGenerator.h" />
@@ -203,6 +208,7 @@
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="RMObject.h" />
+    <ClInclude Include="ShaderHandler.h" />
     <ClInclude Include="ShaderUtility.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Vertex.h" />

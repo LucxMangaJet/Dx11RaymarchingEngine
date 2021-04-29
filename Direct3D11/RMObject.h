@@ -35,7 +35,7 @@ public:
 	RMObject();
 	RMObjectData GetObjectData();
 
-	STR Name;
+	STRING Name;
 
 	V3 Position;
 	V3 EularAngles;

@@ -11,11 +11,12 @@
 
 class Time;
 class Engine;
+class ShaderHandler;
 
 typedef DirectX::XMFLOAT3 V3;
 typedef DirectX::XMFLOAT4X4 M4X4;
-typedef std::string STR;
-typedef std::wstring WSTR;
+typedef std::string STRING;
+typedef std::wstring WSTRING;
 
 
 struct AppInfo
@@ -31,6 +32,7 @@ struct AppInfo
 	ID3D11DeviceContext* D3DDeviceContext;
 	Time* Time;
 	Engine* Engine;
+	ShaderHandler* ShaderHander;
 };
 
 struct InitResult

@@ -8,6 +8,7 @@
 #include "Event.h"
 #include "GUIMainSetup.h"
 #include "loguru.hpp"
+#include "ShaderHandler.h"
 
 static AppInfo g_AppInfo; //Contains global information and pointers to commonly used objects for initialization (Dx11 & WinApi)
 static Direct3D* g_direct3D;
@@ -16,6 +17,7 @@ static Engine* g_engine;
 static ImGUIFacade* g_imgui;
 static Time* g_time;
 static GUIMainSetup* g_gui;
+static ShaderHandler* g_shaderHandler;
 
 void RunMainLoop();
 void Shutdown();
@@ -54,6 +56,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 
 	g_AppInfo.D3DDevice = g_direct3D->GetDevice();
 	g_AppInfo.D3DDeviceContext = g_direct3D->GetDeviceContext();
+
+
+	//Setup Shaders
+	g_shaderHandler = new ShaderHandler();
+	g_AppInfo.ShaderHander = g_shaderHandler;
+
+	g_shaderHandler->AddShader("SkyboxVertex", TEXT("Shader/SkyboxVertex.hlsl"), ShaderType::VertexShader);
+	g_shaderHandler->AddShader("SkyboxPixel", TEXT("Shader/SkyboxPixel.hlsl"), ShaderType::PixelShader);
+	g_shaderHandler->AddShader("Render", TEXT("Shader/Render.compute"), ShaderType::ComputeShader);
+	g_shaderHandler->AddShader("RayMarchingVertex", TEXT("Shader/RayMarchingVertex.hlsl"), ShaderType::VertexShader);
+	g_shaderHandler->AddShader("RayMarchingPixel", TEXT("Shader/RayMarchingPixel.hlsl"), ShaderType::PixelShader);
+
+	result = g_shaderHandler->CompileAllShaders();
+	if (FailedInit(result)) return result.ErrorCode;
 
 	//Time Setup
 	g_time = new Time();
@@ -115,13 +131,15 @@ void Shutdown()
 	g_direct3D->DeInitialize();
 	g_window->DeInitialize();
 	g_engine->DeInitialize();
+	g_shaderHandler->DeInitialize();
 
-	delete g_engine; //change to smart_ptr?
+	delete g_engine;
 	delete g_time;
 	delete g_direct3D;
 	delete g_window;
 	delete g_imgui;
 	delete g_gui;
+	delete g_shaderHandler;
 }
 
 void OnResize(UINT width, UINT height)

@@ -2,15 +2,16 @@
 #include <d3dcompiler.h>
 #include <string>
 #include "PerRenderingDataContainer.h"
-#include "ShaderUtility.h"
+#include "AppInfo.h"
+#include "ShaderHandler.h"
 
-InitResult Material::Initialize(ID3D11Device* pd3dDevice, LPCWSTR textureName, LPCWSTR vertexShaderName, LPCWSTR pixelShaderName, MaterialParameters parameters)
+InitResult Material::Initialize(const AppInfo& appInfo, LPCSTR vertexShaderName, LPCSTR pixelShaderName)
 {
 
-	InitResult result = CreateVertexShader(pd3dDevice, vertexShaderName);
+	InitResult result = CreateVertexShader(appInfo, vertexShaderName);
 	if (result.Failed)return result;
 
-	result = CreatePixelShader(pd3dDevice, pixelShaderName);
+	result = CreatePixelShader(appInfo, pixelShaderName);
 	if (result.Failed)return result;
 
 	return InitResult::Success();
@@ -32,17 +33,16 @@ void Material::DeInitialize()
 
 
 
-InitResult Material::CreateVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
+InitResult Material::CreateVertexShader(const AppInfo& appInfo, LPCSTR name)
 {
-	ID3DBlob* compiledCode;
+	ID3DBlob* compiledCode = appInfo.ShaderHander->GetShader(name);
 
-	InitResult result = ShaderUtility::CompileShader(name, ShaderType::VertexShader, &compiledCode);
-	if (result.Failed) return result;
+	if (compiledCode == nullptr) return InitResult::Failure(300, "Vertex Shader not found.");
 
-	HRESULT hr = pD3DDevice->CreateVertexShader(compiledCode->GetBufferPointer(), compiledCode->GetBufferSize(), nullptr, &_pVertexShader);
+	HRESULT hr = appInfo.D3DDevice->CreateVertexShader(compiledCode->GetBufferPointer(), compiledCode->GetBufferSize(), nullptr, &_pVertexShader);
 	if (FAILED(hr)) return InitResult::Failure(hr, "Material: Failed to create vertex shader.");
 
-	result = CreateInputLayout(pD3DDevice, compiledCode);
+	InitResult result = CreateInputLayout(appInfo.D3DDevice, compiledCode);
 	if (result.Failed) return result;
 
 	SafeRelease<ID3DBlob>(compiledCode);
@@ -50,14 +50,13 @@ InitResult Material::CreateVertexShader(ID3D11Device* pD3DDevice, LPCWSTR name)
 	return InitResult::Success();
 }
 
-InitResult Material::CreatePixelShader(ID3D11Device* pD3DDevice, LPCWSTR name)
+InitResult Material::CreatePixelShader(const AppInfo& appInfo, LPCSTR name)
 {
-	ID3DBlob* pCompiledCode = nullptr;
-	
-	InitResult result = ShaderUtility::CompileShader(name, ShaderType::PixelShader, &pCompiledCode);
-	if (result.Failed) return result;
+	ID3DBlob* pCompiledCode = appInfo.ShaderHander->GetShader(name);
 
-	HRESULT hr = pD3DDevice->CreatePixelShader(pCompiledCode->GetBufferPointer(), pCompiledCode->GetBufferSize(), nullptr, &_pPixelShader);
+	if (pCompiledCode == nullptr) return InitResult::Failure(301, "Pixel Shader not found.");
+
+	HRESULT hr = appInfo.D3DDevice->CreatePixelShader(pCompiledCode->GetBufferPointer(), pCompiledCode->GetBufferSize(), nullptr, &_pPixelShader);
 	if (FAILED(hr)) InitResult::Failure(hr, "Material: Failed to create pixel shader.");
 
 	SafeRelease<ID3DBlob>(pCompiledCode);

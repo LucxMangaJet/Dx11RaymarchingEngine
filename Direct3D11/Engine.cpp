@@ -9,7 +9,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	InitResult result;
 
 	//CS Render
-	result = _csRendering.Initiate(appInfo, TEXT("Shader/Render.compute"));
+	result = _csRendering.Initiate(appInfo, "Render");
 	if (result.Failed) return result;
 
 	//Physics
@@ -25,22 +25,20 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, V3(100, 100, 100), V3(0, 0, 0));
 	if (result.Failed) return result;
 
-
-	// create material
-	MaterialParameters parameters1 = {};
-	parameters1.Ambient = { 0,0,0,0 };
-
-	result = _mainMaterial.Initialize(appInfo.D3DDevice, NULL, L"Shader/RayMarchingVertex.hlsl", L"Shader/RayMarchingPixel.hlsl", parameters1);
+	result = _mainMaterial.Initialize(appInfo, "RayMarchingVertex","RayMarchingPixel");
 	if (result.Failed) return result;
 
-	result = _skyboxMaterial.Initialize(appInfo.D3DDevice, NULL, L"Shader/SkyboxVertex.hlsl", L"Shader/SkyboxPixel.hlsl", parameters1);
+	result = _skyboxMaterial.Initialize(appInfo, "SkyboxVertex", "SkyboxPixel");
 	if (result.Failed) return result;
 
 	// 7. create light
-	_light.LightDirection = { 0.0f, -0.1f, 0.0f };
-	_light.AmbientColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-	_light.DiffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-	_light.LightIntensity = 1.0f;
+	LightData lightData;
+	lightData.LightDirection = { 0.0f, -0.1f, 0.0f };
+	lightData.AmbientColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+	lightData.DiffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+	lightData.LightIntensity = 1.0f;
+
+	_lights.SetLightData(lightData);
 
 	//create GameObject
 	_raymarchObject.Init(appInfo.D3DDevice, &_renderPlane, &_mainMaterial);
@@ -54,7 +52,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	result = _perRenderData.Initialize(appInfo.D3DDevice);
 	if (result.Failed) return result;
 
-	CreateObject(RMObjectType::Mandelbulb, STR("Bulb"), V3(0, 0, 0), V3(), V3(1,1,1), V3(5,5,5));
+	CreateObject(RMObjectType::Mandelbulb, STRING("Bulb"), V3(0, 0, 0), V3(), V3(1,1,1), V3(5,5,5));
 	
 	return InitResult::Success();
 }
@@ -71,7 +69,7 @@ void Engine::Render(const AppInfo& appInfo)
 	_perRenderData.Clear();
 
 	_perRenderData.SetResolution(appInfo.Width, appInfo.Height);
-	_perRenderData.SetLightData(_light);
+	_perRenderData.SetLightData(*_lights.GetLightData());
 	_perRenderData.SetTime(appInfo.Time->GetTotalTime());
 	_perRenderData.SetCameraData(_camera.GetFOV(), _camera.GetWorldPosition(), _camera.GetViewMatrix());
 
