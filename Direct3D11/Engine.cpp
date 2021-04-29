@@ -8,8 +8,13 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 {
 	InitResult result;
 
+	//CS Render
+	result = _csRendering.Initiate(appInfo, TEXT("Shader/Render.compute"));
+	if (result.Failed) return result;
+
 	//Physics
-	_physics.Initiate(appInfo);
+	result = _physics.Initiate(appInfo);
+	if (result.Failed) return result;
 
 	//create render plane
 	MeshData sphereData = MeshGenerator::GenerateFace();

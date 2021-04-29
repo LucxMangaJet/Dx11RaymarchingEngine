@@ -11,6 +11,7 @@
 #include <vector>
 #include "RMObject.h"
 #include "Physics.h"
+#include "ComputeShaderRendering.h"
 
 struct  LightData;
 
@@ -52,6 +53,7 @@ protected:
 	PlayerController _playerController;
 
 	Physics _physics;
+	ComputeShaderRendering _csRendering;
 
 	std::vector<RMObject*> _objects;
 };

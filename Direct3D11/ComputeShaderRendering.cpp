@@ -1,5 +1,6 @@
 #include "ComputeShaderRendering.h"
 #include <d3dcompiler.h>
+#include "ShaderUtility.h"
 
 
 InitResult ComputeShaderRendering::Initiate(const AppInfo& appInfo, LPCWSTR shaderName)
@@ -17,12 +18,20 @@ InitResult ComputeShaderRendering::Initiate(const AppInfo& appInfo, LPCWSTR shad
 
 void ComputeShaderRendering::Render(const AppInfo& appInfo)
 {
+	appInfo.D3DDeviceContext->CSSetShader(_computeShader, NULL, 0);
+	appInfo.D3DDeviceContext->CSSetUnorderedAccessViews(0, 1, &_outputUAV, NULL);
+	//Set buffers?
+	
+	appInfo.D3DDeviceContext->Dispatch(appInfo.Width, appInfo.Height, 1);
 
+	appInfo.D3DDeviceContext->CSSetShader(NULL, NULL, 0);
+	appInfo.D3DDeviceContext->CSSetUnorderedAccessViews(0, 1, NULL, NULL);
+	//Unset buffers?
 }
 
 InitResult ComputeShaderRendering::InitiateOutputView(const AppInfo& appInfo)
 {
-	DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //???
+	DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM; //???
 
 	D3D11_TEXTURE2D_DESC texDesc;
 	texDesc.Width = appInfo.Width;
@@ -70,6 +79,15 @@ InitResult ComputeShaderRendering::InitiateOutputView(const AppInfo& appInfo)
 
 InitResult ComputeShaderRendering::InitiateComputeShader(const AppInfo& appInfo, LPCWSTR shaderName)
 {
-	
+	ID3DBlob* compiledCode;
+
+	InitResult result = ShaderUtility::CompileShader(shaderName, ShaderType::ComputeShader, &compiledCode);
+	if (result.Failed) return result;
+
+	HRESULT hres = appInfo.D3DDevice->CreateComputeShader(compiledCode->GetBufferPointer(), compiledCode->GetBufferSize(), nullptr, &_computeShader);
+	if (FAILED(hres)) return InitResult::Failure(hres, TEXT("Failed to create compute shader."));
+
+
+
 	return InitResult::Success();
 }
