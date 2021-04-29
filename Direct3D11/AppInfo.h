@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <sstream>
 #include <DirectXMath.h>
+#include "loguru.hpp"
+
 
 class Time;
 class Engine;
@@ -50,6 +52,8 @@ struct InitResult
 	};
 
 };
+
+
 
 template <class T>
 void SafeRelease(T*& obj)

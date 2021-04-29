@@ -12,6 +12,7 @@ void GUIObjects::Draw(const AppInfo& appInfo)
 	if (ImGui::Button("AddObject"))
 	{
 		appInfo.Engine->CreateObject(RMObjectType::Sphere);
+		LOG_F(INFO, "Created Object through UI");
 	}
 
 	for (int i = 0; i < objects.size(); i++)

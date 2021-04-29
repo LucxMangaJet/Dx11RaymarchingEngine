@@ -9,7 +9,7 @@ class GUIMainSetup : public GUIBase
 
 public:
 
-	InitResult Init(const AppInfo& appInfo);
+	InitResult Initialize(const AppInfo& appInfo);
 
 	virtual void Draw(const AppInfo& appInfo) override;
 

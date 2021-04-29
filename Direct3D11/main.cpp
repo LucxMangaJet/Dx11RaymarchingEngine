@@ -74,7 +74,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 
 	//GUI Setup
 	g_gui = new GUIMainSetup();
-	g_gui->Init(g_AppInfo);
+	g_gui->Initialize(g_AppInfo);
 	g_gui->Show();
 
 	RunMainLoop();

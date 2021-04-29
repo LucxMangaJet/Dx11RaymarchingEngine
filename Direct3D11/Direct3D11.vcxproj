@@ -198,6 +198,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshGenerator.h" />
+    <ClInclude Include="PerformanceTimer.h" />
     <ClInclude Include="PerRenderingDataContainer.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PlayerController.h" />

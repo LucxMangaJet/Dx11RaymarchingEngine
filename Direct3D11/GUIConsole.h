@@ -18,8 +18,9 @@ class GUIConsole : public GUIBase
 	
 
 public:
-	GUIConsole();
 	~GUIConsole();
+
+	InitResult Initialize(const AppInfo& appInfo);
 
 	void Draw(const AppInfo& info) override;
 	void AddLog(const char* fmt, ...) IM_FMTARGS(2);

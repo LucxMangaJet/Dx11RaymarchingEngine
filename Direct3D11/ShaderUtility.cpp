@@ -1,10 +1,15 @@
 #include "ShaderUtility.h"
 #include <d3dcompiler.h>
+#include "PerformanceTimer.h"
 
 InitResult ShaderUtility::CompileShader(LPCWSTR shaderPath, ShaderType shaderType, ID3DBlob** compiledCode)
 {
 	ID3DBlob* pCompileErrors = nullptr;
 	LPCSTR target = ShaderUtility::ShaderTypeToTarget(shaderType);
+
+#ifdef _DEBUG
+	PerformanceTimer timer;
+#endif // _DEBUG
 
 	HRESULT hr = D3DCompileFromFile(
 		shaderPath, // shader filename
@@ -35,6 +40,11 @@ InitResult ShaderUtility::CompileShader(LPCWSTR shaderPath, ShaderType shaderTyp
 
 		return InitResult::Failure(hr, stream.str().c_str());
 	}
+
+#ifdef _DEBUG
+	timer.LogElapsed(shaderPath);
+#endif // DEBUG
+
 
 	SafeRelease(pCompileErrors);
     return InitResult::Success();

@@ -2,11 +2,14 @@
 #include <functional>
 
 
-InitResult GUIMainSetup::Init(const AppInfo& appInfo)
+InitResult GUIMainSetup::Initialize(const AppInfo& appInfo)
 {
 
 	_menu.Show();
 	_menu.SetCallback([this](GUIMenuEventType t) {OnGuiMenuEvent(t); });
+
+	InitResult result = _console.Initialize(appInfo);
+	if (result.Failed) return result;
 
 	_console.Show();
 
