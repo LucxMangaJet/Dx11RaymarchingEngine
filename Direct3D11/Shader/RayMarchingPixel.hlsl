@@ -23,19 +23,26 @@ float4 main(PixelInput IN) : SV_TARGET
 
 	float3 contactPoint = Camera.Position + depth * forward;
 	float3 normalizedLight = normalize(Light.LightDirection);
+	float3 normalizedNormal = SDF_EstimateNormal(contactPoint, depth);
 
-	float3 normalizedNormal = SDF_EstimateNormal(Camera.Position + depth * forward, depth);
+	//Shadows should work something like this, does not make sense in infinitely repeated context
+	/*
+	float3 lightOrigin = contactPoint - normalizedLight * (MAX_DIST-1);
+	float shadowDepth = RayMarch(lightOrigin, normalizedLight, 0, MAX_DIST);
+	float hasShadow = step(MAX_DIST - EPSILON, shadowDepth);
+	*/
 
-	// and http://en.wikipedia.org/wiki/Phong_shading
-	// diffuse light
-	float diffuse = dot(-normalizedLight, normalizedNormal); // calculate light intensity
-	diffuse = max(diffuse, 0.0f); // dot product can be negative
-	diffuse *= Light.LightIntensity; // adjust light intensity by multiplicator
+	//diffuse
+	float diffuse = dot(-normalizedLight, normalizedNormal); 
+	diffuse = max(diffuse, 0.0f); 
 
 	//specular
 	float3 h = normalize(normalize(Camera.Position - contactPoint) - normalizedLight);
-	float specular = pow(saturate(dot(h, normalizedNormal)), 48.0f);
+	float specular = pow(saturate(dot(h, normalizedNormal)),Light.SpecularPower);
 
-	float4 color = float4(saturate(Light.AmbientColor + Light.DiffuseColor * diffuse + float3(specular,0,0)),1);
+	float3 specularColor = Light.SpecularColor * specular * Light.SpecularIntensity;
+	float3 diffuseColor = Light.LightIntensity * Light.DiffuseColor.rgb * diffuse;
+
+	float4 color = float4(saturate(Light.AmbientColor + specularColor + diffuseColor),1);
 	return color;
 }

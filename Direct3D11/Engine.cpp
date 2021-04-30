@@ -8,9 +8,9 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 {
 	InitResult result;
 
-	//CS Render
-	result = _csRendering.Initiate(appInfo, "Render");
-	if (result.Failed) return result;
+	//CS Render - Not ready yet
+	//result = _csRendering.Initiate(appInfo, "Render");
+	//if (result.Failed) return result;
 
 	//Physics
 	result = _physics.Initiate(appInfo);
@@ -25,7 +25,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, V3(103, 100, 100), V3(0, 0, 0));
 	if (result.Failed) return result;
 
-	result = _mainMaterial.Initialize(appInfo, "RayMarchingVertex","RayMarchingPixel");
+	result = _mainMaterial.Initialize(appInfo, "RayMarchingVertex", "RayMarchingPixel");
 	if (result.Failed) return result;
 
 	result = _skyboxMaterial.Initialize(appInfo, "SkyboxVertex", "SkyboxPixel");
@@ -33,10 +33,13 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 
 	// 7. create light
 	LightData lightData;
-	lightData.LightDirection = { 0.0f, -0.1f, 0.0f };
-	lightData.AmbientColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-	lightData.DiffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+	lightData.LightDirection = { 0.0f, -0.1f, 0.0f};
+	lightData.AmbientColor = { 0.0f, 0.0f, 0.0f ,1.0f };
+	lightData.DiffuseColor = { 1.0f, 1.0f, 1.0f,1.0f };
 	lightData.LightIntensity = 1.0f;
+	lightData.SpecularColor = { 1.0f,0.0f,0.0f,1.0f };
+	lightData.SpecularIntensity = 1.0f;
+	lightData.SpecularPower = 48.0f;
 
 	_lights.SetLightData(lightData);
 
@@ -52,8 +55,8 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	result = _perRenderData.Initialize(appInfo.D3DDevice);
 	if (result.Failed) return result;
 
-	CreateObject(RMObjectType::Mandelbulb, STRING("Bulb"), V3(0, 0, 0), V3(), V3(1,1,1), V3(5,5,5));
-	
+	CreateObject(RMObjectType::Mandelbulb, STRING("Bulb"), V3(0, 0, 0), V3(), V3(1, 1, 1), V3(5, 5, 5));
+
 	return InitResult::Success();
 }
 
@@ -79,6 +82,9 @@ void Engine::Render(const AppInfo& appInfo)
 	}
 
 	_perRenderData.Bind(appInfo.D3DDeviceContext);
+
+	//Not ready yet
+	//_csRendering.Render(appInfo);
 
 	// rendering stuff
 	_skyboxObject.render(appInfo.D3DDeviceContext);

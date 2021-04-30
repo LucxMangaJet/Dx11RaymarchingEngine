@@ -23,6 +23,10 @@ struct LightData
 	float LightIntensity;
 	XMFLOAT4 AmbientColor;
 	XMFLOAT4 DiffuseColor;
+	XMFLOAT4 SpecularColor;
+	float SpecularPower;
+	float SpecularIntensity;
+	XMFLOAT2 __padding;
 };
 
 struct CameraData

@@ -232,9 +232,6 @@
     <ClInclude Include="Lights.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GUILights.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -243,6 +240,9 @@
     </ClInclude>
     <ClInclude Include="..\json\json.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUILights.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

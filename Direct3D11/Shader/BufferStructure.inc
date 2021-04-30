@@ -24,8 +24,12 @@ struct LightData
 {
 	float3 LightDirection;
 	float LightIntensity;
-	float3 AmbientColor;
-	float3 DiffuseColor;
+	float4 AmbientColor;
+	float4 DiffuseColor;
+	float4 SpecularColor;
+	float SpecularPower;
+	float SpecularIntensity;
+	float2 __padding;
 };
 
 struct CameraData

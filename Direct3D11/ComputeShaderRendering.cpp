@@ -25,7 +25,8 @@ void ComputeShaderRendering::Render(const AppInfo& appInfo)
 	appInfo.D3DDeviceContext->Dispatch(appInfo.Width, appInfo.Height, 1);
 
 	appInfo.D3DDeviceContext->CSSetShader(NULL, NULL, 0);
-	appInfo.D3DDeviceContext->CSSetUnorderedAccessViews(0, 1, NULL, NULL);
+	ID3D11UnorderedAccessView* ppUAViewNULL[1] = { NULL };
+	appInfo.D3DDeviceContext->CSSetUnorderedAccessViews(0, 1, ppUAViewNULL, NULL);
 	//Unset buffers?
 }
 
