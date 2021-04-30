@@ -22,7 +22,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	if (result.Failed) return result;
 
 	// create camera
-	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, V3(100, 100, 100), V3(0, 0, 0));
+	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, V3(103, 100, 100), V3(0, 0, 0));
 	if (result.Failed) return result;
 
 	result = _mainMaterial.Initialize(appInfo, "RayMarchingVertex","RayMarchingPixel");
