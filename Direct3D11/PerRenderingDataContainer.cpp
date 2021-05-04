@@ -36,6 +36,7 @@ void PerRenderingDataContainer::Bind(ID3D11DeviceContext* pD3DDeviceContext)
 	pD3DDeviceContext->Unmap(_buffer, 0);
 
 	pD3DDeviceContext->PSSetConstantBuffers(RMB_PER_RENDERING, 1, &_buffer);
+	pD3DDeviceContext->CSSetConstantBuffers(RMB_PER_RENDERING, 1, &_buffer); //for physics
 }
 
 void PerRenderingDataContainer::SetTime(float time)

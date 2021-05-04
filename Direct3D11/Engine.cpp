@@ -63,6 +63,11 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 void Engine::Update(const AppInfo& appInfo)
 {
 	_playerController.Update(appInfo);
+	
+	_physics.ResetFrame();
+
+	_physics.SetPoint(_camera.GetWorldPosition());
+
 	_physics.Run(appInfo);
 }
 

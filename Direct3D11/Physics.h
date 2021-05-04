@@ -2,8 +2,7 @@
 #include "AppInfo.h"
 
 
-
-
+typedef UINT POINT_ID;
 
 class Physics
 {
@@ -15,7 +14,13 @@ public:
 
 	void Finish(const AppInfo& appInfo);
 
+	void ResetFrame() { _currentID = 0; };
+	POINT_ID SetPoint(V3 point);
+	float GetDistance(POINT_ID id) { return _distances[id]; };
+
 private:
+
+	POINT_ID _currentID = 0;
 
 	int _pointCount = 0;
 	V3 _points[MAX_POINTS];

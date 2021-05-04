@@ -7,17 +7,14 @@ InitResult Physics::Initiate(const AppInfo& appInfo, LPCSTR shaderName)
 {
 	//input buffer
 	D3D11_BUFFER_DESC inputDesc;
-	inputDesc.Usage = D3D11_USAGE_DEFAULT;
+	inputDesc.Usage = D3D11_USAGE_DYNAMIC;
 	inputDesc.ByteWidth = sizeof(V3) * MAX_POINTS;
 	inputDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	inputDesc.CPUAccessFlags = 0;
+	inputDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	inputDesc.StructureByteStride = sizeof(V3);
 	inputDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 
-	D3D11_SUBRESOURCE_DATA vinitDataA;
-	vinitDataA.pSysMem = _points;
-
-	HRESULT res = appInfo.D3DDevice->CreateBuffer(&inputDesc, &vinitDataA, &_inputBuffer);
+	HRESULT res = appInfo.D3DDevice->CreateBuffer(&inputDesc, 0, &_inputBuffer);
 	if (FAILED(res)) return InitResult::Failure(res, "Failed to create physics compute shader input buffer.");
 
 	//output buffer
@@ -86,6 +83,18 @@ InitResult Physics::Initiate(const AppInfo& appInfo, LPCSTR shaderName)
 
 void Physics::Run(const AppInfo& appInfo)
 {
+	//update input data
+	D3D11_MAPPED_SUBRESOURCE data = {};
+	HRESULT hr = appInfo.D3DDeviceContext->Map(_inputBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
+	//unhandled failure!
+	V3* pBuffer = reinterpret_cast<V3*>(data.pData);
+	for (int i = 0; i < MAX_POINTS; i++)
+	{
+		pBuffer[i] = _points[i];
+	}
+	appInfo.D3DDeviceContext->Unmap(_inputBuffer, 0);
+
+
 	ID3D11UnorderedAccessView* ppUAViewNULL[1] = { NULL };
 	ID3D11ShaderResourceView* ppSRViewNULL[1] = { NULL };
 
@@ -129,4 +138,11 @@ void Physics::Finish(const AppInfo& appInfo)
 	LOG_F(INFO, "Physics Result: %f", _distances[0]);
 
 	appInfo.D3DDeviceContext->Unmap(_outputReadBuffer, 0);
+}
+
+POINT_ID Physics::SetPoint(V3 point)
+{
+	POINT_ID id = _currentID++;
+	_points[id] = point;
+	return id;
 }
