@@ -105,16 +105,16 @@ void PlayerController::OnPrePhysics(const AppInfo& appInfo)
 	V3 point = position + V3(0, -1.5f, 0);
 	_collisionPoints[0] = point;
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < _CollisionPointCount - 1; i++)
 	{
-		float r = ((float)i / 9) * 2 * PI;
+		float r = ((float)i / _CollisionPointCount - 1) * 2 * PI;
 		float x = sin(r);
 		float z = cos(r);
 		V3 point = position + V3(x, -1, z);
 		_collisionPoints[i + 1] = point;
 	}
 
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < _CollisionPointCount; i++)
 	{
 		physics->SetPoint(_collisionPoints[i]);
 	}

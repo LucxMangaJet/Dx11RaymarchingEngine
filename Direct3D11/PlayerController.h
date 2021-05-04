@@ -26,6 +26,7 @@ private:
 	POINT _oldMousePos;
 	Camera* _camera;
 	POINT_ID _collisionID;
-	V3 _collisionPoints[9];
+	V3 _collisionPoints[20];
+	float _CollisionPointCount = 20;
 };
 
