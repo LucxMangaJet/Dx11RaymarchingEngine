@@ -1,9 +1,11 @@
 #include "PlayerController.h"
-#include <DirectXMath.h>
 #include "Camera.h"
 #include "Engine.h"
 #include "AppInfo.h"
 #include "Time.h"
+#include "Physics.h"
+#include "ExtraMath.h"
+#include <cmath>
 
 InitResult PlayerController::Init(const AppInfo& appInfo, Camera* camera)
 {
@@ -13,7 +15,7 @@ InitResult PlayerController::Init(const AppInfo& appInfo, Camera* camera)
 
 	_camera = camera;
 
-	_movementSpeed = 10; //Hardcoded
+	_movementSpeed = 10;
 
 	return InitResult();
 }
@@ -36,35 +38,60 @@ void PlayerController::Update(const AppInfo& appInfo)
 		_oldMousePos = mousePos;
 	}
 
-	V3 f_position = _camera->GetWorldPosition();
-	V3 f_forward = _camera->GetForwardVector();
-	V3 f_right = _camera->GetRightVector();
+	V3 position = _camera->GetWorldPosition();
+	V3 forward = _camera->GetForwardVector();
+	V3 right = _camera->GetRightVector();
 
-	XMVECTOR position = XMLoadFloat3(&f_position);
-	XMVECTOR forward = XMLoadFloat3(&f_forward);
-	XMVECTOR right = XMLoadFloat3(&f_right);
+	forward.y = 0;
+	forward = Normalize(forward);
+	right.y = 0;
+	right = Normalize(right);
 
 	float deltaTime = appInfo.Time->GetDeltaTime();
 
+
 	if (GetKeyState(KEY_W) & KEY_PRESSED)
 	{
-		position = XMVectorAdd(position, XMVectorScale(forward, deltaTime * _movementSpeed));
+		position = position + (forward * (deltaTime * _movementSpeed));
 	}
 	if (GetKeyState(KEY_S) & KEY_PRESSED)
 	{
-		position = XMVectorAdd(position, XMVectorScale(forward, -deltaTime * _movementSpeed));
+		position = position + (forward * (-deltaTime * _movementSpeed));
 	}
 	if (GetKeyState(KEY_A) & KEY_PRESSED)
 	{
-		position = XMVectorAdd(position, XMVectorScale(right, -deltaTime * _movementSpeed));
+		position = position + (right * (-deltaTime * _movementSpeed));
 	}
 	if (GetKeyState(KEY_D) & KEY_PRESSED)
 	{
-		position = XMVectorAdd(position, XMVectorScale(right, deltaTime * _movementSpeed));
+		position = position + (right * (deltaTime * _movementSpeed));
 	}
 
-	XMStoreFloat3(&f_position, position);
-	_camera->SetPosition(f_position);
+	float collisionValue = appInfo.Engine->GetPhysics()->GetDistance(_collisionID);
+	LOG_F(INFO, "Coll Val: %f", collisionValue);
+
+	float pushAmount = 0;
+	if (collisionValue < 0)
+	{
+		pushAmount = collisionValue;
+		_vy = 0;
+	}
+	else
+	{
+		_vy += 9.81f * deltaTime;
+		pushAmount = _vy * deltaTime;
+	}
+
+	position = position + (V3(0, -1, 0) * pushAmount);
+
+	_camera->SetPosition(position);
 
 	_camera->Update();
+}
+
+void PlayerController::OnPrePhysics(const AppInfo& appInfo)
+{
+	Physics* physics = appInfo.Engine->GetPhysics();
+
+	_collisionID = physics->SetPoint(_camera->GetWorldPosition() + V3(0, -1.5f, 0));
 }

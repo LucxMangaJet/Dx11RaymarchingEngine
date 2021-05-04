@@ -134,9 +134,6 @@ void Physics::Finish(const AppInfo& appInfo)
 	{
 		_distances[i] = dataView[i];
 	}
-
-	LOG_F(INFO, "Physics Result: %f", _distances[0]);
-
 	appInfo.D3DDeviceContext->Unmap(_outputReadBuffer, 0);
 }
 

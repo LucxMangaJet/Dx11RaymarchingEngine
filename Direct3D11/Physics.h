@@ -2,8 +2,6 @@
 #include "AppInfo.h"
 
 
-typedef UINT POINT_ID;
-
 class Physics
 {
 public:

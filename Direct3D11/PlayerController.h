@@ -16,12 +16,15 @@ public:
 
 	InitResult Init(const AppInfo& AppInfos, Camera* camera);
 	void Update(const AppInfo& appInfo);
+	void OnPrePhysics(const AppInfo& appInfo);
 
 	float _mouseSensitivity = 3;
 	float _movementSpeed = 1;
+	float _vy;
 
 private:
 	POINT _oldMousePos;
 	Camera* _camera;
+	POINT_ID _collisionID;
 };
 

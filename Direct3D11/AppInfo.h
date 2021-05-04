@@ -8,7 +8,6 @@
 #include <DirectXMath.h>
 #include "loguru.hpp"
 
-
 class Time;
 class Engine;
 class ShaderHandler;
@@ -17,7 +16,7 @@ typedef DirectX::XMFLOAT3 V3;
 typedef DirectX::XMFLOAT4X4 M4X4;
 typedef std::string STRING;
 typedef std::wstring WSTRING;
-
+typedef UINT POINT_ID;
 
 struct AppInfo
 {
@@ -43,19 +42,17 @@ struct InitResult
 
 
 	static InitResult Success() { return InitResult(); }
-	static InitResult Failure(int errorCode, LPCSTR errorMsg = nullptr) 
+	static InitResult Failure(int errorCode, LPCSTR errorMsg = nullptr)
 	{
 		InitResult res;
 		res.Failed = true;
 		res.ErrorCode = errorCode;
-		if(errorMsg)
+		if (errorMsg)
 			res.ErrorMsg = std::string(errorMsg);
 		return res;
 	};
 
 };
-
-
 
 template <class T>
 void SafeRelease(T*& obj)

@@ -151,6 +151,7 @@
     <ClCompile Include="..\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\loguru\loguru.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ExtraMath.cpp" />
     <ClCompile Include="ComputeShaderRendering.cpp" />
     <ClCompile Include="Direct3D.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="..\loguru\loguru.hpp" />
     <ClInclude Include="AppInfo.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ExtraMath.h" />
     <ClInclude Include="ComputeShaderRendering.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="Engine.h" />

@@ -28,6 +28,7 @@ public:
 	PlayerController* GetPlayerController() { return &_playerController; }
 	Camera* GetActiveCamera() { return &_camera; }
 	Lights* GetLights() { return &_lights; }
+	Physics* GetPhysics() { return &_physics; }
 
 	std::vector<RMObject*> const * const GetAllObjects() { return &_objects; }
 

@@ -22,7 +22,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	if (result.Failed) return result;
 
 	// create camera
-	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, V3(103, 100, 100), V3(0, 0, 0));
+	result = _camera.Initialize(appInfo.Width, appInfo.Height, XM_PI * 0.3333333f, V3(103, 10000, 100), V3(0, 0, 0));
 	if (result.Failed) return result;
 
 	result = _mainMaterial.Initialize(appInfo, "RayMarchingVertex", "RayMarchingPixel");
@@ -55,20 +55,18 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	result = _perRenderData.Initialize(appInfo.D3DDevice);
 	if (result.Failed) return result;
 
-	CreateObject(RMObjectType::Mandelbulb, STRING("Bulb"), V3(0, 0, 0), V3(), V3(1, 1, 1), V3(5, 5, 5));
+	CreateObject(RMObjectType::Maze, STRING("Bulb"), V3(0, 0, 0), V3(), V3(1, 1, 1));
 
 	return InitResult::Success();
 }
 
 void Engine::Update(const AppInfo& appInfo)
 {
-	_playerController.Update(appInfo);
-	
 	_physics.ResetFrame();
-
-	_physics.SetPoint(_camera.GetWorldPosition());
-
+	_playerController.OnPrePhysics(appInfo);
 	_physics.Run(appInfo);
+
+	_playerController.Update(appInfo);
 }
 
 void Engine::Render(const AppInfo& appInfo)
