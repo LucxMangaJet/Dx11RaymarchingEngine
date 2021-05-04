@@ -19,9 +19,14 @@ public:
 	void Update(const AppInfo& appInfo);
 	void OnPrePhysics(const AppInfo& appInfo);
 
+	void UpdateNormal(const AppInfo& appInfo);
+	void UpdateSpectator(const AppInfo& appInfo);
+
 	float _mouseSensitivity = 3;
 	float _movementSpeed = 1;
 	float _vy;
+	bool _spectatorMode = false;
+	FLOAT _terminalVelocity = 40;
 
 private:
 	POINT _oldMousePos;

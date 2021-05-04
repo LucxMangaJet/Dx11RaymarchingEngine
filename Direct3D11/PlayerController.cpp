@@ -21,24 +21,8 @@ InitResult PlayerController::Init(const AppInfo& appInfo, Camera* camera)
 	return InitResult();
 }
 
-void PlayerController::Update(const AppInfo& appInfo)
+void PlayerController::UpdateNormal(const AppInfo& appInfo)
 {
-
-	POINT mousePos;
-	if (GetCursorPos(&mousePos))
-	{
-		POINT diff;
-		diff.x = mousePos.x - _oldMousePos.x;
-		diff.y = mousePos.y - _oldMousePos.y;
-
-		V3 eular = _camera->GetWorldRotation();
-		eular.y += (_mouseSensitivity * diff.x) / appInfo.Width;
-		eular.x += (_mouseSensitivity * diff.y) / appInfo.Height;
-
-		_camera->SetEulerAngles(eular);
-		_oldMousePos = mousePos;
-	}
-
 	V3 position = _camera->GetWorldPosition();
 	V3 forward = _camera->GetForwardVector();
 	V3 right = _camera->GetRightVector();
@@ -92,11 +76,67 @@ void PlayerController::Update(const AppInfo& appInfo)
 	else
 	{
 		_vy += 9.81f * deltaTime;
+		_vy = min(_vy, _terminalVelocity);
 		position = position + (V3(0, -1, 0) * _vy * deltaTime);
 	}
 
 
 	_camera->SetPosition(position);
+}
+
+void PlayerController::UpdateSpectator(const AppInfo& appInfo)
+{
+	V3 position = _camera->GetWorldPosition();
+	V3 forward = _camera->GetForwardVector();
+	V3 right = _camera->GetRightVector();
+
+	float deltaTime = appInfo.Time->GetDeltaTime();
+
+
+	if (GetKeyState(KEY_W) & KEY_PRESSED)
+	{
+		position = position + (forward * (deltaTime * _movementSpeed));
+	}
+	if (GetKeyState(KEY_S) & KEY_PRESSED)
+	{
+		position = position + (forward * (-deltaTime * _movementSpeed));
+	}
+	if (GetKeyState(KEY_A) & KEY_PRESSED)
+	{
+		position = position + (right * (-deltaTime * _movementSpeed));
+	}
+	if (GetKeyState(KEY_D) & KEY_PRESSED)
+	{
+		position = position + (right * (deltaTime * _movementSpeed));
+	}
+
+	_camera->SetPosition(position);
+}
+
+
+void PlayerController::Update(const AppInfo& appInfo)
+{
+
+	POINT mousePos;
+	if (GetCursorPos(&mousePos))
+	{
+		POINT diff;
+		diff.x = mousePos.x - _oldMousePos.x;
+		diff.y = mousePos.y - _oldMousePos.y;
+
+		V3 eular = _camera->GetWorldRotation();
+		eular.y += (_mouseSensitivity * diff.x) / appInfo.Width;
+		eular.x += (_mouseSensitivity * diff.y) / appInfo.Height;
+
+		_camera->SetEulerAngles(eular);
+		_oldMousePos = mousePos;
+	}
+
+	
+	if (_spectatorMode)
+		UpdateSpectator(appInfo);
+	else
+		UpdateNormal(appInfo);
 
 	_camera->Update();
 }
