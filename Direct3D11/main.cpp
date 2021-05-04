@@ -67,6 +67,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	g_shaderHandler->AddShader("Render", TEXT("Shader/Render.compute"), ShaderType::ComputeShader);
 	g_shaderHandler->AddShader("RayMarchingVertex", TEXT("Shader/RayMarchingVertex.hlsl"), ShaderType::VertexShader);
 	g_shaderHandler->AddShader("RayMarchingPixel", TEXT("Shader/RayMarchingPixel.hlsl"), ShaderType::PixelShader);
+	g_shaderHandler->AddShader("Physics", TEXT("Shader/Physics.compute"), ShaderType::ComputeShader);
 
 	result = g_shaderHandler->LoadAllShaders();
 	if (FailedInit(result)) return result.ErrorCode;

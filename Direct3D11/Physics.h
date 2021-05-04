@@ -1,24 +1,35 @@
 #pragma once
 #include "AppInfo.h"
-#include <vector>
 
-struct SphereCollider
-{
-	V3 Position;
-	float Radius;
-};
+
 
 
 
 class Physics
 {
 public:
-	InitResult Initiate(const AppInfo& appInfo);
-	void Update(const AppInfo& appInfo);
+	const static int MAX_POINTS = 64;
 
+	InitResult Initiate(const AppInfo& appInfo, LPCSTR shaderName);
+	void Run(const AppInfo& appInfo);
+
+	void Finish(const AppInfo& appInfo);
 
 private:
-	std::vector<SphereCollider> _colliders;
+
+	int _pointCount = 0;
+	V3 _points[MAX_POINTS];
+	float _distances[MAX_POINTS];
+
+	ID3D11Buffer* _inputBuffer;
+	ID3D11Buffer* _outputBuffer;
+	ID3D11Buffer* _outputReadBuffer;
+
+	ID3D11ShaderResourceView* _inputSRV;
+	ID3D11UnorderedAccessView* _outputUAV;
+
+	ID3D11ComputeShader* _computeShader;
+	ID3D11Query* _finishedQuery;
 
 };
 

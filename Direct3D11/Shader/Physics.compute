@@ -1,0 +1,9 @@
+
+StructuredBuffer<float3> InputPoints : register(t0);
+RWStructuredBuffer<float> OutputDistance : register(u0);
+
+[numthreads(16, 1, 1)]
+void main(int3 id : SV_DispatchThreadID)
+{
+	OutputDistance[id.x] = InputPoints[id.x].x;
+}

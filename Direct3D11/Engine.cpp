@@ -13,7 +13,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	//if (result.Failed) return result;
 
 	//Physics
-	result = _physics.Initiate(appInfo);
+	result = _physics.Initiate(appInfo, "Physics");
 	if (result.Failed) return result;
 
 	//create render plane
@@ -63,7 +63,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 void Engine::Update(const AppInfo& appInfo)
 {
 	_playerController.Update(appInfo);
-	_physics.Update(appInfo);
+	_physics.Run(appInfo);
 }
 
 void Engine::Render(const AppInfo& appInfo)

@@ -277,4 +277,9 @@
       <Filter>Shader</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\Physics.compute">
+      <Filter>Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>
