@@ -6,6 +6,7 @@
 #include "Physics.h"
 #include "ExtraMath.h"
 #include <cmath>
+#include "loguru.hpp"
 
 InitResult PlayerController::Init(const AppInfo& appInfo, Camera* camera)
 {
@@ -67,22 +68,29 @@ void PlayerController::Update(const AppInfo& appInfo)
 		position = position + (right * (deltaTime * _movementSpeed));
 	}
 
-	float collisionValue = appInfo.Engine->GetPhysics()->GetDistance(_collisionID);
-	LOG_F(INFO, "Coll Val: %f", collisionValue);
+	float collisionValue[9];
+	Physics* physics = appInfo.Engine->GetPhysics();
+	V3 center = _camera->GetWorldPosition() + V3(0, -1, 0);
 
-	float pushAmount = 0;
-	if (collisionValue < 0)
+	for (int i = 0; i < 9; i++)
 	{
-		pushAmount = collisionValue;
+		collisionValue[i] = physics->GetDistance(_collisionID + i);
+		V3 vector = center - _collisionPoints[i];
+		float force = max(0, -collisionValue[i]);
+		position = position + force * vector;
+	}
+
+	//fall
+	if (collisionValue[0] < 0)
+	{
 		_vy = 0;
 	}
 	else
 	{
 		_vy += 9.81f * deltaTime;
-		pushAmount = _vy * deltaTime;
+		position = position + (V3(0, -1, 0) * _vy * deltaTime);
 	}
 
-	position = position + (V3(0, -1, 0) * pushAmount);
 
 	_camera->SetPosition(position);
 
@@ -93,5 +101,21 @@ void PlayerController::OnPrePhysics(const AppInfo& appInfo)
 {
 	Physics* physics = appInfo.Engine->GetPhysics();
 
-	_collisionID = physics->SetPoint(_camera->GetWorldPosition() + V3(0, -1.5f, 0));
+	V3 position = _camera->GetWorldPosition();
+	V3 point = position + V3(0, -1.5f, 0);
+	_collisionPoints[0] = point;
+
+	for (int i = 0; i < 8; i++)
+	{
+		float r = ((float)i / 9) * 2 * PI;
+		float x = sin(r);
+		float z = cos(r);
+		V3 point = position + V3(x, -1, z);
+		_collisionPoints[i + 1] = point;
+	}
+
+	for (int i = 0; i < 9; i++)
+	{
+		physics->SetPoint(_collisionPoints[i]);
+	}
 }

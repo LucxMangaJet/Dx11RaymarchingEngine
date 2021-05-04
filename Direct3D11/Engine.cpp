@@ -55,7 +55,7 @@ InitResult Engine::Initialize(const AppInfo& appInfo)
 	result = _perRenderData.Initialize(appInfo.D3DDevice);
 	if (result.Failed) return result;
 
-	CreateObject(RMObjectType::Maze, STRING("Bulb"), V3(0, 0, 0), V3(), V3(1, 1, 1));
+	CreateObject(RMObjectType::Mandelbulb, STRING("Bulb"), V3(0, 0, 0), V3(), V3(50, 50, 50), V3(100,100,100));
 
 	return InitResult::Success();
 }

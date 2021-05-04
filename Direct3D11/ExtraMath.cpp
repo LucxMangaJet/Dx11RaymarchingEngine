@@ -5,6 +5,11 @@ V3 operator+(const V3& a, const V3& b)
 	return V3(a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
+V3 operator-(const V3& a, const V3& b)
+{
+	return V3(a.x - b.x, a.y - b.y, a.z - b.z);
+}
+
 V3 operator*(const V3& a, const float& s)
 {
 	return V3(a.x * s, a.y * s, a.z * s);

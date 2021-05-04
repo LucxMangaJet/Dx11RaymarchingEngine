@@ -2,9 +2,12 @@
 
 #include "AppInfo.h"
 
+#define PI 3.141592f;
 
 //Custom Vector operations, because XMVECTOR is not productive and painful to use
 V3 operator+(const V3& a, const V3& b);
+
+V3 operator-(const V3& a, const V3& b);
 
 V3 operator*(const V3& a, const float& s);
 
