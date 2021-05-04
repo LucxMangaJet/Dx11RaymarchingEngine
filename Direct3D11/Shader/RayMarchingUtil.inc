@@ -91,7 +91,7 @@ float SDF_Scene(float3 p)
 float3 SDF_EstimateNormal(float3 p, float depth)
 {
  //This should be correctly calculated based on FOV or similar (Distance between pixels)
-	float step = depth *depth *EPSILON;
+	float step = depth * EPSILON;
 
 	return normalize(float3(
 		SDF_Scene(float3(p.x + step, p.y, p.z)) - SDF_Scene(float3(p.x - step, p.y, p.z)),
