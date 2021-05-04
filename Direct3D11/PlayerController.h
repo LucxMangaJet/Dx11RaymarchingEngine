@@ -6,6 +6,7 @@
 #define KEY_D 0x44
 #define KEY_A 0x41
 #define KEY_PRESSED 0x8000
+#define KEY_SPACE 0x20
 
 class Camera;
 

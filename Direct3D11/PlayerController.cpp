@@ -84,6 +84,10 @@ void PlayerController::Update(const AppInfo& appInfo)
 	if (collisionValue[0] < 0)
 	{
 		_vy = 0;
+		if (GetKeyState(KEY_SPACE) & KEY_PRESSED)
+		{
+			_vy -= 20;
+		}
 	}
 	else
 	{
