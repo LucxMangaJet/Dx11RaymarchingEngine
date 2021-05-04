@@ -27,5 +27,6 @@ void GUIObjects::Draw(const AppInfo& appInfo)
 		ImGui::DragFloat3(("Scale " + nr).c_str(), (float*)&object->Scale, 0.1);
 		ImGui::Spacing();
 		ImGui::DragFloat3(("Repetition " + nr).c_str(), (float*)&object->Repetition, 0.1);
+		ImGui::DragInt(("Type " + nr).c_str(), (int*)&object->Type);
 	}
 }
