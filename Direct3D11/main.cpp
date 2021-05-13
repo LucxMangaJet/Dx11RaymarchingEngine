@@ -60,14 +60,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 
 	//Setup Shaders
 	g_shaderHandler = new ShaderHandler();
+	g_shaderHandler->Initialize(g_AppInfo);
 	g_AppInfo.ShaderHander = g_shaderHandler;
 
-	g_shaderHandler->AddShader("SkyboxVertex", TEXT("Shader/SkyboxVertex.hlsl"), ShaderType::VertexShader);
-	g_shaderHandler->AddShader("SkyboxPixel", TEXT("Shader/SkyboxPixel.hlsl"), ShaderType::PixelShader);
-	g_shaderHandler->AddShader("Render", TEXT("Shader/Render.compute"), ShaderType::ComputeShader);
-	g_shaderHandler->AddShader("RayMarchingVertex", TEXT("Shader/RayMarchingVertex.hlsl"), ShaderType::VertexShader);
-	g_shaderHandler->AddShader("RayMarchingPixel", TEXT("Shader/RayMarchingPixel.hlsl"), ShaderType::PixelShader);
-	g_shaderHandler->AddShader("Physics", TEXT("Shader/Physics.compute"), ShaderType::ComputeShader);
+	g_shaderHandler->AddShader("SkyboxVertex", TEXT("SkyboxVertex.hlsl"), ShaderType::VertexShader);
+	g_shaderHandler->AddShader("SkyboxPixel", TEXT("SkyboxPixel.hlsl"), ShaderType::PixelShader);
+	g_shaderHandler->AddShader("Render", TEXT("Render.compute"), ShaderType::ComputeShader);
+	g_shaderHandler->AddShader("RayMarchingVertex", TEXT("RayMarchingVertex.hlsl"), ShaderType::VertexShader);
+	g_shaderHandler->AddShader("RayMarchingPixel", TEXT("RayMarchingPixel.hlsl"), ShaderType::PixelShader);
+	g_shaderHandler->AddShader("Physics", TEXT("Physics.compute"), ShaderType::ComputeShader);
 
 	result = g_shaderHandler->LoadAllShaders();
 	if (FailedInit(result)) return result.ErrorCode;

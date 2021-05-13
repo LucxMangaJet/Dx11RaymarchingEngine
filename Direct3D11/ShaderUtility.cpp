@@ -49,7 +49,7 @@ InitResult ShaderUtility::CompileShader(LPCWSTR shaderPath, ShaderType shaderTyp
 
 
 	SafeRelease(pCompileErrors);
-    return InitResult::Success();
+	return InitResult::Success();
 }
 
 InitResult ShaderUtility::ReadFileToBlob(LPCWSTR path, ID3DBlob** blob)
@@ -67,7 +67,16 @@ void ShaderUtility::WriteToFile(ID3DBlob* data, LPCWSTR path)
 bool ShaderUtility::DoesFileExist(LPCWSTR path)
 {
 	std::ifstream file(path);
-	return file.good();
+	bool good = file.good();
+	file.close();
+	return good;
+}
+
+int ShaderUtility::GetFileSize(LPCWSTR path)
+{
+	std::ifstream stream(path, std::ifstream::ate | std::ifstream::binary);
+
+	return stream.tellg();
 }
 
 LPCSTR ShaderUtility::ShaderTypeToTarget(ShaderType type)

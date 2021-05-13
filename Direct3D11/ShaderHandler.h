@@ -3,6 +3,7 @@
 #include <string>
 #include "ShaderUtility.h"
 #include <unordered_map>
+#include "json.hpp"
 
 class ShaderHandler
 {
@@ -16,16 +17,20 @@ class ShaderHandler
 
 public:
 
+	void Initialize(const AppInfo& appInfo);
+
 	void AddShader(LPCSTR shaderName, LPCWSTR shaderPath, ShaderType type);
 	ID3DBlob* GetShader(LPCSTR shader);
 
 	InitResult LoadAllShaders(bool recompileAll = false);
 
 	void DeInitialize();
-	 
+
 private:
 
 	std::unordered_map <STRING, ID3DBlob*> _shaderDict;
 	std::vector<ShaderInfo> _shaderInfoList;
+	nlohmann::json cacheJson;
+
 };
 

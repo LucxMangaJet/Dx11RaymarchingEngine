@@ -18,6 +18,9 @@ public:
 	static void WriteToFile(ID3DBlob* data, LPCWSTR path);
 	static bool DoesFileExist(LPCWSTR path);
 
+	static int GetFileSize(LPCWSTR path);
+
+
 	static LPCSTR ShaderTypeToTarget(ShaderType type);
 
 };
